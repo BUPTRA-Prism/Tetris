@@ -30,3 +30,27 @@ void RendererDeleter::operator()(SDL_Renderer* renderer) const {
         SDL_DestroyRenderer(renderer);
     }
 }
+
+void TextureDeleter::operator()(SDL_Texture* texture) const {
+    if (texture) {
+        SDL_DestroyTexture(texture);
+    }
+}
+
+void SurfaceDeleter::operator()(SDL_Surface* surface) const {
+    if (surface) {
+        SDL_FreeSurface(surface);
+    }
+}
+
+void MusicDeleter::operator()(Mix_Music* music) const {
+    if (music) {
+        Mix_FreeMusic(music);
+    }
+}
+
+void ChunkDeleter::operator()(Mix_Chunk* chunk) const {
+    if (chunk) {
+        Mix_FreeChunk(chunk);
+    }
+}
