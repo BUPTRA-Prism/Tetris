@@ -14,8 +14,6 @@ private:
     std::unordered_map<std::string, UniqueMusic> m_musicMap;
     std::unordered_map<std::string, UniqueChunk> m_chunkMap;
 
-    bool m_loaded = false;
-
 public:
     static ResourceManager& getInstance();
 
@@ -24,11 +22,26 @@ public:
     ResourceManager(ResourceManager&&) = delete;
     ResourceManager& operator=(ResourceManager&&) = delete;
 
-    void loadResource();
+    bool loadResource(SDL_Renderer* renderer);
     void destroyResource();
-    bool isLoaded() const;
+
+    SDL_Texture* getImage(const std::string& path);
+    SDL_Surface* getDigitFont(char digit);
+    SDL_Surface* getLetterFont(char letter);
+    SDL_Surface* getPunctuationFont(char punctuation);
+    Mix_Music* getMusic(const std::string& path);
+    Mix_Chunk* getChunk(const std::string& path);
 
 private:
-    ResourceManager();
+    ResourceManager() = default;
     ~ResourceManager() = default;
+
+    bool loadImage(SDL_Renderer* renderer, const std::string& path);
+    bool loadDigitFont();
+    bool loadLetterFont();
+    bool loadPunctuationFont();
+    bool loadMusic(const std::string& path);
+    bool loadChunk(const std::string& path);
+
+    bool splitSurfaceGroup(std::vector<UniqueSurface>& surfaceVec, const std::string& path, int rowCnt, int colCnt);
 };

@@ -34,4 +34,16 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
         "C:/msys64/mingw64/bin/SDL2.dll"
         $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    COMMAND ${CMAKE_COMMAND} -E copy
+        "C:/msys64/mingw64/bin/SDL2_mixer.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    COMMAND ${CMAKE_COMMAND} -E copy
+        "C:/msys64/mingw64/bin/libvorbisfile-3.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    COMMAND ${CMAKE_COMMAND} -E copy
+        "C:/msys64/mingw64/bin/libogg-0.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    COMMAND ${CMAKE_COMMAND} -E copy
+        "C:/msys64/mingw64/bin/libvorbis-0.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )

@@ -21,6 +21,7 @@ extern const std::string TYPE_FRAME_IMAGE_PATH;
 extern const std::string DIGIT_FONT_PATH;
 extern const std::string LETTER_FONT_PATH;
 extern const std::string PUNCTUATION_FONT_PATH;
+extern const std::string PUNCTUATION_LIST;
 
 extern const std::string BGM1_MUSIC_PATH;
 extern const std::string BGM2_MUSIC_PATH;

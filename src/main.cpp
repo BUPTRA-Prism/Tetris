@@ -1,7 +1,7 @@
 #define SDL_MAIN_HANDLED
 
 #include "conf/basicconf.h"
-#include "util/sdlresource.h"
+#include "manager/resourcemanager.h"
 #include <iostream>
 
 int main(int argc, char* argv[]) {
@@ -31,6 +31,13 @@ int main(int argc, char* argv[]) {
             return 1;
         }
 
+        ResourceManager& resourceManager = ResourceManager::getInstance();
+        if (!resourceManager.loadResource(renderer.get())) {
+            std::cerr << "Load Resource Error: " << SDL_GetError() << std::endl;
+            resourceManager.destroyResource();
+            return 1;
+        }
+
         bool running = true;
         while (running) {
             SDL_Event event;
@@ -40,14 +47,16 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            SDL_RenderClear(renderer.get());
-
             SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
+
+            SDL_RenderClear(renderer.get());
 
             SDL_RenderPresent(renderer.get());
 
             SDL_Delay(MSPF);
         }
+
+        resourceManager.destroyResource();
     }
     
     return 0;
