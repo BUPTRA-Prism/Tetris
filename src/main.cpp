@@ -1,7 +1,8 @@
 #define SDL_MAIN_HANDLED
 
 #include "conf/basicconf.h"
-#include "manager/resourcemanager.h"
+#include "core/context.h"
+#include "scene/scenemanager.h"
 #include <iostream>
 
 int main(int argc, char* argv[]) {
@@ -38,6 +39,9 @@ int main(int argc, char* argv[]) {
             return 1;
         }
 
+        Context ctx(resourceManager, renderer.get());
+        SceneManager& sceneManager = SceneManager::getInstance(ctx);
+
         bool running = true;
         while (running) {
             SDL_Event event;
@@ -47,11 +51,8 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
-
-            SDL_RenderClear(renderer.get());
-
-            SDL_RenderPresent(renderer.get());
+            sceneManager.onUpdate();
+            sceneManager.onRender();
 
             SDL_Delay(MSPF);
         }

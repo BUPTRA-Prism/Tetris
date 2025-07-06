@@ -8,7 +8,18 @@ find_package(SDL2_mixer REQUIRED)
 set(SOURCE_FILES
     src/conf/basicconf.cpp
     src/conf/resourceconf.cpp
+    src/conf/sceneconf.cpp
+    src/core/context.cpp
+    src/core/logic.cpp
     src/manager/resourcemanager.cpp
+    src/scene/scene.cpp
+    src/scene/titlescene.cpp
+    src/scene/menuscene.cpp
+    src/scene/settingscene.cpp
+    src/scene/gamescene.cpp
+    src/scene/pausescene.cpp
+    src/scene/countscene.cpp
+    src/scene/scenemanager.cpp
     src/util/sdlresource.cpp
     src/main.cpp
 )
@@ -16,7 +27,18 @@ set(SOURCE_FILES
 set(HEADER_FILES
     include/conf/basicconf.h
     include/conf/resourceconf.h
+    include/conf/sceneconf.h
+    include/core/context.h
+    include/core/logic.h
     include/manager/resourcemanager.h
+    include/scene/scene.h
+    include/scene/titlescene.h
+    include/scene/menuscene.h
+    include/scene/settingscene.h
+    include/scene/gamescene.h
+    include/scene/pausescene.h
+    include/scene/countscene.h
+    include/scene/scenemanager.h
     include/util/sdlresource.h
 )
 
