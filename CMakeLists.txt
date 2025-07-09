@@ -20,7 +20,9 @@ set(SOURCE_FILES
     src/scene/pausescene.cpp
     src/scene/countscene.cpp
     src/scene/scenemanager.cpp
+    src/ui/text.cpp
     src/util/sdlresource.cpp
+    src/util/util.cpp
     src/main.cpp
 )
 
@@ -39,7 +41,9 @@ set(HEADER_FILES
     include/scene/pausescene.h
     include/scene/countscene.h
     include/scene/scenemanager.h
+    include/ui/text.h
     include/util/sdlresource.h
+    include/util/util.h
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})

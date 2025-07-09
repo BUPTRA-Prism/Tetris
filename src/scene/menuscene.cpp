@@ -2,8 +2,7 @@
 #include "conf/sceneconf.h"
 
 MenuScene::MenuScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback)
-    : Scene(ctx, loadSceneCallback, MENU_SCENE::BGCOLOR)
-    {}
+    : Scene(ctx, loadSceneCallback, MENU_SCENE::BGCOLOR) {}
 
 void MenuScene::onEnter() {
 

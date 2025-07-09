@@ -3,8 +3,8 @@
 #include "manager/resourcemanager.h"
 
 struct Context {
-    ResourceManager& m_resourceManager;
-    SDL_Renderer* m_renderer;
+    ResourceManager& resourceManager;
+    SDL_Renderer* renderer;
 
-    Context(ResourceManager& resourceManager, SDL_Renderer* renderer);
+    Context(ResourceManager& rm, SDL_Renderer* rdr);
 };

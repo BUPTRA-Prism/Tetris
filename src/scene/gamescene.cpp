@@ -2,8 +2,7 @@
 #include "conf/sceneconf.h"
 
 GameScene::GameScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback)
-    : Scene(ctx, loadSceneCallback, GAME_SCENE::BGCOLOR)
-    {}
+    : Scene(ctx, loadSceneCallback, GAME_SCENE::BGCOLOR) {}
 
 void GameScene::onEnter() {
 

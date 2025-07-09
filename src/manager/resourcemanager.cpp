@@ -34,6 +34,11 @@ bool ResourceManager::loadResource(SDL_Renderer* renderer) {
         TITLE_FRAME_IMAGE_PATH, 
         TYPE_FRAME_IMAGE_PATH
     };
+    std::vector<std::string> fontPaths{
+        DIGIT_FONT_PATH, 
+        LETTER_FONT_PATH, 
+        PUNCTUATION_FONT_PATH
+    };
     std::vector<std::string> musicPaths{
         BGM1_MUSIC_PATH,
         BGM2_MUSIC_PATH,
@@ -54,26 +59,22 @@ bool ResourceManager::loadResource(SDL_Renderer* renderer) {
         SCENE_CHUNK_PATH
     };
 
-    if (!loadDigitFont()) { 
-        return false; 
-    }
-    if (!loadLetterFont()) { 
-        return false; 
-    }
-    if (!loadPunctuationFont()) { 
-        return false; 
-    }
-    for (auto path: imagePaths) {
+    for (auto& path: imagePaths) {
         if (!loadImage(renderer, path)) {
             return false; 
         }
     }
-    for (auto path: musicPaths) {
+    for (auto& path: fontPaths) {
+        if (!loadFont(renderer, path)) {
+            return false; 
+        }
+    }
+    for (auto& path: musicPaths) {
         if (!loadMusic(path)) {
             return false; 
         }
     }
-    for (auto path: chunkPaths) {
+    for (auto& path: chunkPaths) {
         if (!loadChunk(path)) {
             return false;
         }
@@ -83,9 +84,6 @@ bool ResourceManager::loadResource(SDL_Renderer* renderer) {
 
 void ResourceManager::destroyResource() {
     m_imageMap.clear();
-    m_digitFontVec.clear();
-    m_letterFontVec.clear();
-    m_punctuationFontMap.clear();
     m_musicMap.clear();
     m_chunkMap.clear();
 
@@ -108,26 +106,17 @@ bool ResourceManager::loadImage(SDL_Renderer* renderer, const std::string& path)
     return true;
 }
 
-bool ResourceManager::loadDigitFont() {
-    m_digitFontVec.resize(10);
-    return splitSurfaceGroup(m_digitFontVec, FONT_DIR + DIGIT_FONT_PATH, 1, 10);
-}
-
-bool ResourceManager::loadLetterFont() {
-    m_letterFontVec.resize(26);
-    return splitSurfaceGroup(m_letterFontVec, FONT_DIR + LETTER_FONT_PATH, 1, 26);
-}
-
-bool ResourceManager::loadPunctuationFont() {
-    int len = PUNCTUATION_LIST.length();
-    std::vector<UniqueSurface> punctuationFontVec;
-    punctuationFontVec.resize(len);
-    if (!splitSurfaceGroup(punctuationFontVec, FONT_DIR + PUNCTUATION_FONT_PATH, 1, len)) {
+bool ResourceManager::loadFont(SDL_Renderer* renderer, const std::string& path) {
+    if (m_fontMap.count(path) != 0) {
+        std::cerr << "Duplicate texture \"" << path << '\n';
         return false;
     }
-    for (int idx = 0; idx < len; ++idx) {
-        m_punctuationFontMap.emplace(PUNCTUATION_LIST[idx], std::move(punctuationFontVec[idx]));
+    SDL_Texture* texture = IMG_LoadTexture(renderer, (FONT_DIR + path).c_str());
+    if (!texture) {
+        std::cerr << "Failed to load texture \"" << path << "\": " << IMG_GetError() << '\n';
+        return false;
     }
+    m_fontMap.emplace(path, UniqueTexture(texture));
     return true;
 }
 
@@ -168,25 +157,11 @@ SDL_Texture* ResourceManager::getImage(const std::string& path) {
     return m_imageMap.at(path).get();
 }
 
-SDL_Surface* ResourceManager::getDigitFont(char digit) {
-    if (digit >= '0' && digit <= '9') {
-        return m_digitFontVec[digit - '0'].get();
-    }
-    return nullptr;
-}
-
-SDL_Surface* ResourceManager::getLetterFont(char letter) {
-    if (letter >= 'A' && letter <= 'Z') {
-        return m_letterFontVec[letter - 'A'].get();
-    }
-    return nullptr;
-}
-
-SDL_Surface* ResourceManager::getPunctuationFont(char punctuation) {
-    if (m_punctuationFontMap.count(punctuation) == 0) {
+SDL_Texture* ResourceManager::getFont(const std::string& path) {
+    if (m_fontMap.count(path) == 0) {
         return nullptr;
     }
-    return m_punctuationFontMap.at(punctuation).get();
+    return m_fontMap.at(path).get();
 }
 
 Mix_Music* ResourceManager::getMusic(const std::string& path) {
@@ -201,42 +176,4 @@ Mix_Chunk* ResourceManager::getChunk(const std::string& path) {
         return nullptr;
     }
     return m_chunkMap.at(path).get();
-}
-
-bool ResourceManager::splitSurfaceGroup(std::vector<UniqueSurface>& surfaceVec, const std::string& path, int rowCnt, int colCnt) {
-    UniqueSurface surfaceGroup(IMG_Load(path.c_str()));
-    if (!surfaceGroup) {
-        std::cerr << "Load surface group failed: " << SDL_GetError() << std::endl;
-        return false;
-    }
-    if (surfaceGroup->w % colCnt != 0 || surfaceGroup->h % rowCnt != 0) {
-        std::cerr << "Invalid surface group size: (" << surfaceGroup->w << ", " << surfaceGroup->h << ")" << std::endl;
-        return false;
-    }
-    int surfaceWidth = surfaceGroup->w / colCnt;
-    int surfaceHeight = surfaceGroup->h / rowCnt;
-    for (int y = 0; y < rowCnt; y++) {
-        for (int x = 0; x < colCnt; x++) {
-            SDL_Rect srcRect = { x * surfaceWidth, y * surfaceHeight, surfaceWidth, surfaceHeight };
-
-            SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormat(
-                0, surfaceWidth, surfaceHeight, 
-                surfaceGroup->format->BitsPerPixel,
-                surfaceGroup->format->format);
-
-            if (!surface) {
-                std::cerr << "Create frame surface failed: " << SDL_GetError() << std::endl;
-                return false;
-            }
-
-            if (SDL_BlitSurface(surfaceGroup.get(), &srcRect, surface, nullptr) != 0) {
-                std::cerr << "Blit failed: " << SDL_GetError() << std::endl;
-                SDL_FreeSurface(surface);
-                return false;
-            }
-
-            surfaceVec.emplace_back(UniqueSurface(surface));
-        }
-    }
-    return true;
 }

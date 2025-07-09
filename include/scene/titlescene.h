@@ -1,9 +1,13 @@
 #pragma once
 
 #include "scene/scene.h"
+#include "ui/text.h"
 
 class TitleScene : public Scene {
 private:
+    SDL_Texture* m_titleFrameTexture;
+    std::unique_ptr<Text> m_startText;
+    std::unique_ptr<Text> m_yearText;
 
 public:
     TitleScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback);
