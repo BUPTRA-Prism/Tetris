@@ -6,7 +6,7 @@
 #include <iostream>
 
 int main(int argc, char* argv[]) {
-    SDLInitializer init(SDL_INIT_VIDEO);
+    SDLInitializer init;
     if (!init.isSuccess()) {
         return 1;
     }
@@ -39,7 +39,9 @@ int main(int argc, char* argv[]) {
             return 1;
         }
 
-        Context ctx(resourceManager, renderer.get());
+        AudioManager& audioManager = AudioManager::getInstance();
+
+        Context ctx(resourceManager, audioManager, renderer.get());
         SceneManager& sceneManager = SceneManager::getInstance(ctx);
 
         bool running = true;

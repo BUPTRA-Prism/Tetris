@@ -9,19 +9,6 @@ ResourceManager& ResourceManager::getInstance() {
 }
 
 bool ResourceManager::loadResource(SDL_Renderer* renderer) {
-    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-        std::cerr << "IMG_Init failed: " << IMG_GetError() << '\n';
-        return false;
-    }
-    if (!(Mix_Init(MIX_INIT_OGG) & MIX_INIT_OGG)) {
-        std::cerr << "Mix_Init failed: " << Mix_GetError() << '\n';
-        return false;
-    }
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-        std::cerr << "Mix_OpenAudio failed: " << Mix_GetError() << std::endl;
-        return false;
-    }
-
     std::vector<std::string> imagePaths{
         COYRIGHT_ICON_IMAGE_PATH, 
         COUNT_FRAME_IMAGE_PATH, 
@@ -86,10 +73,6 @@ void ResourceManager::destroyResource() {
     m_imageMap.clear();
     m_musicMap.clear();
     m_chunkMap.clear();
-
-    Mix_CloseAudio();
-    Mix_Quit();
-    IMG_Quit();
 }
 
 bool ResourceManager::loadImage(SDL_Renderer* renderer, const std::string& path) {

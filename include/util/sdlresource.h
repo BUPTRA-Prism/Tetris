@@ -6,10 +6,13 @@
 
 class SDLInitializer {
 private:
-    bool m_success;
+    bool m_sdlInitialized;
+    bool m_imgInitialized;
+    bool m_mixInitialized;
+    bool m_openAudio;
 
 public:
-    SDLInitializer(Uint32 flags);
+    SDLInitializer();
     ~SDLInitializer();
     bool isSuccess() const;
 };

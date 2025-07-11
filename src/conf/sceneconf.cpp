@@ -8,6 +8,8 @@ const SDL_Color TITLE_SCENE::START_TEXT::COLOR = { 255, 255, 255, 255 };
 const std::string TITLE_SCENE::YEAR_TEXT::STR = "1989";
 const SDL_Point TITLE_SCENE::YEAR_TEXT::POS = { 352, 768 };
 const SDL_Color TITLE_SCENE::YEAR_TEXT::COLOR = { 255, 255, 255, 255 };
+const SDL_Point TITLE_SCENE::COPYRIGHT_ICON::POS = { 288, 768 };
+const SDL_Color TITLE_SCENE::COPYRIGHT_ICON::COLOR = { 188, 190, 0, 255 };
 
 const std::string MENU_SCENE::NAME = "menu";
 const SDL_Color MENU_SCENE::BGCOLOR = {0, 0, 0, 255};

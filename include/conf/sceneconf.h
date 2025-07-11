@@ -17,6 +17,10 @@ namespace TITLE_SCENE {
         extern const SDL_Point POS;
         extern const SDL_Color COLOR;
     };
+    namespace COPYRIGHT_ICON {
+        extern const SDL_Point POS;
+        extern const SDL_Color COLOR;
+    }
 };
 
 namespace MENU_SCENE {

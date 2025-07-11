@@ -11,6 +11,7 @@ set(SOURCE_FILES
     src/conf/sceneconf.cpp
     src/core/context.cpp
     src/core/logic.cpp
+    src/manager/audiomanager.cpp
     src/manager/resourcemanager.cpp
     src/scene/scene.cpp
     src/scene/titlescene.cpp
@@ -32,6 +33,7 @@ set(HEADER_FILES
     include/conf/sceneconf.h
     include/core/context.h
     include/core/logic.h
+    include/manager/audiomanager.h
     include/manager/resourcemanager.h
     include/scene/scene.h
     include/scene/titlescene.h
