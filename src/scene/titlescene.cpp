@@ -11,15 +11,15 @@ TitleScene::TitleScene(Context& ctx, std::function<void(const std::string&)> loa
     m_copyrightTexture = rm.getImage(COYRIGHT_ICON_IMAGE_PATH);
     m_startText = std::make_unique<Text>(
         ctx,
-        TITLE_SCENE::START_TEXT::STR, 
-        TITLE_SCENE::START_TEXT::POS,
-        TITLE_SCENE::START_TEXT::COLOR
+        TITLE_SCENE::START_TEXT_CONF.STR, 
+        TITLE_SCENE::START_TEXT_CONF.POS,
+        TITLE_SCENE::START_TEXT_CONF.COLOR
     );
     m_yearText = std::make_unique<Text>(
         ctx,
-        TITLE_SCENE::YEAR_TEXT::STR, 
-        TITLE_SCENE::YEAR_TEXT::POS,
-        TITLE_SCENE::YEAR_TEXT::COLOR
+        TITLE_SCENE::YEAR_TEXT_CONF.STR, 
+        TITLE_SCENE::YEAR_TEXT_CONF.POS,
+        TITLE_SCENE::YEAR_TEXT_CONF.COLOR
     );
     m_titleMusic = rm.getMusic(TITLE_MUSIC_PATH);
 }
@@ -44,11 +44,11 @@ void TitleScene::renderContent() {
     renderTexture(rdr, m_titleFrameTexture);
     SDL_SetTextureColorMod(
         m_copyrightTexture, 
-        TITLE_SCENE::COPYRIGHT_ICON::COLOR.r,
-        TITLE_SCENE::COPYRIGHT_ICON::COLOR.g,
-        TITLE_SCENE::COPYRIGHT_ICON::COLOR.b
+        TITLE_SCENE::COPYRIGHT_ICON_CONF.COLOR.r,
+        TITLE_SCENE::COPYRIGHT_ICON_CONF.COLOR.g,
+        TITLE_SCENE::COPYRIGHT_ICON_CONF.COLOR.b
     );
-    renderTexture(rdr, m_copyrightTexture, TITLE_SCENE::COPYRIGHT_ICON::POS);
+    renderTexture(rdr, m_copyrightTexture, TITLE_SCENE::COPYRIGHT_ICON_CONF.POS);
     m_startText->onRender();
     m_yearText->onRender();
 }

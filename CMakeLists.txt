@@ -10,8 +10,10 @@ set(SOURCE_FILES
     src/conf/keyconf.cpp
     src/conf/resourceconf.cpp
     src/conf/sceneconf.cpp
+    src/conf/settingconf.cpp
     src/core/context.cpp
     src/core/logic.cpp
+    src/core/settings.cpp
     src/manager/audiomanager.cpp
     src/manager/inputmanager.cpp
     src/manager/resourcemanager.cpp
@@ -34,8 +36,10 @@ set(HEADER_FILES
     include/conf/keyconf.h
     include/conf/resourceconf.h
     include/conf/sceneconf.h
+    include/conf/settingconf.h
     include/core/context.h
     include/core/logic.h
+    include/core/settings.h
     include/manager/audiomanager.h
     include/manager/inputmanager.h
     include/manager/resourcemanager.h

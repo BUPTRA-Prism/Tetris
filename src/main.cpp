@@ -42,7 +42,9 @@ int main(int argc, char* argv[]) {
         AudioManager& audioManager = AudioManager::getInstance();
         InputManager& inputManager = InputManager::getInstance();
 
-        Context ctx(resourceManager, audioManager, inputManager, renderer.get());
+        Settings& settings = Settings::getInstance();
+
+        Context ctx(resourceManager, audioManager, inputManager, settings, renderer.get());
         SceneManager& sceneManager = SceneManager::getInstance(ctx);
 
         bool running = true;

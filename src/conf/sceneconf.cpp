@@ -1,18 +1,25 @@
 #include "conf/sceneconf.h"
 
 const std::string TITLE_SCENE::NAME = "title";
-const SDL_Color TITLE_SCENE::BGCOLOR = {0, 0, 0, 255};
-const std::string TITLE_SCENE::START_TEXT::STR = "PUSH START";
-const SDL_Point TITLE_SCENE::START_TEXT::POS = { 224, 608 };
-const SDL_Color TITLE_SCENE::START_TEXT::COLOR = { 255, 255, 255, 255 };
-const std::string TITLE_SCENE::YEAR_TEXT::STR = "1989";
-const SDL_Point TITLE_SCENE::YEAR_TEXT::POS = { 352, 768 };
-const SDL_Color TITLE_SCENE::YEAR_TEXT::COLOR = { 255, 255, 255, 255 };
-const SDL_Point TITLE_SCENE::COPYRIGHT_ICON::POS = { 288, 768 };
-const SDL_Color TITLE_SCENE::COPYRIGHT_ICON::COLOR = { 188, 190, 0, 255 };
+const SDL_Color TITLE_SCENE::BGCOLOR = { 0, 0, 0, 255 };
+const TextConf TITLE_SCENE::START_TEXT_CONF = { "PUSH START", { 224, 608 }, { 255, 255, 255, 255 } };
+const TextConf TITLE_SCENE::YEAR_TEXT_CONF = { "1989", { 352, 768 }, { 255, 255, 255, 255 } };
+const TextConf TITLE_SCENE::COPYRIGHT_ICON_CONF = { "", { 288, 768 }, { 188, 190, 0, 255 } };
 
 const std::string MENU_SCENE::NAME = "menu";
 const SDL_Color MENU_SCENE::BGCOLOR = {0, 0, 0, 255};
+const TextConf MENU_SCENE::GAME_TYPE_TITLE_TEXT_CONF = { "GAME  TYPE", { 160, 96 }, { 255, 255, 255, 255 } };
+const std::vector<TextConf> MENU_SCENE::GAME_TYPE_TEXT_CONF = {
+    { "A-TYPE", { 288, 224 }, { 255, 255, 255, 255 } },
+    { "B-TYPE", { 672, 224 }, { 255, 255, 255, 255 } }
+};
+const TextConf MENU_SCENE::MUSIC_TYPE_TITLE_TEXT_CONF = { "MUSIC TYPE", { 160, 384 }, { 255, 255, 255, 255 } };
+const std::vector<TextConf> MENU_SCENE::MUSIC_TYPE_TEXT_CONF = {
+    { "MUSIC  1", { 448, 544 }, { 255, 255, 255, 255 } },
+    { "MUSIC  2", { 448, 608 }, { 255, 255, 255, 255 } },
+    { "MUSIC  3", { 448, 672 }, { 255, 255, 255, 255 } },
+    { "OFF", { 512, 736 }, { 255, 255, 255, 255 } },
+};
 
 const std::string SETTING_SCENE::NAME = "setting";
 const SDL_Color SETTING_SCENE::BGCOLOR = {0, 0, 0, 255};
