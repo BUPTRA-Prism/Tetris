@@ -40,17 +40,21 @@ int main(int argc, char* argv[]) {
         }
 
         AudioManager& audioManager = AudioManager::getInstance();
+        InputManager& inputManager = InputManager::getInstance();
 
-        Context ctx(resourceManager, audioManager, renderer.get());
+        Context ctx(resourceManager, audioManager, inputManager, renderer.get());
         SceneManager& sceneManager = SceneManager::getInstance(ctx);
 
         bool running = true;
         while (running) {
+            inputManager.beginFrame();
+
             SDL_Event event;
             while (SDL_PollEvent(&event)) {
                 if (event.type == SDL_QUIT) {
                     running = false;
                 }
+                inputManager.processEvent(event);
             }
 
             sceneManager.onUpdate();

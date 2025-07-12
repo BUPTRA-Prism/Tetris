@@ -12,10 +12,6 @@ void SettingScene::onExit() {
     
 }
 
-void SettingScene::onInput() {
-    
-}
-
 void SettingScene::onUpdate() {
     
 }

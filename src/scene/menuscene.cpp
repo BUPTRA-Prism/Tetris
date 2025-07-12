@@ -12,10 +12,6 @@ void MenuScene::onExit() {
     
 }
 
-void MenuScene::onInput() {
-    
-}
-
 void MenuScene::onUpdate() {
     
 }

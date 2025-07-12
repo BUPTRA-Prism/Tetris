@@ -12,10 +12,6 @@ void GameScene::onExit() {
     
 }
 
-void GameScene::onInput() {
-    
-}
-
 void GameScene::onUpdate() {
     
 }

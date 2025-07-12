@@ -19,7 +19,6 @@ public:
     SceneManager(SceneManager&&) = delete;
     SceneManager& operator=(SceneManager&&) = delete;
 
-    void onInput();
     void onUpdate();
     void onRender();
 

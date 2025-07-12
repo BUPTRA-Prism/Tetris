@@ -11,7 +11,6 @@ public:
 
     void onEnter() override;
     void onExit() override;
-    void onInput() override;
     void onUpdate() override;
     void renderContent() override;
 };

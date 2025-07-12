@@ -1,4 +1,5 @@
 #include "scene/titlescene.h"
+#include "conf/keyconf.h"
 #include "conf/resourceconf.h"
 #include "conf/sceneconf.h"
 #include "util/util.h"
@@ -31,12 +32,11 @@ void TitleScene::onExit() {
     m_ctx.audioManager.stopMusic();
 }
 
-void TitleScene::onInput() {
-    
-}
-
 void TitleScene::onUpdate() {
-    
+    auto& im = m_ctx.inputManager;
+    if (im.isKeyJustPressed(NEXT_SCENE_KEY)) {
+        m_loadSceneCallback(MENU_SCENE::NAME);
+    }
 }
 
 void TitleScene::renderContent() {

@@ -7,11 +7,13 @@ find_package(SDL2_mixer REQUIRED)
 
 set(SOURCE_FILES
     src/conf/basicconf.cpp
+    src/conf/keyconf.cpp
     src/conf/resourceconf.cpp
     src/conf/sceneconf.cpp
     src/core/context.cpp
     src/core/logic.cpp
     src/manager/audiomanager.cpp
+    src/manager/inputmanager.cpp
     src/manager/resourcemanager.cpp
     src/scene/scene.cpp
     src/scene/titlescene.cpp
@@ -29,11 +31,13 @@ set(SOURCE_FILES
 
 set(HEADER_FILES
     include/conf/basicconf.h
+    include/conf/keyconf.h
     include/conf/resourceconf.h
     include/conf/sceneconf.h
     include/core/context.h
     include/core/logic.h
     include/manager/audiomanager.h
+    include/manager/inputmanager.h
     include/manager/resourcemanager.h
     include/scene/scene.h
     include/scene/titlescene.h

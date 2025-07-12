@@ -12,10 +12,6 @@ void PauseScene::onExit() {
     
 }
 
-void PauseScene::onInput() {
-    
-}
-
 void PauseScene::onUpdate() {
     
 }

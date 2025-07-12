@@ -29,12 +29,6 @@ SceneManager::SceneManager(Context& ctx)
     loadScene(TITLE_SCENE::NAME);
 }
 
-void SceneManager::onInput() {
-    if (m_curScene) {
-        m_curScene->onInput();
-    }
-}
-
 void SceneManager::onUpdate() {
     if (m_curScene) {
         m_curScene->onUpdate();

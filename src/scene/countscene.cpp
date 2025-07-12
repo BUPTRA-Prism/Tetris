@@ -12,10 +12,6 @@ void CountScene::onExit() {
     
 }
 
-void CountScene::onInput() {
-    
-}
-
 void CountScene::onUpdate() {
     
 }
