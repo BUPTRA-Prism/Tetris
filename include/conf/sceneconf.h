@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <string>
 #include <utility>
 #include <vector>
@@ -26,6 +27,10 @@ namespace MENU_SCENE {
     extern const std::vector<TextConf> GAME_TYPE_TEXT_CONF;
     extern const TextConf MUSIC_TYPE_TITLE_TEXT_CONF;
     extern const std::vector<TextConf> MUSIC_TYPE_TEXT_CONF;
+    extern const std::array<std::vector<SDL_Point>, 2> GAME_TYPE_OPTION_POS;
+    extern const std::array<std::vector<SDL_Point>, 2> MUSIC_TYPE_OPTION_POS;
+    extern const int OPTION_SHOW_FRAME;
+    extern const int OPTION_HIDE_FRAME;
 };
 
 namespace SETTING_SCENE {

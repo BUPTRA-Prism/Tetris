@@ -27,6 +27,7 @@ public:
     int getGameType() const;
     int getLevel() const;
     int getHeight() const;
+    int getMusicTypeIdx() const;
     std::string getMusicType() const;
 
 private:

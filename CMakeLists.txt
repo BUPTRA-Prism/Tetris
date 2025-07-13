@@ -6,6 +6,8 @@ find_package(SDL2_image REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 
 set(SOURCE_FILES
+    src/animation/animation.cpp
+    src/animation/blinkanimation.cpp
     src/conf/basicconf.cpp
     src/conf/keyconf.cpp
     src/conf/resourceconf.cpp
@@ -25,6 +27,7 @@ set(SOURCE_FILES
     src/scene/pausescene.cpp
     src/scene/countscene.cpp
     src/scene/scenemanager.cpp
+    src/ui/option.cpp
     src/ui/text.cpp
     src/util/sdlresource.cpp
     src/util/util.cpp
@@ -32,6 +35,8 @@ set(SOURCE_FILES
 )
 
 set(HEADER_FILES
+    include/animation/animation.h
+    include/animation/blinkanimation.h
     include/conf/basicconf.h
     include/conf/keyconf.h
     include/conf/resourceconf.h
@@ -51,6 +56,7 @@ set(HEADER_FILES
     include/scene/pausescene.h
     include/scene/countscene.h
     include/scene/scenemanager.h
+    include/ui/option.h
     include/ui/text.h
     include/util/sdlresource.h
     include/util/util.h

@@ -1,6 +1,6 @@
 #include "util/util.h"
 
-void renderTexture(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Point dstPos, SDL_Rect* srcRect) {
+void renderTexture(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Point dstPos, SDL_Rect* srcRect, SDL_RendererFlip flip) {
     SDL_Rect dstRect = { dstPos.x, dstPos.y, 0, 0 };
     if (!srcRect) {
         SDL_QueryTexture(texture, nullptr, nullptr, &(dstRect.w), &(dstRect.h));
@@ -8,5 +8,5 @@ void renderTexture(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Point dstPo
         dstRect.w = srcRect->w;
         dstRect.h = srcRect->h;
     }
-    SDL_RenderCopy(renderer, texture, srcRect, &dstRect);
+    SDL_RenderCopyEx(renderer, texture, srcRect, &dstRect, 0.0, nullptr, flip);
 }

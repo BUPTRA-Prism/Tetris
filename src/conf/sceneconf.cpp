@@ -20,6 +20,16 @@ const std::vector<TextConf> MENU_SCENE::MUSIC_TYPE_TEXT_CONF = {
     { "MUSIC  3", { 448, 672 }, { 255, 255, 255, 255 } },
     { "OFF", { 512, 736 }, { 255, 255, 255, 255 } },
 };
+const std::array<std::vector<SDL_Point>, 2> MENU_SCENE::GAME_TYPE_OPTION_POS = {
+    std::vector<SDL_Point>{ { 252, 224 }, { 636, 224 } },
+    std::vector<SDL_Point>{ { 488, 224 }, { 872, 224 } }
+};
+const std::array<std::vector<SDL_Point>, 2> MENU_SCENE::MUSIC_TYPE_OPTION_POS = {
+    std::vector<SDL_Point>{ { 412, 544 }, { 412, 608 }, { 412, 672 }, { 412, 736 } },
+    std::vector<SDL_Point>{ { 712, 544 }, { 712, 608 }, { 712, 672 }, { 712, 736 } },
+};
+const int MENU_SCENE::OPTION_SHOW_FRAME = 3;
+const int MENU_SCENE::OPTION_HIDE_FRAME = 1;
 
 const std::string SETTING_SCENE::NAME = "setting";
 const SDL_Color SETTING_SCENE::BGCOLOR = {0, 0, 0, 255};

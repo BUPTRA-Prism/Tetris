@@ -52,4 +52,6 @@ int Settings::getLevel() const { return m_curLevel; }
 
 int Settings::getHeight() const { return m_curHeight; }
 
+int Settings::getMusicTypeIdx() const { return m_curMusicTypeIdx; }
+
 std::string Settings::getMusicType() const { return m_musicType[m_curMusicTypeIdx]; }
