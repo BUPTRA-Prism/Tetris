@@ -33,7 +33,7 @@ void TitleScene::onExit() {
 }
 
 void TitleScene::onUpdate() {
-    auto& im = m_ctx.inputManager;
+    InputManager& im = m_ctx.inputManager;
     if (im.isKeyJustPressed(NEXT_SCENE_KEY)) {
         m_loadSceneCallback(MENU_SCENE::NAME);
     }

@@ -14,7 +14,7 @@ void Option::stopAnim() { m_anim->stop(); }
 void Option::onUpdate() { m_anim->onUpdate(); }
 
 void Option::onRender(int posIdx, bool isFlip) {
-    auto rdr = m_ctx.renderer;
+    SDL_Renderer* rdr = m_ctx.renderer;
     SDL_Point pos = m_pos[posIdx];
     if (m_anim->isShow()) {
         if (isFlip) {

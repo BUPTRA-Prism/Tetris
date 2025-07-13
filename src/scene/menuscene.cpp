@@ -58,9 +58,9 @@ MenuScene::MenuScene(Context& ctx, std::function<void(const std::string&)> loadS
 }
 
 void MenuScene::onEnter() {
-    auto& rm = m_ctx.resourceManager;
-    auto& am = m_ctx.audioManager;
-    auto& s = m_ctx.settings;
+    ResourceManager& rm = m_ctx.resourceManager;
+    AudioManager& am = m_ctx.audioManager;
+    Settings& s = m_ctx.settings;
     m_music = rm.getMusic(s.getMusicType());
     if (m_music) {
         am.playMusic(m_music);
@@ -86,8 +86,8 @@ void MenuScene::onExit() {
 void MenuScene::onUpdate() {
     bool gameTypeChanged = false;
     bool musicTypeChanged = false;
-    auto& im = m_ctx.inputManager;
-    auto& s = m_ctx.settings;
+    InputManager& im = m_ctx.inputManager;
+    Settings& s = m_ctx.settings;
 
     for (int i = 0; i < 2; ++i) {
         m_gameTypeOption[i]->onUpdate();
@@ -111,8 +111,8 @@ void MenuScene::onUpdate() {
         }
     }
 
-    auto& rm = m_ctx.resourceManager;
-    auto& am = m_ctx.audioManager;
+    ResourceManager& rm = m_ctx.resourceManager;
+    AudioManager& am = m_ctx.audioManager;
     if (gameTypeChanged || musicTypeChanged) {
         am.playChunk(m_optionChunk);
     }
@@ -138,7 +138,7 @@ void MenuScene::renderContent() {
         text->onRender();
     }
 
-    auto& s = m_ctx.settings;
+    Settings& s = m_ctx.settings;
     int gameTypeIdx = s.getGameType();
     int musicTypeIdx = s.getMusicTypeIdx();
     m_gameTypeOption[0]->onRender(gameTypeIdx, false);

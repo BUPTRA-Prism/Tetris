@@ -11,15 +11,17 @@ ResourceManager& ResourceManager::getInstance() {
 bool ResourceManager::loadResource(SDL_Renderer* renderer) {
     std::vector<std::string> imagePaths{
         COYRIGHT_ICON_IMAGE_PATH, 
-        COUNT_FRAME_IMAGE_PATH, 
         GAME_FRAME_IMAGE_PATH, 
         HEIGHT_FRAME_IMAGE_PATH, 
-        LEVEL_FRAME_IMAGE_PATH, 
+        LEVEL_A_FRAME_IMAGE_PATH, 
+        LEVEL_B_FRAME_IMAGE_PATH, 
         MENU_FRAME_IMAGE_PATH, 
         OPTION_ICON_IMAGE_PATH, 
         RESULT_FRAME_IMAGE_PATH, 
+        SETTING_FRAME_IMAGE_PATH, 
         TITLE_FRAME_IMAGE_PATH, 
-        TYPE_FRAME_IMAGE_PATH
+        TYPE_A_FRAME_IMAGE_PATH,
+        TYPE_B_FRAME_IMAGE_PATH, 
     };
     std::vector<std::string> fontPaths{
         DIGIT_FONT_PATH, 

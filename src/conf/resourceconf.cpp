@@ -6,15 +6,17 @@ const std::string MUSIC_DIR = "resource/audio/music/";
 const std::string CHUNK_DIR = "resource/audio/chunk/";
 
 const std::string COYRIGHT_ICON_IMAGE_PATH = "copyright_icon.png";
-const std::string COUNT_FRAME_IMAGE_PATH = "count_frame.png";
 const std::string GAME_FRAME_IMAGE_PATH = "game_frame.png";
 const std::string HEIGHT_FRAME_IMAGE_PATH = "height_frame.png";
-const std::string LEVEL_FRAME_IMAGE_PATH = "level_frame.png";
+const std::string LEVEL_A_FRAME_IMAGE_PATH = "level_a_frame.png";
+const std::string LEVEL_B_FRAME_IMAGE_PATH = "level_b_frame.png";
 const std::string MENU_FRAME_IMAGE_PATH = "menu_frame.png";
 const std::string OPTION_ICON_IMAGE_PATH = "option_icon.png";
 const std::string RESULT_FRAME_IMAGE_PATH = "result_frame.png";
+const std::string SETTING_FRAME_IMAGE_PATH = "setting_frame.png";
 const std::string TITLE_FRAME_IMAGE_PATH = "title_frame.png";
-const std::string TYPE_FRAME_IMAGE_PATH = "type_frame.png";
+const std::string TYPE_A_FRAME_IMAGE_PATH = "type_a_frame.png";
+const std::string TYPE_B_FRAME_IMAGE_PATH = "type_b_frame.png";
 
 const std::string DIGIT_FONT_PATH = "digit.png";
 const std::string LETTER_FONT_PATH = "letter.png";

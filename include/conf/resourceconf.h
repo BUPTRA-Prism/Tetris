@@ -8,15 +8,17 @@ extern const std::string MUSIC_DIR;
 extern const std::string CHUNK_DIR;
 
 extern const std::string COYRIGHT_ICON_IMAGE_PATH;
-extern const std::string COUNT_FRAME_IMAGE_PATH;
 extern const std::string GAME_FRAME_IMAGE_PATH;
 extern const std::string HEIGHT_FRAME_IMAGE_PATH;
-extern const std::string LEVEL_FRAME_IMAGE_PATH;
+extern const std::string LEVEL_A_FRAME_IMAGE_PATH;
+extern const std::string LEVEL_B_FRAME_IMAGE_PATH;
 extern const std::string MENU_FRAME_IMAGE_PATH;
 extern const std::string OPTION_ICON_IMAGE_PATH;
 extern const std::string RESULT_FRAME_IMAGE_PATH;
+extern const std::string SETTING_FRAME_IMAGE_PATH;
 extern const std::string TITLE_FRAME_IMAGE_PATH;
-extern const std::string TYPE_FRAME_IMAGE_PATH;
+extern const std::string TYPE_A_FRAME_IMAGE_PATH;
+extern const std::string TYPE_B_FRAME_IMAGE_PATH;
 
 extern const std::string DIGIT_FONT_PATH;
 extern const std::string LETTER_FONT_PATH;

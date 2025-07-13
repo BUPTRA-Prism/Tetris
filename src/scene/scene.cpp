@@ -12,7 +12,7 @@ void Scene::onRender() {
 }
 
 void Scene::renderBGColor() {
-    auto rdr = m_ctx.renderer;
+    SDL_Renderer* rdr = m_ctx.renderer;
     SDL_SetRenderDrawColor(rdr, m_bgColor.r, m_bgColor.g, m_bgColor.b, m_bgColor.a);
     SDL_RenderClear(rdr);
 }

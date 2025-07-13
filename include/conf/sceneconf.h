@@ -36,6 +36,10 @@ namespace MENU_SCENE {
 namespace SETTING_SCENE {
     extern const std::string NAME;
     extern const SDL_Color BGCOLOR;
+    extern const SDL_Point TYPE_FRAME_POS;
+    extern const std::string GAME_TYPE_A_STR;
+    extern const std::string GAME_TYPE_B_STR;
+    extern const TextConf GAME_TYPE_TEXT_CONF;
 };
 
 namespace GAME_SCENE {
