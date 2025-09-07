@@ -17,9 +17,14 @@ private:
 
     std::unique_ptr<Text> m_gameTypeText;                       // 游戏类型文本
     std::unique_ptr<Text> m_levelText;                          // 关卡标题文本
-    std::unique_ptr<Text> m_heightText;                         // 高度标题文本
     std::vector<std::unique_ptr<Text>> m_levelOptionText;       // 关卡选项文本
+    std::unique_ptr<Text> m_heightText;                         // 高度标题文本
     std::vector<std::unique_ptr<Text>> m_heightOptionText;      // 高度选项文本
+    std::vector<std::unique_ptr<Text>> m_recordTitleText;       // 记录表头文本
+    std::vector<std::unique_ptr<Text>> m_recordOrderText;       // 记录名次文本
+    std::vector<std::unique_ptr<Text>> m_recordNameText;        // 记录姓名文本
+    std::vector<std::unique_ptr<Text>> m_recordScoreText;       // 记录分数文本
+    std::vector<std::unique_ptr<Text>> m_recordLvText;          // 记录关卡数文本
     
     std::unique_ptr<OptionIcon> m_levelOptionIcon;      // 关卡选项图标
     std::unique_ptr<OptionIcon> m_heightOptionIcon;     // 高度选项图标
