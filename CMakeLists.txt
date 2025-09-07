@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(Tetris)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_mixer REQUIRED)
@@ -8,11 +11,6 @@ find_package(SDL2_mixer REQUIRED)
 set(SOURCE_FILES
     src/animation/animation.cpp
     src/animation/blinkanimation.cpp
-    src/conf/basicconf.cpp
-    src/conf/keyconf.cpp
-    src/conf/resourceconf.cpp
-    src/conf/sceneconf.cpp
-    src/conf/settingconf.cpp
     src/core/context.cpp
     src/core/logic.cpp
     src/core/settings.cpp
@@ -27,7 +25,7 @@ set(SOURCE_FILES
     src/scene/pausescene.cpp
     src/scene/countscene.cpp
     src/scene/scenemanager.cpp
-    src/ui/option.cpp
+    src/ui/optionicon.cpp
     src/ui/text.cpp
     src/util/sdlresource.cpp
     src/util/util.cpp
@@ -56,7 +54,7 @@ set(HEADER_FILES
     include/scene/pausescene.h
     include/scene/countscene.h
     include/scene/scenemanager.h
-    include/ui/option.h
+    include/ui/optionicon.h
     include/ui/text.h
     include/util/sdlresource.h
     include/util/util.h

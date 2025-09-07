@@ -8,15 +8,22 @@ Settings& Settings::getInstance() {
 }
 
 Settings::Settings()
-    : m_musicType({ BGM1_MUSIC_PATH, BGM2_MUSIC_PATH, BGM3_MUSIC_PATH, "" })
-    , m_curGameType(0)
+    : m_curGameTypeIdx(0)
+    , m_curMusicTypeIdx(0)
     , m_curLevel(0)
-    , m_curHeight(0)
-    , m_curMusicTypeIdx(0) {}
+    , m_curHeight(0) {}
 
 bool Settings::setGameType(int delta) {
-    if (m_curGameType + delta >= 0 && m_curGameType + delta < GAME_TYPE_COUNT) {
-        m_curGameType += delta;
+    if (m_curGameTypeIdx + delta >= 0 && m_curGameTypeIdx + delta < GAME_TYPE.size()) {
+        m_curGameTypeIdx += delta;
+        return true;
+    }
+    return false;
+}
+
+bool Settings::setMusicType(int delta) {
+    if (m_curMusicTypeIdx + delta >= 0 && m_curMusicTypeIdx + delta < MUSIC_TYPE.size()) {
+        m_curMusicTypeIdx += delta;
         return true;
     }
     return false;
@@ -38,20 +45,14 @@ bool Settings::setHeight(int delta) {
     return false;
 }
 
-bool Settings::setMusicType(int delta) {
-    if (m_curMusicTypeIdx + delta >= 0 && m_curMusicTypeIdx + delta < m_musicType.size()) {
-        m_curMusicTypeIdx += delta;
-        return true;
-    }
-    return false;
-}
+int Settings::getGameTypeIdx() const { return m_curGameTypeIdx; }
 
-int Settings::getGameType() const { return m_curGameType; }
+int Settings::getMusicTypeIdx() const { return m_curMusicTypeIdx; }
 
 int Settings::getLevel() const { return m_curLevel; }
 
 int Settings::getHeight() const { return m_curHeight; }
 
-int Settings::getMusicTypeIdx() const { return m_curMusicTypeIdx; }
+std::string Settings::getGameType() const { return GAME_TYPE[m_curGameTypeIdx]; }
 
-std::string Settings::getMusicType() const { return m_musicType[m_curMusicTypeIdx]; }
+std::string Settings::getMusicPath() const { return MUSIC_TYPE[m_curMusicTypeIdx].path; }

@@ -2,7 +2,7 @@
 #include "conf/sceneconf.h"
 
 PauseScene::PauseScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback)
-    : Scene(ctx, loadSceneCallback, PAUSE_SCENE::BGCOLOR) {}
+    : Scene(ctx, loadSceneCallback) {}
 
 void PauseScene::onEnter() {
 

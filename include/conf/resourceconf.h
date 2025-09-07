@@ -2,42 +2,47 @@
 
 #include <string>
 
-extern const std::string IMAGE_DIR;
-extern const std::string FONT_DIR;
-extern const std::string MUSIC_DIR;
-extern const std::string CHUNK_DIR;
+/* 资源文件夹路径 */
+inline const std::string IMAGE_DIR = "resource/image/";         // 图像资源目录
+inline const std::string FONT_DIR = "resource/font/";           // 字体资源目录
+inline const std::string MUSIC_DIR = "resource/audio/music/";   // 音乐资源目录
+inline const std::string CHUNK_DIR = "resource/audio/chunk/";   // 音效资源目录
 
-extern const std::string COYRIGHT_ICON_IMAGE_PATH;
-extern const std::string GAME_FRAME_IMAGE_PATH;
-extern const std::string HEIGHT_FRAME_IMAGE_PATH;
-extern const std::string LEVEL_A_FRAME_IMAGE_PATH;
-extern const std::string LEVEL_B_FRAME_IMAGE_PATH;
-extern const std::string MENU_FRAME_IMAGE_PATH;
-extern const std::string OPTION_ICON_IMAGE_PATH;
-extern const std::string RESULT_FRAME_IMAGE_PATH;
-extern const std::string SETTING_FRAME_IMAGE_PATH;
-extern const std::string TITLE_FRAME_IMAGE_PATH;
-extern const std::string TYPE_A_FRAME_IMAGE_PATH;
-extern const std::string TYPE_B_FRAME_IMAGE_PATH;
+/* 图像资源文件 */
+inline const std::string COYRIGHT_ICON_IMAGE_PATH = "copyright_icon.png";   // 版权图标
+inline const std::string GAME_FRAME_IMAGE_PATH = "game_frame.png";          // 游戏界面框架
+inline const std::string HEIGHT_FRAME_IMAGE_PATH = "height_frame.png";      // 高度选项框架
+inline const std::string LEVEL_A_FRAME_IMAGE_PATH = "level_a_frame.png";    // A模式关卡选项框架
+inline const std::string LEVEL_B_FRAME_IMAGE_PATH = "level_b_frame.png";    // B模式关卡选项框架
+inline const std::string MENU_FRAME_IMAGE_PATH = "menu_frame.png";          // 菜单界面框架
+inline const std::string OPTION_ICON_IMAGE_PATH = "option_icon.png";        // 选项图标框架
+inline const std::string RESULT_FRAME_IMAGE_PATH = "result_frame.png";      // 游戏结束框架
+inline const std::string SETTING_FRAME_IMAGE_PATH = "setting_frame.png";    // 设置界面框架
+inline const std::string TITLE_FRAME_IMAGE_PATH = "title_frame.png";        // 标题界面框架
+inline const std::string TYPE_A_FRAME_IMAGE_PATH = "type_a_frame.png";      // A模式框架
+inline const std::string TYPE_B_FRAME_IMAGE_PATH = "type_b_frame.png";      // B模式框架
 
-extern const std::string DIGIT_FONT_PATH;
-extern const std::string LETTER_FONT_PATH;
-extern const std::string PUNCTUATION_FONT_PATH;
-extern const std::string PUNCTUATION_LIST;
+/* 字体资源文件 */
+inline const std::string DIGIT_FONT_PATH = "digit.png";                 // 数字
+inline const std::string LETTER_FONT_PATH = "letter.png";               // 大写字母
+inline const std::string PUNCTUATION_FONT_PATH = "punctuation.png";     // 标点符号
+inline const std::string PUNCTUATION_LIST = ",/()\". -";                // 支持的标点符号列表
 
-extern const std::string BGM1_MUSIC_PATH;
-extern const std::string BGM2_MUSIC_PATH;
-extern const std::string BGM3_MUSIC_PATH;
-extern const std::string COUNT_MUSIC_PATH;
-extern const std::string LOSE_MUSIC_PATH;
-extern const std::string TITLE_MUSIC_PATH;
-extern const std::string WIN_MUSIC_PATH;
+/* 音乐资源文件 */
+inline const std::string BGM1_MUSIC_PATH = "bgm1.ogg";      // 游戏背景音乐1
+inline const std::string BGM2_MUSIC_PATH = "bgm2.ogg";      // 游戏背景音乐2
+inline const std::string BGM3_MUSIC_PATH = "bgm3.ogg";      // 游戏背景音乐3
+inline const std::string COUNT_MUSIC_PATH = "count.ogg";    // 结算界面背景音乐
+inline const std::string LOSE_MUSIC_PATH = "lose.ogg";      // 游戏失败背景音乐
+inline const std::string TITLE_MUSIC_PATH = "title.ogg";    // 标题界面背景音乐
+inline const std::string WIN_MUSIC_PATH = "win.ogg";        // 游戏胜利背景音乐
 
-extern const std::string DROP_CHUNK_PATH;
-extern const std::string ERASE_FOUR_CHUNK_PATH;
-extern const std::string ERASE_CHUNK_PATH;
-extern const std::string LEVEL_CHUNK_PATH;
-extern const std::string MOVE_CHUNK_PATH;
-extern const std::string OPTION_CHUNK_PATH;
-extern const std::string ROTATE_CHUNK_PATH;
-extern const std::string SCENE_CHUNK_PATH;
+/* 音效资源文件 */
+inline const std::string DROP_CHUNK_PATH = "drop.ogg";              // 方块下落音效
+inline const std::string ERASE_FOUR_CHUNK_PATH = "erase_four.ogg";  // 消除4行音效
+inline const std::string ERASE_CHUNK_PATH = "erase.ogg";            // 消除音效（非4行）
+inline const std::string LEVEL_CHUNK_PATH = "level.ogg";            // 下一关音效
+inline const std::string MOVE_CHUNK_PATH = "move.ogg";              // 方块移动音效
+inline const std::string OPTION_CHUNK_PATH = "option.ogg";          // 选项切换音效
+inline const std::string ROTATE_CHUNK_PATH = "rotate.ogg";          // 方块旋转音效
+inline const std::string SCENE_CHUNK_PATH = "scene.ogg";            // 场景切换音效
