@@ -22,7 +22,6 @@ set(SOURCE_FILES
     src/scene/menuscene.cpp
     src/scene/settingscene.cpp
     src/scene/gamescene.cpp
-    src/scene/pausescene.cpp
     src/scene/countscene.cpp
     src/scene/scenemanager.cpp
     src/ui/layout.cpp
@@ -52,7 +51,6 @@ set(HEADER_FILES
     include/scene/menuscene.h
     include/scene/settingscene.h
     include/scene/gamescene.h
-    include/scene/pausescene.h
     include/scene/countscene.h
     include/scene/scenemanager.h
     include/ui/layout.h

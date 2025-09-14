@@ -4,7 +4,6 @@
 #include "scene/menuscene.h"
 #include "scene/settingscene.h"
 #include "scene/gamescene.h"
-#include "scene/pausescene.h"
 #include "scene/countscene.h"
 #include <iostream>
 
@@ -26,7 +25,6 @@ SceneManager::SceneManager(Context& ctx)
     registerScene(MENU_SCENE::NAME, std::make_unique<MenuScene>(ctx, loadSceneCallback));
     registerScene(SETTING_SCENE::NAME, std::make_unique<SettingScene>(ctx, loadSceneCallback));
     registerScene(GAME_SCENE::NAME, std::make_unique<GameScene>(ctx, loadSceneCallback));
-    registerScene(PAUSE_SCENE::NAME, std::make_unique<PauseScene>(ctx, loadSceneCallback));
     registerScene(COUNT_SCENE::NAME, std::make_unique<CountScene>(ctx, loadSceneCallback));
 
     // 加载初始场景

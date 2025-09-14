@@ -72,11 +72,6 @@ namespace GAME_SCENE {
     inline const std::string NAME = "game";     // 场景名
 };
 
-// 暂停场景
-namespace PAUSE_SCENE {
-    inline const std::string NAME = "pause";        // 场景名
-};
-
 // 结算场景
 namespace COUNT_SCENE {
     inline const std::string NAME = "count";        // 场景名
