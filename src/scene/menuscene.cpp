@@ -11,66 +11,107 @@ MenuScene::MenuScene(Context& ctx, std::function<void(const std::string&)> loadS
     ResourceManager& rm = ctx.resourceManager;
     Settings& s = ctx.settings;
 
-    // 载入菜单框架与选项图标纹理
-    m_menuFrameTexture = rm.getImage(MENU_FRAME_IMAGE_PATH);
-    m_optionIconTexture = rm.getImage(OPTION_ICON_IMAGE_PATH);
+    m_menuFrameTexture = rm.getImage(MENU_FRAME_IMAGE_PATH);        // 载入菜单界面框架纹理
+    m_optionIconTexture = rm.getImage(OPTION_ICON_IMAGE_PATH);      // 载入选项图标纹理
+    m_optionChunk = rm.getChunk(OPTION_CHUNK_PATH);                 // 载入切换选项音效
 
-    // 创建游戏模式和音乐模式标题文本
-    m_gameTypeText = std::make_unique<Text>(
-        ctx,
-        MENU_SCENE::GAME_TYPE_TEXT_STR,
-        MENU_SCENE::GAME_TYPE_TEXT_POS
+    // 初始化各区域组件
+    initGameTypeOption();
+    initMusicTypeOption();
+}
+
+void MenuScene::initGameTypeOption() {
+    // 创建游戏类型选项与图标布局
+    m_gameTypeOptionLayout = std::make_unique<HorizontalLayout>(
+        MENU_SCENE::GAME_TYPE_OPTION_POS,
+        MENU_SCENE::GAME_TYPE_OPTION_SPACING
     );
-    m_musicTypeText = std::make_unique<Text>(
-        ctx,
-        MENU_SCENE::MUSIC_TYPE_TEXT_STR,
-        MENU_SCENE::MUSIC_TYPE_TEXT_POS
+    m_gameTypeOptionIconLayout = std::make_unique<HorizontalLayout>(
+        MENU_SCENE::GAME_TYPE_OPTION_ICON_POS,
+        MENU_SCENE::GAME_TYPE_OPTION_ICON_OUTER_SPACING
     );
 
-    // 初始化游戏模式与音乐模式选项文本
+    // 创建游戏类型标题文本
+    m_gameTypeTitle = std::make_unique<Text>(
+        m_ctx,
+        MENU_SCENE::GAME_TYPE_TITLE_STR,
+        MENU_SCENE::GAME_TYPE_TITLE_POS
+    );
+
+    // 创建游戏类型选项文本
     int gameTypeCnt = GAME_TYPE.size();
-    int musicTypeCnt = MUSIC_TYPE.size();
-    m_gameTypeOptionText.reserve(gameTypeCnt);
-    m_musicTypeOptionText.reserve(musicTypeCnt);
+    m_gameTypeOption.reserve(gameTypeCnt);
     for (int i = 0; i < gameTypeCnt; ++i) {
-        m_gameTypeOptionText.emplace_back(
+        m_gameTypeOption.emplace_back(
             std::make_unique<Text>(
-                ctx,
+                m_ctx,
                 GAME_TYPE[i],
-                MENU_SCENE::GAME_TYPE_OPTION_TEXT_POS[i]
-            )
-        );
-    }
-    for (int i = 0; i < musicTypeCnt; ++i) {
-        m_musicTypeOptionText.emplace_back(
-            std::make_unique<Text>(
-                ctx,
-                MUSIC_TYPE[i].name,
-                MENU_SCENE::MUSIC_TYPE_OPTION_TEXT_POS[i]
+                m_gameTypeOptionLayout->getElementPos(i)
             )
         );
     }
 
-    // 初始化选项指示图标（左右两个动画图标）
+    // 创建游戏类型选项图标（左右各一个）
     for (int i = 0; i < 2; ++i) {
         m_gameTypeOptionIcon[i] = std::make_unique<OptionIcon>(
-            ctx, 
+            m_ctx, 
             m_optionIconTexture, 
-            MENU_SCENE::GAME_TYPE_OPTION_ICON_POS[i], 
-            MENU_SCENE::OPTION_ICON_SHOW_FRAME, 
-            MENU_SCENE::OPTION_ICON_HIDE_FRAME
-        );
-        m_musicTypeOptionIcon[i] = std::make_unique<OptionIcon>(
-            ctx, 
-            m_optionIconTexture, 
-            MENU_SCENE::MUSIC_TYPE_OPTION_ICON_POS[i], 
+            [layoutPtr = m_gameTypeOptionIconLayout.get(), i](int row, int col) { 
+                SDL_Point pos = layoutPtr->getElementPos(col);
+                pos.x += i * MENU_SCENE::GAME_TYPE_OPTION_ICON_INNER_SPACING;
+                return pos;
+            }, 
             MENU_SCENE::OPTION_ICON_SHOW_FRAME, 
             MENU_SCENE::OPTION_ICON_HIDE_FRAME
         );
     }
+}
 
-    // 载入选项切换音效
-    m_optionChunk = rm.getChunk(OPTION_CHUNK_PATH);
+void MenuScene::initMusicTypeOption() {
+    // 创建音乐类型选项与图标布局
+    m_musicTypeOptionLayout = std::make_unique<VerticalLayout>(
+        MENU_SCENE::MUSIC_TYPE_OPTION_POS,
+        MENU_SCENE::MUSIC_TYPE_OPTION_SPACING
+    );
+    m_musicTypeOptionIconLayout = std::make_unique<VerticalLayout>(
+        MENU_SCENE::MUSIC_TYPE_OPTION_ICON_POS,
+        MENU_SCENE::MUSIC_TYPE_OPTION_ICON_OUTER_SPACING
+    );
+
+    // 创建音乐类型标题文本
+    m_musicTypeTitle = std::make_unique<Text>(
+        m_ctx,
+        MENU_SCENE::MUSIC_TYPE_TITLE_STR,
+        MENU_SCENE::MUSIC_TYPE_TITLE_POS
+    );
+
+    // 创建音乐类型选项文本
+    int musicTypeCnt = MUSIC_TYPE.size();
+    m_musicTypeOption.reserve(musicTypeCnt);
+    for (int i = 0; i < musicTypeCnt; ++i) {
+        m_musicTypeOption.emplace_back(
+            std::make_unique<Text>(
+                m_ctx,
+                MUSIC_TYPE[i].name,
+                m_musicTypeOptionLayout->getElementPos(i)
+            )
+        );
+    }
+
+    // 创建游戏类型选项图标（左右各一个）
+    for (int i = 0; i < 2; ++i) {
+        m_musicTypeOptionIcon[i] = std::make_unique<OptionIcon>(
+            m_ctx, 
+            m_optionIconTexture, 
+            [layoutPtr = m_musicTypeOptionIconLayout.get(), i](int row, int col) { 
+                SDL_Point pos = layoutPtr->getElementPos(row);
+                pos.x += i * MENU_SCENE::MUSIC_TYPE_OPTION_ICON_INNER_SPACING;
+                return pos;
+            }, 
+            MENU_SCENE::OPTION_ICON_SHOW_FRAME, 
+            MENU_SCENE::OPTION_ICON_HIDE_FRAME
+        );
+    }
 }
 
 void MenuScene::onEnter() {
@@ -86,7 +127,7 @@ void MenuScene::onEnter() {
         am.stopMusic();
     }
 
-    // 启动光标动画
+    // 选项图标启动动画
     for (int i = 0; i < 2; ++i) {
         m_gameTypeOptionIcon[i]->playAnim();
         m_musicTypeOptionIcon[i]->playAnim();
@@ -97,7 +138,7 @@ void MenuScene::onExit() {
     // 停止播放音乐
     m_ctx.audioManager.stopMusic();
 
-    // 停止光标动画
+    // 选项图标停止动画
     for (int i = 0; i < 2; ++i) {
         m_gameTypeOptionIcon[i]->stopAnim();
         m_musicTypeOptionIcon[i]->stopAnim();
@@ -105,7 +146,7 @@ void MenuScene::onExit() {
 }
 
 void MenuScene::onUpdate() {
-    // 更新光标动画
+    // 选项图标动画更新
     for (int i = 0; i < 2; ++i) {
         m_gameTypeOptionIcon[i]->onUpdate();
         m_musicTypeOptionIcon[i]->onUpdate();
@@ -160,14 +201,14 @@ void MenuScene::renderContent() {
     renderTexture(rdr, m_menuFrameTexture);
 
     // 绘制标题文本
-    m_gameTypeText->onRender();
-    m_musicTypeText->onRender();
+    m_gameTypeTitle->onRender();
+    m_musicTypeTitle->onRender();
 
     // 绘制选项文本
-    for (auto& text: m_gameTypeOptionText) {
+    for (auto& text: m_gameTypeOption) {
         text->onRender();
     }
-    for (auto& text: m_musicTypeOptionText) {
+    for (auto& text: m_musicTypeOption) {
         text->onRender();
     }
 
@@ -175,8 +216,8 @@ void MenuScene::renderContent() {
     Settings& s = m_ctx.settings;
     int gameTypeIdx = s.getGameTypeIdx();
     int musicTypeIdx = s.getMusicTypeIdx();
-    m_gameTypeOptionIcon[0]->onRender(gameTypeIdx);
-    m_gameTypeOptionIcon[1]->onRender(gameTypeIdx, true);
-    m_musicTypeOptionIcon[0]->onRender(musicTypeIdx);
-    m_musicTypeOptionIcon[1]->onRender(musicTypeIdx, true);
+    m_gameTypeOptionIcon[0]->onRender(0, gameTypeIdx);
+    m_gameTypeOptionIcon[1]->onRender(0, gameTypeIdx, true);
+    m_musicTypeOptionIcon[0]->onRender(musicTypeIdx, 0);
+    m_musicTypeOptionIcon[1]->onRender(musicTypeIdx, 0, true);
 }

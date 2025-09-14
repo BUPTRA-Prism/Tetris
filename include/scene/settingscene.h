@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene/scene.h"
+#include "ui/layout.h"
 #include "ui/optionicon.h"
 #include "ui/text.h"
 
@@ -15,16 +16,20 @@ private:
     SDL_Texture* m_heightFrameTexture;      // 高度设置框架纹理
     UniqueTexture m_optionIconTexture;      // 选项图标纹理
 
-    std::unique_ptr<Text> m_gameTypeText;                       // 游戏类型文本
-    std::unique_ptr<Text> m_levelText;                          // 关卡标题文本
-    std::vector<std::unique_ptr<Text>> m_levelOptionText;       // 关卡选项文本
-    std::unique_ptr<Text> m_heightText;                         // 高度标题文本
-    std::vector<std::unique_ptr<Text>> m_heightOptionText;      // 高度选项文本
-    std::vector<std::unique_ptr<Text>> m_recordTitleText;       // 记录表头文本
-    std::vector<std::unique_ptr<Text>> m_recordOrderText;       // 记录名次文本
-    std::vector<std::unique_ptr<Text>> m_recordNameText;        // 记录姓名文本
-    std::vector<std::unique_ptr<Text>> m_recordScoreText;       // 记录分数文本
-    std::vector<std::unique_ptr<Text>> m_recordLvText;          // 记录关卡数文本
+    std::unique_ptr<GridLayout> m_levelOptionIconLayout;    // 关卡选项图标布局
+    std::unique_ptr<GridLayout> m_heightOptionIconLayout;   // 高度选项图标布局
+    std::unique_ptr<GridLayout> m_recordLayout;             // 记录表布局
+
+    std::unique_ptr<Text> m_gameTypeTitle;              // 游戏类型
+    std::unique_ptr<Text> m_levelTitle;                 // 关卡标题
+    std::vector<std::unique_ptr<Text>> m_levelOption;   // 关卡选项
+    std::unique_ptr<Text> m_heightTitle;                // 高度标题
+    std::vector<std::unique_ptr<Text>> m_heightOption;  // 高度选项
+    std::vector<std::unique_ptr<Text>> m_recordTitle;   // 记录表头
+    std::vector<std::unique_ptr<Text>> m_recordOrder;   // 记录名次
+    std::vector<std::unique_ptr<Text>> m_recordName;    // 记录姓名
+    std::vector<std::unique_ptr<Text>> m_recordScore;   // 记录分数
+    std::vector<std::unique_ptr<Text>> m_recordLv;      // 记录关卡数
     
     std::unique_ptr<OptionIcon> m_levelOptionIcon;      // 关卡选项图标
     std::unique_ptr<OptionIcon> m_heightOptionIcon;     // 高度选项图标
@@ -54,4 +59,22 @@ public:
      * @brief 渲染设置场景具体内容
      */
     void renderContent() override;
+
+private:
+    /**
+     * @brief 初始化游戏类型相关组件
+     */
+    void initGameType();
+    /**
+     * @brief 初始化关卡选项相关组件
+     */
+    void initLevelOption();
+    /**
+     * @brief 初始化高度选项相关组件
+     */
+    void initHeightOption();
+    /**
+     * @brief 初始化记录表相关组件
+     */
+    void initRecord();
 };

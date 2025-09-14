@@ -33,7 +33,7 @@ void Text::onRender() {
     SDL_Renderer* rdr = m_ctx.renderer;
     for (int i = 0; i < m_str.length(); ++i) {
         // 获取每个字符位置
-        SDL_Point dstPos = { m_pos.x + i * (FONT_SIZE + FONT_MARGIN), m_pos.y };
+        SDL_Point dstPos = { m_pos.x + i * (FONT_SIZE + FONT_SPACING), m_pos.y };
         
         if (m_str[i] >= '0' && m_str[i] <= '9') {
             // 渲染数字字符

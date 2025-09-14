@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene/scene.h"
+#include "ui/layout.h"
 #include "ui/optionicon.h"
 #include "ui/text.h"
 
@@ -12,10 +13,15 @@ private:
     SDL_Texture* m_menuFrameTexture;    // 菜单框架纹理
     SDL_Texture* m_optionIconTexture;   // 选项图标纹理
 
-    std::unique_ptr<Text> m_gameTypeText;                       // 游戏模式标题文本
-    std::vector<std::unique_ptr<Text>> m_gameTypeOptionText;    // 游戏模式选项文本列表
-    std::unique_ptr<Text> m_musicTypeText;                      // 音乐模式标题文本
-    std::vector<std::unique_ptr<Text>> m_musicTypeOptionText;   // 音乐模式选项文本列表
+    std::unique_ptr<HorizontalLayout> m_gameTypeOptionLayout;       // 游戏模式选项布局
+    std::unique_ptr<HorizontalLayout> m_gameTypeOptionIconLayout;   // 游戏模式选项图标布局
+    std::unique_ptr<VerticalLayout> m_musicTypeOptionLayout;        // 音乐模式选项布局
+    std::unique_ptr<VerticalLayout> m_musicTypeOptionIconLayout;    // 音乐模式选项图标布局
+
+    std::unique_ptr<Text> m_gameTypeTitle;                  // 游戏模式标题
+    std::unique_ptr<Text> m_musicTypeTitle;                 // 音乐模式标题
+    std::vector<std::unique_ptr<Text>> m_gameTypeOption;    // 游戏模式选项
+    std::vector<std::unique_ptr<Text>> m_musicTypeOption;   // 音乐模式选项
 
     std::array<std::unique_ptr<OptionIcon>, 2> m_gameTypeOptionIcon;    // 游戏模式选项图标
     std::array<std::unique_ptr<OptionIcon>, 2> m_musicTypeOptionIcon;   // 音乐模式选项图标
@@ -48,4 +54,14 @@ public:
      * @brief 渲染菜单场景具体内容
      */
     void renderContent() override;
+
+private:
+    /**
+     * @brief 初始化游戏类型选项相关组件
+     */
+    void initGameTypeOption();
+    /**
+     * @brief 初始化音乐类型选项相关组件
+     */
+    void initMusicTypeOption();
 };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "conf/settingconf.h"
 #include <string>
 #include <vector>
 
@@ -52,6 +53,7 @@ public:
      * @return bool 设置成功返回 true ，否则返回 false
      */
     bool setHeight(int delta);
+    bool setRecord(std::string name, int score, int lv);
 
     /**
      * @brief 获取当前游戏类型索引
@@ -84,6 +86,24 @@ public:
      * @return std::string 当前音乐文件名
      */
     std::string getMusicPath() const;
+    /**
+     * @brief 获取指定排名的记录姓名
+     * @param order 排名
+     * @return std::string 记录姓名
+     */
+    std::string getRecordName(int order) const;
+    /**
+     * @brief 获取指定排名的记录分数
+     * @param order 排名
+     * @return int 记录分数
+     */
+    int getRecordScore(int order) const;
+    /**
+     * @brief 获取指定排名的记录关卡数
+     * @param order 排名
+     * @return int 记录关卡数
+     */
+    int getRecordLv(int order) const;
 
 private:
     Settings();             // 私有构造函数

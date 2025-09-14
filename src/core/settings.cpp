@@ -1,6 +1,5 @@
 #include "core/settings.h"
 #include "conf/resourceconf.h"
-#include "conf/settingconf.h"
 
 Settings& Settings::getInstance() {
     static Settings instance;
@@ -45,6 +44,10 @@ bool Settings::setHeight(int delta) {
     return false;
 }
 
+bool Settings::setRecord(std::string name, int score, int lv) {
+    return false;
+}
+
 int Settings::getGameTypeIdx() const { return m_curGameTypeIdx; }
 
 int Settings::getMusicTypeIdx() const { return m_curMusicTypeIdx; }
@@ -56,3 +59,33 @@ int Settings::getHeight() const { return m_curHeight; }
 std::string Settings::getGameType() const { return GAME_TYPE[m_curGameTypeIdx]; }
 
 std::string Settings::getMusicPath() const { return MUSIC_TYPE[m_curMusicTypeIdx].path; }
+
+std::string Settings::getRecordName(int order) const {
+    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_A && order >= 0 && order <= RECORD_A.size()) {
+        return RECORD_A[order].name;
+    }
+    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_B && order >= 0 && order <= RECORD_B.size()) {
+        return RECORD_B[order].name;
+    }
+    return "";
+}
+
+int Settings::getRecordScore(int order) const {
+    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_A && order >= 0 && order <= RECORD_A.size()) {
+        return RECORD_A[order].score;
+    }
+    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_B && order >= 0 && order <= RECORD_B.size()) {
+        return RECORD_B[order].score;
+    }
+    return 0;
+}
+
+int Settings::getRecordLv(int order) const {
+    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_A && order >= 0 && order <= RECORD_A.size()) {
+        return RECORD_A[order].lv;
+    }
+    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_B && order >= 0 && order <= RECORD_B.size()) {
+        return RECORD_B[order].lv;
+    }
+    return 0;
+}

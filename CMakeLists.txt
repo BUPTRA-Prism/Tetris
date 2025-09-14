@@ -25,6 +25,7 @@ set(SOURCE_FILES
     src/scene/pausescene.cpp
     src/scene/countscene.cpp
     src/scene/scenemanager.cpp
+    src/ui/layout.cpp
     src/ui/optionicon.cpp
     src/ui/text.cpp
     src/util/sdlresource.cpp
@@ -54,6 +55,7 @@ set(HEADER_FILES
     include/scene/pausescene.h
     include/scene/countscene.h
     include/scene/scenemanager.h
+    include/ui/layout.h
     include/ui/optionicon.h
     include/ui/text.h
     include/util/sdlresource.h
