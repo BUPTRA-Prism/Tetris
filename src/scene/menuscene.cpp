@@ -14,6 +14,7 @@ MenuScene::MenuScene(Context& ctx, std::function<void(const std::string&)> loadS
     m_menuFrameTexture = rm.getImage(MENU_FRAME_IMAGE_PATH);        // 载入菜单界面框架纹理
     m_optionIconTexture = rm.getImage(OPTION_ICON_IMAGE_PATH);      // 载入选项图标纹理
     m_optionChunk = rm.getChunk(OPTION_CHUNK_PATH);                 // 载入切换选项音效
+    m_sceneChunk = rm.getChunk(SCENE_CHUNK_PATH);                   // 载入切换场景音效
 
     // 初始化各区域组件
     initGameTypeOption();
@@ -137,6 +138,8 @@ void MenuScene::onEnter() {
 void MenuScene::onExit() {
     // 停止播放音乐
     m_ctx.audioManager.stopMusic();
+    // 播放切换场景音效
+    m_ctx.audioManager.playChunk(m_sceneChunk);
 
     // 选项图标停止动画
     for (int i = 0; i < 2; ++i) {

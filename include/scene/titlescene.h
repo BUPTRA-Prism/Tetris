@@ -13,6 +13,7 @@ private:
     std::unique_ptr<Text> m_startText;  // 开始游戏文本
     std::unique_ptr<Text> m_yearText;   // 年份文本
     Mix_Music* m_titleMusic;            // 背景音乐
+    Mix_Chunk* m_sceneChunk;           // 切换场景音效
 
 public:
     /**

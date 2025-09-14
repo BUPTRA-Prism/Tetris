@@ -26,6 +26,8 @@ TitleScene::TitleScene(Context& ctx, std::function<void(const std::string&)> loa
     );
     // 获取标题场景背景音乐
     m_titleMusic = rm.getMusic(TITLE_MUSIC_PATH);
+    // 获取切换场景音效
+    m_sceneChunk = rm.getChunk(SCENE_CHUNK_PATH);
 }
 
 void TitleScene::onEnter() {
@@ -36,6 +38,8 @@ void TitleScene::onEnter() {
 void TitleScene::onExit() {
     // 退出场景时，停止背景音乐
     m_ctx.audioManager.stopMusic();
+    // 退出场景时，播放切换场景音效
+    m_ctx.audioManager.playChunk(m_sceneChunk);
 }
 
 void TitleScene::onUpdate() {

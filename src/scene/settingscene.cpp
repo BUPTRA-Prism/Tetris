@@ -23,6 +23,9 @@ SettingScene::SettingScene(Context& ctx, std::function<void(const std::string&)>
         SETTING_SCENE::OPTION_ICON_SIZE.y
     );
 
+    // 载入切换场景音效
+    m_sceneChunk = rm.getChunk(SCENE_CHUNK_PATH);
+
     // 初始化各区域组件
     initGameType();
     initLevelOption();
@@ -224,6 +227,9 @@ void SettingScene::onEnter() {
 }
 
 void SettingScene::onExit() {
+    // 播放切换场景音效
+    m_ctx.audioManager.playChunk(m_sceneChunk);
+    
     // 选项图标停止动画
     m_levelOptionIcon->stopAnim();
     m_heightOptionIcon->stopAnim();

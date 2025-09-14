@@ -34,6 +34,8 @@ private:
     std::unique_ptr<OptionIcon> m_levelOptionIcon;      // 关卡选项图标
     std::unique_ptr<OptionIcon> m_heightOptionIcon;     // 高度选项图标
 
+    Mix_Chunk* m_sceneChunk;    // 切换场景音效
+
 public:
     /**
      * @brief 构造函数

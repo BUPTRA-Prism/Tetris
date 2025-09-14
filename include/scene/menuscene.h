@@ -28,6 +28,7 @@ private:
 
     Mix_Music* m_music;         // 背景音乐
     Mix_Chunk* m_optionChunk;   // 选项切换音效
+    Mix_Chunk* m_sceneChunk;    // 切换场景音效
 
 public:
     /**
