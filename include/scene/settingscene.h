@@ -10,6 +10,14 @@
  */
 class SettingScene : public Scene {
 private:
+    // 选项枚举
+    enum SettingItem {
+        level,  // 关卡选项
+        height  // 高度选项
+    };
+
+    SettingItem m_curSettingItem;   // 目前正在设置的选项
+
     SDL_Texture* m_settingFrameTexture;     // 设置场景框架纹理
     SDL_Texture* m_typeFrameTexture;        // 游戏类型框架纹理
     SDL_Texture* m_levelFrameTexture;       // 关卡设置框架纹理
@@ -34,6 +42,7 @@ private:
     std::unique_ptr<OptionIcon> m_levelOptionIcon;      // 关卡选项图标
     std::unique_ptr<OptionIcon> m_heightOptionIcon;     // 高度选项图标
 
+    Mix_Chunk* m_optionChunk;   // 选项切换音效
     Mix_Chunk* m_sceneChunk;    // 切换场景音效
 
 public:

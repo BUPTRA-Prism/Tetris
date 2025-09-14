@@ -23,8 +23,8 @@ SettingScene::SettingScene(Context& ctx, std::function<void(const std::string&)>
         SETTING_SCENE::OPTION_ICON_SIZE.y
     );
 
-    // 载入切换场景音效
-    m_sceneChunk = rm.getChunk(SCENE_CHUNK_PATH);
+    m_optionChunk = rm.getChunk(OPTION_CHUNK_PATH);     // 载入切换选项音效
+    m_sceneChunk = rm.getChunk(SCENE_CHUNK_PATH);       // 载入切换场景音效
 
     // 初始化各区域组件
     initGameType();
@@ -190,6 +190,9 @@ void SettingScene::initRecord() {
 }
 
 void SettingScene::onEnter() {
+    // 初始设置选项为关卡
+    m_curSettingItem = SettingItem::level;
+
     ResourceManager& rm = m_ctx.resourceManager;
     Settings& s = m_ctx.settings;
     
@@ -204,8 +207,6 @@ void SettingScene::onEnter() {
     } else if (gameType == GAME_TYPE_B) {
         m_typeFrameTexture = rm.getImage(TYPE_B_FRAME_IMAGE_PATH);
         m_levelFrameTexture = rm.getImage(LEVEL_B_FRAME_IMAGE_PATH);
-        // 如果是B模式，高度选项图标启动动画
-        m_heightOptionIcon->playAnim();
     }
     // 关卡选项图标启动动画
     m_levelOptionIcon->playAnim();
@@ -229,7 +230,7 @@ void SettingScene::onEnter() {
 void SettingScene::onExit() {
     // 播放切换场景音效
     m_ctx.audioManager.playChunk(m_sceneChunk);
-    
+
     // 选项图标停止动画
     m_levelOptionIcon->stopAnim();
     m_heightOptionIcon->stopAnim();
@@ -240,13 +241,70 @@ void SettingScene::onUpdate() {
     m_levelOptionIcon->onUpdate();
     m_heightOptionIcon->onUpdate();
 
+    bool levelChanged = false;
+    bool heightChanged = false;
+    AudioManager& am = m_ctx.audioManager;
     InputManager& im = m_ctx.inputManager;
+    Settings& s = m_ctx.settings;
 
     // 场景切换
     if (im.isKeyJustPressed(NEXT_SCENE_KEY)) {
         m_loadSceneCallback(GAME_SCENE::NAME);
     } else if (im.isKeyJustPressed(ABOVE_SCENE_KEY)) {
         m_loadSceneCallback(MENU_SCENE::NAME);
+    } else if (im.isKeyJustPressed(SWITCH_SETTING_KEY)) {
+        // 切换设置项，仅在B模式能切换
+        // 仅目前所处设置项选项图标启动动画，其他设置项选项停止动画
+        if (s.getGameType() == GAME_TYPE_B) {
+            if (m_curSettingItem == SettingItem::level) {
+                m_curSettingItem = SettingItem::height;
+                m_levelOptionIcon->stopAnim();
+                m_heightOptionIcon->playAnim();
+            } else {
+                m_curSettingItem = SettingItem::level;
+                m_levelOptionIcon->playAnim();
+                m_heightOptionIcon->stopAnim();
+            }
+
+            // 播放切换选项音效
+            am.playChunk(m_optionChunk);
+        }
+    } else {
+        // 选项设置
+        int levelOptionCol = (MAX_LEVEL + 1) / SETTING_SCENE::OPTION_ROW_NUM;
+        int heightOptionCol = (MAX_HEIGHT + 1) / SETTING_SCENE::OPTION_ROW_NUM;
+        // 左右键
+        if (im.isKeyJustPressed(LEFT_KEY) && !im.isKeyPressed(RIGHT_KEY)) {
+            if (m_curSettingItem == SettingItem::level) {
+                levelChanged = s.setLevel(-1);
+            } else {
+                heightChanged = s.setHeight(-1);
+            }
+        } else if (im.isKeyJustPressed(RIGHT_KEY) && !im.isKeyPressed(LEFT_KEY)) {
+            if (m_curSettingItem == SettingItem::level) {
+                levelChanged = s.setLevel(1);
+            } else {
+                heightChanged = s.setHeight(1);
+            }
+        }
+        // 上下键
+        if (im.isKeyJustPressed(UP_KEY) && !im.isKeyPressed(DOWN_KEY)) {
+            if (m_curSettingItem == SettingItem::level) {
+                levelChanged = s.setLevel(-levelOptionCol);
+            } else {
+                heightChanged = s.setHeight(-heightOptionCol);
+            }
+        } else if (im.isKeyJustPressed(DOWN_KEY) && !im.isKeyPressed(UP_KEY)) {
+            if (m_curSettingItem == SettingItem::level) {
+                levelChanged = s.setLevel(levelOptionCol);
+            } else {
+                heightChanged = s.setHeight(heightOptionCol);
+            }
+        }
+        // 如果有设置项变更，播放选项切换音效
+        if (levelChanged || heightChanged) {
+            am.playChunk(m_optionChunk);
+        }
     }
 }
 
@@ -260,7 +318,9 @@ void SettingScene::renderContent() {
     m_gameTypeTitle->onRender();
 
     // 渲染关卡选项相关组件
-    m_levelOptionIcon->onRender(0, 0);
+    int levelOptionCol = (MAX_LEVEL + 1) / SETTING_SCENE::OPTION_ROW_NUM;
+    int level = s.getLevel();
+    m_levelOptionIcon->onRender(level / levelOptionCol, level % levelOptionCol);
     renderTexture(rdr, m_levelFrameTexture, SETTING_SCENE::LEVEL_FRAME_POS);
     m_levelTitle->onRender();
     for (auto& text: m_levelOption) {
@@ -269,7 +329,9 @@ void SettingScene::renderContent() {
 
     // 渲染高度选项相关组件
     if (s.getGameType() == GAME_TYPE_B) {
-        m_heightOptionIcon->onRender(0, 0);
+        int heightOptionCol = (MAX_HEIGHT + 1) / SETTING_SCENE::OPTION_ROW_NUM;
+        int height = s.getHeight();
+        m_heightOptionIcon->onRender(height / heightOptionCol, height % heightOptionCol);
         renderTexture(rdr, m_heightFrameTexture, SETTING_SCENE::HEIGHT_FRAME_POS);
         m_heightTitle->onRender();
         for (auto& text: m_heightOption) {
