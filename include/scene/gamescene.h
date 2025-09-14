@@ -4,6 +4,9 @@
 
 class GameScene : public Scene {
 private:
+    SDL_Texture* m_gameFrameTexture;
+
+    Mix_Music* m_music;
 
 public:
     GameScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback);
