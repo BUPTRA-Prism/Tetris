@@ -69,7 +69,28 @@ namespace SETTING_SCENE {
 
 // 游戏场景
 namespace GAME_SCENE {
-    inline const std::string NAME = "game";     // 场景名
+    inline const std::string NAME = "game";                             // 场景名
+    inline const SDL_Point GAME_TYPE_TITLE_POS = { 64, 64 };            // 游戏类型标题位置
+    inline const SDL_Point TETRIS_COUNT_POS = { 192, 352 };             // 方块计数区域位置
+    inline const SDL_Point TETRIS_TEMPLATE_CENTER_POS = { 138, 366 };   // 方块模板中心点位置
+    inline const int TETRIS_COUNT_SPACING = 64;                         // 方块计数区域间距
+    inline const SDL_Color TETRIS_COUNT_COLOR = { 181, 49, 32, 255 };   // 方块计数文本颜色
+    inline const std::string LINE_COUNT_STR = "LINES-";                 // 消除行文本内容
+    inline const SDL_Point LINE_COUNT_POS = { 416, 64 };                // 消除行文本位置
+    inline const std::string TOP_TITLE_STR = "TOP";                     // 最高分标题文本
+    inline const std::string SCORE_TITLE_STR = "SCORE";                 // 分数标题文本
+    inline const SDL_Point TOP_POS = { 768, 96 };                       // 最高分区域位置
+    inline const SDL_Point SCORE_POS = { 768, 192 };                    // 分数区域位置 
+    inline const int SCORE_SPACING = 32;                                // 分数区域间距
+    inline const std::string NEXT_TETRIS_TITLE_STR = "NEXT";            // 下一个方块标题文本
+    inline const SDL_Point NEXT_TETRIS_TITLE_POS = { 768, 384 };        // 下一个方块区域位置
+    inline const std::string LEVEL_TITLE_STR = "LEVEL";                 // 关卡标题文本
+    inline const SDL_Point LEVEL_POS = { 768, 608 };                    // 关卡区域位置
+    inline const int LEVEL_SPACING = 32;                                // 关卡区域间距
+    inline const int TETRIS_COUNT_MAX_LEN = 3;                          // 方块计数最大长度
+    inline const int LINE_COUNT_MAX_LEN = 3;                            // 消除行数最大长度
+    inline const int SCORE_MAX_LEN = 6;                                 // 分数最大长度
+    inline const int LEVEL_MAX_LEN = 2;                                 // 关卡数最大长度
 };
 
 // 结算场景

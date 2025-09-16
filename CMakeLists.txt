@@ -12,7 +12,7 @@ set(SOURCE_FILES
     src/animation/animation.cpp
     src/animation/blinkanimation.cpp
     src/core/context.cpp
-    src/core/logic.cpp
+    src/core/game.cpp
     src/core/settings.cpp
     src/manager/audiomanager.cpp
     src/manager/inputmanager.cpp
@@ -41,7 +41,7 @@ set(HEADER_FILES
     include/conf/sceneconf.h
     include/conf/settingconf.h
     include/core/context.h
-    include/core/logic.h
+    include/core/game.h
     include/core/settings.h
     include/manager/audiomanager.h
     include/manager/inputmanager.h

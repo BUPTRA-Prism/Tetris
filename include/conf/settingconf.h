@@ -32,13 +32,13 @@ inline const int MAX_LEVEL = 9;     // 最大初始关卡
 inline const int MAX_HEIGHT = 5;    // 最大启示高度
 
 inline const int RECORD_COUNT = 3;  // 记录数量
-inline std::vector<Record> RECORD_A = {
-    { "HOWARD", 10000, 9 },
-    { "OTASAN", 7500, 5 },
-    { "LANCE", 5000, 0 }
+inline std::array<Record, RECORD_COUNT> RECORD_A = {
+    Record { "HOWARD", 10000, 9 },
+    Record { "OTASAN", 7500, 5 },
+    Record { "LANCE", 5000, 0 }
 };
-inline std::vector<Record> RECORD_B = {
-    { "ALEX", 2000, 9 },
-    { "TONY", 1000, 5 },
-    { "NINTEN", 500, 0 }
+inline std::array<Record, RECORD_COUNT> RECORD_B = {
+    Record { "ALEX", 2000, 9 },
+    Record { "TONY", 1000, 5 },
+    Record { "NINTEN", 500, 0 }
 };
