@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sdlresource.h"
+#include <random>
 #include <SDL.h>
 
 /**
@@ -22,3 +23,5 @@ void renderTexture(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Point dstPo
  * @return UniqueTexture 管理 SDL_Texture 的智能指针，创建失败返回 nullptr
 */
 UniqueTexture createSolidTexture(SDL_Renderer* renderer, SDL_Color color, int w, int h);
+
+int getRandomInt(int min, int max);

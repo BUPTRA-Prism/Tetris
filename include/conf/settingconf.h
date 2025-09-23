@@ -2,6 +2,7 @@
 
 #include "conf/resourceconf.h"
 
+#include <array>
 #include <string>
 #include <vector>
 

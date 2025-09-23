@@ -11,7 +11,7 @@
 class SettingScene : public Scene {
 private:
     // 选项枚举
-    enum SettingItem {
+    enum class SettingItem {
         level,  // 关卡选项
         height  // 高度选项
     };
