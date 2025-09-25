@@ -14,8 +14,10 @@ enum class TetrisStyle {
 
 enum class TetrisMode { T, J, Z, O, S, L, I };
 
+inline const int TETRIS_NUM = 4;
+
 inline const std::unordered_map<TetrisMode, 
-    std::vector<std::array<std::pair<int, int>, 4>>> TETRIS_MODE_ROTATE = {
+    std::vector<std::array<std::pair<int, int>, TETRIS_NUM>>> TETRIS_MODE_ROTATE = {
     {
         TetrisMode::T, {
             { { { 0, 0 }, { 0, 1 }, { 0, 2 }, { -1, 1 } } },
@@ -87,3 +89,5 @@ inline const std::vector<int> TETRIS_GRAVITY_FRAME = {
     2, 2, 2, 2, 2, 2, 2, 2, 2, 1
 };
 inline const std::vector<int> TETRIS_HEIGHT_LINE = { 0, 3, 5, 8, 10, 12 };
+
+inline const std::pair<int, int> TETRIS_INIT_POS = { 19, 4 };

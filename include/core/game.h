@@ -16,6 +16,9 @@ private:
     TetrisMode m_curMode;
     TetrisMode m_nextMode;
 
+    std::array<std::pair<int, int>, TETRIS_NUM> m_tetrisPos;
+    int m_tetrisRotateStatus;
+
 public:
     Game();
     ~Game() = default;
@@ -29,12 +32,13 @@ public:
 
     void resetGame(int level, int height);
 
+    bool generate();
     void move(int delta);
     void rotate(int delta);
+    bool drop();
 
-    void generate();
-    int erase();
+    std::vector<int> checkEraseLine();
+    void erase(std::vector<int>& lines, int order);
     int calculate();
     bool win();
-    bool lose();
 };
