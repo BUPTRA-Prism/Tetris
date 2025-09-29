@@ -12,8 +12,8 @@ class SettingScene : public Scene {
 private:
     // 选项枚举
     enum class SettingItem {
-        level,  // 关卡选项
-        height  // 高度选项
+        LevelSetting,  // 关卡选项
+        HeightSetting  // 高度选项
     };
 
     SettingItem m_curSettingItem;   // 目前正在设置的选项
@@ -26,18 +26,19 @@ private:
 
     std::unique_ptr<GridLayout> m_levelOptionIconLayout;    // 关卡选项图标布局
     std::unique_ptr<GridLayout> m_heightOptionIconLayout;   // 高度选项图标布局
+    std::unique_ptr<VerticalLayout> m_recordOrderLayout;    // 记录表排名布局
     std::unique_ptr<GridLayout> m_recordLayout;             // 记录表布局
 
-    std::unique_ptr<Text> m_gameTypeTitle;              // 游戏类型
-    std::unique_ptr<Text> m_levelTitle;                 // 关卡标题
-    std::vector<std::unique_ptr<Text>> m_levelOption;   // 关卡选项
-    std::unique_ptr<Text> m_heightTitle;                // 高度标题
-    std::vector<std::unique_ptr<Text>> m_heightOption;  // 高度选项
-    std::vector<std::unique_ptr<Text>> m_recordTitle;   // 记录表头
-    std::vector<std::unique_ptr<Text>> m_recordOrder;   // 记录名次
-    std::vector<std::unique_ptr<Text>> m_recordName;    // 记录姓名
-    std::vector<std::unique_ptr<Text>> m_recordScore;   // 记录分数
-    std::vector<std::unique_ptr<Text>> m_recordLv;      // 记录关卡数
+    std::unique_ptr<Text> m_gameTypeTitle;                  // 游戏类型
+    std::unique_ptr<Text> m_levelTitle;                     // 关卡标题
+    std::vector<std::unique_ptr<Text>> m_levelOptionText;   // 关卡选项
+    std::unique_ptr<Text> m_heightTitle;                    // 高度标题
+    std::vector<std::unique_ptr<Text>> m_heightOptionText;  // 高度选项
+    std::vector<std::unique_ptr<Text>> m_recordTitle;       // 记录表头
+    std::vector<std::unique_ptr<Text>> m_recordOrderText;   // 记录名次
+    std::vector<std::unique_ptr<Text>> m_recordNameText;    // 记录姓名
+    std::vector<std::unique_ptr<Text>> m_recordScoreText;   // 记录分数
+    std::vector<std::unique_ptr<Text>> m_recordLvText;      // 记录关卡数
     
     std::unique_ptr<OptionIcon> m_levelOptionIcon;      // 关卡选项图标
     std::unique_ptr<OptionIcon> m_heightOptionIcon;     // 高度选项图标
@@ -73,19 +74,49 @@ public:
 
 private:
     /**
+     * @brief 构造游戏类型相关组件
+     */
+    void constructGameTypeUI();
+    /**
+     * @brief 构造关卡选项相关组件
+     */
+    void constructLevelOptionUI();
+    /**
+     * @brief 构造高度选项相关组件
+     */
+    void constructHeightOptionUI();
+    /**
+     * @brief 构造记录表相关组件
+     */
+    void constructRecordUI();
+
+    /**
      * @brief 初始化游戏类型相关组件
      */
-    void initGameType();
+    void initGameTypeUI();
     /**
      * @brief 初始化关卡选项相关组件
      */
-    void initLevelOption();
-    /**
-     * @brief 初始化高度选项相关组件
-     */
-    void initHeightOption();
+    void initLevelOptionUI();
     /**
      * @brief 初始化记录表相关组件
      */
-    void initRecord();
+    void initRecordUI();
+    
+    /**
+     * @brief 渲染游戏类型相关组件
+     */
+    void renderGameTypeUI();
+    /**
+     * @brief 渲染关卡选项相关组件
+     */
+    void renderLevelOptionUI();
+    /**
+     * @brief 渲染高度选项相关组件
+     */
+    void renderHeightOptionUI();
+    /**
+     * @brief 渲染记录表相关组件
+     */
+    void renderRecordUI();
 };

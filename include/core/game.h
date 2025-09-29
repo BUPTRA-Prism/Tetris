@@ -10,8 +10,8 @@ private:
     int m_level;
     int m_height;
     int m_score;
-    int m_lines;
-    std::unordered_map<TetrisMode, int> m_count;
+    int m_lineCount;
+    std::unordered_map<TetrisMode, int> m_tetrisCount;
 
     TetrisMode m_curMode;
     TetrisMode m_nextMode;
@@ -27,18 +27,18 @@ public:
     int getLevel() const;
     int getHeight() const;
     int getScore() const;
-    int getLines() const;
-    const std::unordered_map<TetrisMode, int>& getCount();
+    int getLineCount() const;
+    const std::unordered_map<TetrisMode, int>& getTetrisCount();
 
     void resetGame(int level, int height);
 
     bool generate();
-    void move(int delta);
-    void rotate(int delta);
+    bool move(int delta);
+    bool rotate(int delta);
     bool drop();
 
     std::vector<int> checkEraseLine();
     void erase(std::vector<int>& lines, int order);
-    int calculate();
+    int calculate(int eraseLine, int accelerateLine);
     bool win();
 };

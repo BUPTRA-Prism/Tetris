@@ -14,8 +14,8 @@ inline const SDL_Scancode UP_KEY = SDL_SCANCODE_W;      // 上 - W
 inline const SDL_Scancode DOWN_KEY = SDL_SCANCODE_S;    // 下 - S
 
 /* 旋转键 */
-inline const SDL_Scancode LEFT_ROTATE_KEY = SDL_SCANCODE_J;     // 逆时针旋转 - J
-inline const SDL_Scancode RIGHT_ROTATE_KEY = SDL_SCANCODE_L;    // 顺时针旋转 - L
+inline const SDL_Scancode CCW_ROTATE_KEY = SDL_SCANCODE_J;  // 逆时针旋转 - J
+inline const SDL_Scancode CW_ROTATE_KEY = SDL_SCANCODE_L;   // 顺时针旋转 - L
 
 /* 其他 */
 inline const SDL_Scancode SWITCH_SETTING_KEY = SDL_SCANCODE_I;  // 切换设置 - I

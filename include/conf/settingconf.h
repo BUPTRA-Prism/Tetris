@@ -30,7 +30,7 @@ inline const std::vector<MusicOption> MUSIC_TYPE = {
     {"  OFF", ""}
 };
 inline const int MAX_LEVEL = 9;     // 最大初始关卡
-inline const int MAX_HEIGHT = 5;    // 最大启示高度
+inline const int MAX_HEIGHT = 5;    // 最大初始高度
 
 inline const int RECORD_COUNT = 3;  // 记录数量
 inline std::array<Record, RECORD_COUNT> RECORD_A = {

@@ -2,7 +2,7 @@
 #include "conf/keyconf.h"
 #include "conf/resourceconf.h"
 #include "conf/sceneconf.h"
-#include "util/util.h"
+#include "util/render.h"
 
 TitleScene::TitleScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback)
     : Scene(ctx, loadSceneCallback) {

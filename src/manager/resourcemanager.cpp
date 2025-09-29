@@ -12,7 +12,8 @@ bool ResourceManager::loadResource(SDL_Renderer* renderer) {
     // 图像文件名列表
     std::vector<std::string> imagePaths{
         COYRIGHT_ICON_IMAGE_PATH, 
-        GAME_FRAME_IMAGE_PATH, 
+        GAME_A_FRAME_IMAGE_PATH,
+        GAME_B_FRAME_IMAGE_PATH, 
         HEIGHT_FRAME_IMAGE_PATH, 
         LEVEL_A_FRAME_IMAGE_PATH, 
         LEVEL_B_FRAME_IMAGE_PATH, 

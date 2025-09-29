@@ -84,10 +84,12 @@ inline const int TETRIS_ARR_FRAME = 6;
 inline const int TETRIS_ACCELERATE_FRAME = 2;
 inline const int TETRIS_ERASE_FRAME = 4;
 inline const std::vector<int> TETRIS_GRAVITY_FRAME = {
-    48, 4, 38, 33, 28, 23, 18, 13, 8, 6,
+    48, 43, 38, 33, 28, 23, 18, 13, 8, 6,
     5, 5, 5, 4, 4, 4, 3, 3, 3, 2, 
     2, 2, 2, 2, 2, 2, 2, 2, 2, 1
 };
 inline const std::vector<int> TETRIS_HEIGHT_LINE = { 0, 3, 5, 8, 10, 12 };
 
 inline const std::pair<int, int> TETRIS_INIT_POS = { 19, 4 };
+
+inline const std::vector<int> TETRIS_ERASE_SCORE = { 0, 40, 100, 300, 1200 };

@@ -59,7 +59,8 @@ namespace SETTING_SCENE {
     inline const SDL_Color OPTION_ICON_COLOR = { 234, 158, 34, 255 };   // 选项图标颜色
     inline const int OPTION_ICON_SHOW_FRAME = 3;                        // 选项图标显示帧数
     inline const int OPTION_ICON_HIDE_FRAME = 1;                        // 选项图标隐藏帧数
-    inline const SDL_Point RECORD_POS = { 64, 544 };                    // 记录表位置
+    inline const SDL_Point RECORD_ORDER_POS = { 224, 608 };             // 记录表名词位置
+    inline const SDL_Point RECORD_POS = { 288, 544 };                   // 记录表位置
     inline const int RECORD_ROW_SPACING = 64;                           // 记录表行间距
     inline const int RECORD_COL_SPACING = 224;                          // 记录表列间距
     inline const std::vector<std::string> RECORD_TITLE_STR = { " NAME", "SCORE", "LV" };   // 记录表头内容
@@ -70,7 +71,7 @@ namespace SETTING_SCENE {
 // 游戏场景
 namespace GAME_SCENE {
     inline const std::string NAME = "game";                             // 场景名
-    inline const SDL_Point GAME_TYPE_TITLE_POS = { 64, 64 };            // 游戏类型标题位置
+    inline const SDL_Point GAME_TYPE_TITLE_POS = { 96, 96 };            // 游戏类型标题位置
     inline const SDL_Point TETRIS_COUNT_POS = { 192, 352 };             // 方块计数区域位置
     inline const SDL_Point TETRIS_TEMPLATE_CENTER_POS = { 138, 366 };   // 方块模板中心点位置
     inline const int TETRIS_COUNT_SPACING = 64;                         // 方块计数区域间距
@@ -85,12 +86,15 @@ namespace GAME_SCENE {
     inline const std::string NEXT_TETRIS_TITLE_STR = "NEXT";            // 下一个方块标题文本
     inline const SDL_Point NEXT_TETRIS_TITLE_POS = { 768, 384 };        // 下一个方块区域位置
     inline const std::string LEVEL_TITLE_STR = "LEVEL";                 // 关卡标题文本
-    inline const SDL_Point LEVEL_POS = { 768, 608 };                    // 关卡区域位置
+    inline const SDL_Point LEVEL_TITLE_POS = { 768, 608 };                    // 关卡标题位置
+    inline const SDL_Point LEVEL_TEXT_POS = { 800, 640 };                    // 关卡文本位置
     inline const int LEVEL_SPACING = 32;                                // 关卡区域间距
     inline const int TETRIS_COUNT_MAX_LEN = 3;                          // 方块计数最大长度
     inline const int LINE_COUNT_MAX_LEN = 3;                            // 消除行数最大长度
     inline const int SCORE_MAX_LEN = 6;                                 // 分数最大长度
     inline const int LEVEL_MAX_LEN = 2;                                 // 关卡数最大长度
+    inline const SDL_Point TETRIS_FIELD_POS = { 384, 796 };
+    inline const int TETRIS_FIELD_SPACING = 32;
 };
 
 // 结算场景

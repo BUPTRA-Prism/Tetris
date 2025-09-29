@@ -3,7 +3,8 @@
 #include "conf/resourceconf.h"
 #include "conf/sceneconf.h"
 #include "conf/settingconf.h"
-#include "util/util.h"
+#include "util/common.h"
+#include "util/render.h"
 
 SettingScene::SettingScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback)
     : Scene(ctx, loadSceneCallback)
@@ -26,14 +27,14 @@ SettingScene::SettingScene(Context& ctx, std::function<void(const std::string&)>
     m_optionChunk = rm.getChunk(OPTION_CHUNK_PATH);     // 载入切换选项音效
     m_sceneChunk = rm.getChunk(SCENE_CHUNK_PATH);       // 载入切换场景音效
 
-    // 初始化各区域组件
-    initGameType();
-    initLevelOption();
-    initHeightOption();
-    initRecord();
+    // 构造各区域组件
+    constructGameTypeUI();
+    constructLevelOptionUI();
+    constructHeightOptionUI();
+    constructRecordUI();
 }
 
-void SettingScene::initGameType() {
+void SettingScene::constructGameTypeUI() {
     // 创建游戏类型标题文本
     m_gameTypeTitle = std::make_unique<Text>(
         m_ctx,
@@ -42,7 +43,7 @@ void SettingScene::initGameType() {
     );
 }
 
-void SettingScene::initLevelOption() {
+void SettingScene::constructLevelOptionUI() {
     int levelOptionCol = (MAX_LEVEL + 1) / SETTING_SCENE::OPTION_ROW_NUM;
 
     // 创建关卡选项标题文本
@@ -60,10 +61,10 @@ void SettingScene::initLevelOption() {
     );
 
     // 创建关卡选项文本
-    m_levelOption.reserve(MAX_LEVEL + 1);
+    m_levelOptionText.reserve(MAX_LEVEL + 1);
     for (int i = 0; i <= MAX_LEVEL; ++i) {
         SDL_Point pos = m_levelOptionIconLayout->getElementPos(i / levelOptionCol, i % levelOptionCol);
-        m_levelOption.emplace_back(
+        m_levelOptionText.emplace_back(
             std::make_unique<Text>(
                 m_ctx,
                 std::to_string(i),
@@ -85,7 +86,7 @@ void SettingScene::initLevelOption() {
     );
 }
 
-void SettingScene::initHeightOption() {
+void SettingScene::constructHeightOptionUI() {
     ResourceManager& rm = m_ctx.resourceManager;
 
     int heightOptionCol = (MAX_HEIGHT + 1) / SETTING_SCENE::OPTION_ROW_NUM;
@@ -108,10 +109,10 @@ void SettingScene::initHeightOption() {
     );
 
     // 创建高度选项文本
-    m_heightOption.reserve(MAX_HEIGHT + 1);
+    m_heightOptionText.reserve(MAX_HEIGHT + 1);
     for (int i = 0; i <= MAX_HEIGHT; ++i) {
         SDL_Point pos = m_heightOptionIconLayout->getElementPos(i / heightOptionCol, i % heightOptionCol);
-        m_heightOption.emplace_back(
+        m_heightOptionText.emplace_back(
             std::make_unique<Text>(
                 m_ctx,
                 std::to_string(i),
@@ -133,7 +134,12 @@ void SettingScene::initHeightOption() {
     );
 }
 
-void SettingScene::initRecord() {
+void SettingScene::constructRecordUI() {
+    // 创建记录表布局
+    m_recordOrderLayout = std::make_unique<VerticalLayout>(
+        SETTING_SCENE::RECORD_ORDER_POS,
+        SETTING_SCENE::RECORD_ROW_SPACING
+    );
     // 创建记录表布局
     m_recordLayout = std::make_unique<GridLayout>(
         SETTING_SCENE::RECORD_POS,
@@ -148,42 +154,42 @@ void SettingScene::initRecord() {
             std::make_unique<Text>(
                 m_ctx,
                 SETTING_SCENE::RECORD_TITLE_STR[i],
-                m_recordLayout->getElementPos(0, i + 1)
+                m_recordLayout->getElementPos(0, i)
             )
         );
     }
     // 创建记录表内容文本，包括排名、姓名、分数、关卡数
-    m_recordOrder.reserve(RECORD_COUNT);
-    m_recordName.reserve(RECORD_COUNT);
-    m_recordScore.reserve(RECORD_COUNT);
-    m_recordLv.reserve(RECORD_COUNT);
+    m_recordOrderText.reserve(RECORD_COUNT);
+    m_recordNameText.reserve(RECORD_COUNT);
+    m_recordScoreText.reserve(RECORD_COUNT);
+    m_recordLvText.reserve(RECORD_COUNT);
     for (int i = 0; i < RECORD_COUNT; ++i) {
-        m_recordOrder.emplace_back(
+        m_recordOrderText.emplace_back(
             std::make_unique<Text>(
                 m_ctx,
-                std::string(5, ' ') + std::to_string(i + 1),
+                std::to_string(i + 1),
+                m_recordOrderLayout->getElementPos(i)
+            )
+        );
+        m_recordNameText.emplace_back(
+            std::make_unique<Text>(
+                m_ctx,
+                "",
                 m_recordLayout->getElementPos(i + 1, 0)
             )
         );
-        m_recordName.emplace_back(
+        m_recordScoreText.emplace_back(
             std::make_unique<Text>(
                 m_ctx,
                 "",
                 m_recordLayout->getElementPos(i + 1, 1)
             )
         );
-        m_recordScore.emplace_back(
+        m_recordLvText.emplace_back(
             std::make_unique<Text>(
                 m_ctx,
                 "",
                 m_recordLayout->getElementPos(i + 1, 2)
-            )
-        );
-        m_recordLv.emplace_back(
-            std::make_unique<Text>(
-                m_ctx,
-                "",
-                m_recordLayout->getElementPos(i + 1, 3)
             )
         );
     }
@@ -191,39 +197,53 @@ void SettingScene::initRecord() {
 
 void SettingScene::onEnter() {
     // 初始设置选项为关卡
-    m_curSettingItem = SettingItem::level;
+    m_curSettingItem = SettingItem::LevelSetting;
 
+    initGameTypeUI();
+    initLevelOptionUI();
+    initRecordUI();
+}
+
+void SettingScene::initGameTypeUI() {
     ResourceManager& rm = m_ctx.resourceManager;
     Settings& s = m_ctx.settings;
-    
-    // 获取游戏类型
+
     std::string gameType = s.getGameType();
     m_gameTypeTitle->setStr(gameType);
-
-    // 根据游戏类型载入游戏类型框架和关卡选项框架纹理
     if (gameType == GAME_TYPE_A) {
         m_typeFrameTexture = rm.getImage(TYPE_A_FRAME_IMAGE_PATH);
-        m_levelFrameTexture = rm.getImage(LEVEL_A_FRAME_IMAGE_PATH);
     } else if (gameType == GAME_TYPE_B) {
         m_typeFrameTexture = rm.getImage(TYPE_B_FRAME_IMAGE_PATH);
+    }
+}
+
+void SettingScene::initLevelOptionUI() {
+    ResourceManager& rm = m_ctx.resourceManager;
+    Settings& s = m_ctx.settings;
+
+    std::string gameType = s.getGameType();
+    if (gameType == GAME_TYPE_A) {
+        m_levelFrameTexture = rm.getImage(LEVEL_A_FRAME_IMAGE_PATH);
+    } else if (gameType == GAME_TYPE_B) {
         m_levelFrameTexture = rm.getImage(LEVEL_B_FRAME_IMAGE_PATH);
     }
     // 关卡选项图标启动动画
     m_levelOptionIcon->playAnim();
+}
 
-    // 读取记录表内容
+void SettingScene::initRecordUI() {
+    Settings& s = m_ctx.settings;
+
     for (int i = 0; i < RECORD_COUNT; ++i) {
-        m_recordName[i]->setStr(s.getRecordName(i));
+        m_recordNameText[i]->setStr(s.getRecordName(i));
 
         std::string scoreStr = std::to_string(s.getRecordScore(i));
-        m_recordScore[i]->setStr(
-            std::string(SETTING_SCENE::RECORD_SCORE_MAX_LEN - scoreStr.length(), '0') + scoreStr
-        );
+        padLeft(scoreStr, SETTING_SCENE::RECORD_SCORE_MAX_LEN, '0');
+        m_recordScoreText[i]->setStr(scoreStr);
 
         std::string lvStr = std::to_string(s.getRecordLv(i));
-        m_recordLv[i]->setStr(
-            std::string(SETTING_SCENE::RECORD_LV_MAX_LEN - lvStr.length(), '0') + lvStr
-        );
+        padLeft(lvStr, SETTING_SCENE::RECORD_LV_MAX_LEN, '0');
+        m_recordLvText[i]->setStr(lvStr);
     }
 }
 
@@ -256,12 +276,12 @@ void SettingScene::onUpdate() {
         // 切换设置项，仅在B模式能切换
         // 仅目前所处设置项选项图标启动动画，其他设置项选项停止动画
         if (s.getGameType() == GAME_TYPE_B) {
-            if (m_curSettingItem == SettingItem::level) {
-                m_curSettingItem = SettingItem::height;
+            if (m_curSettingItem == SettingItem::LevelSetting) {
+                m_curSettingItem = SettingItem::HeightSetting;
                 m_levelOptionIcon->stopAnim();
                 m_heightOptionIcon->playAnim();
             } else {
-                m_curSettingItem = SettingItem::level;
+                m_curSettingItem = SettingItem::LevelSetting;
                 m_levelOptionIcon->playAnim();
                 m_heightOptionIcon->stopAnim();
             }
@@ -275,13 +295,13 @@ void SettingScene::onUpdate() {
         int heightOptionCol = (MAX_HEIGHT + 1) / SETTING_SCENE::OPTION_ROW_NUM;
         // 左右键
         if (im.isKeyJustPressed(LEFT_KEY) && !im.isKeyPressed(RIGHT_KEY)) {
-            if (m_curSettingItem == SettingItem::level) {
+            if (m_curSettingItem == SettingItem::LevelSetting) {
                 levelChanged = s.setLevel(-1);
             } else {
                 heightChanged = s.setHeight(-1);
             }
         } else if (im.isKeyJustPressed(RIGHT_KEY) && !im.isKeyPressed(LEFT_KEY)) {
-            if (m_curSettingItem == SettingItem::level) {
+            if (m_curSettingItem == SettingItem::LevelSetting) {
                 levelChanged = s.setLevel(1);
             } else {
                 heightChanged = s.setHeight(1);
@@ -289,13 +309,13 @@ void SettingScene::onUpdate() {
         }
         // 上下键
         if (im.isKeyJustPressed(UP_KEY) && !im.isKeyPressed(DOWN_KEY)) {
-            if (m_curSettingItem == SettingItem::level) {
+            if (m_curSettingItem == SettingItem::LevelSetting) {
                 levelChanged = s.setLevel(-levelOptionCol);
             } else {
                 heightChanged = s.setHeight(-heightOptionCol);
             }
         } else if (im.isKeyJustPressed(DOWN_KEY) && !im.isKeyPressed(UP_KEY)) {
-            if (m_curSettingItem == SettingItem::level) {
+            if (m_curSettingItem == SettingItem::LevelSetting) {
                 levelChanged = s.setLevel(levelOptionCol);
             } else {
                 heightChanged = s.setHeight(heightOptionCol);
@@ -314,45 +334,68 @@ void SettingScene::renderContent() {
     
     // 渲染游戏类型相关组件
     renderTexture(rdr, m_settingFrameTexture);
-    renderTexture(rdr, m_typeFrameTexture, SETTING_SCENE::GAME_TYPE_FRAME_POS);
-    m_gameTypeTitle->onRender();
+    renderGameTypeUI();
 
     // 渲染关卡选项相关组件
+    renderLevelOptionUI();
+
+    // 渲染高度选项相关组件
+    if (s.getGameType() == GAME_TYPE_B) {
+        renderHeightOptionUI();
+    }
+
+    // 渲染记录表
+    renderRecordUI();
+}
+
+void SettingScene::renderGameTypeUI() {
+    SDL_Renderer* rdr = m_ctx.renderer;
+    renderTexture(rdr, m_typeFrameTexture, SETTING_SCENE::GAME_TYPE_FRAME_POS);
+    m_gameTypeTitle->onRender();
+}
+
+void SettingScene::renderLevelOptionUI() {
+    SDL_Renderer* rdr = m_ctx.renderer;
+    Settings& s = m_ctx.settings;
+
     int levelOptionCol = (MAX_LEVEL + 1) / SETTING_SCENE::OPTION_ROW_NUM;
     int level = s.getLevel();
     m_levelOptionIcon->onRender(level / levelOptionCol, level % levelOptionCol);
     renderTexture(rdr, m_levelFrameTexture, SETTING_SCENE::LEVEL_FRAME_POS);
     m_levelTitle->onRender();
-    for (auto& text: m_levelOption) {
+    for (auto& text: m_levelOptionText) {
         text->onRender();
     }
+}
 
-    // 渲染高度选项相关组件
-    if (s.getGameType() == GAME_TYPE_B) {
-        int heightOptionCol = (MAX_HEIGHT + 1) / SETTING_SCENE::OPTION_ROW_NUM;
-        int height = s.getHeight();
-        m_heightOptionIcon->onRender(height / heightOptionCol, height % heightOptionCol);
-        renderTexture(rdr, m_heightFrameTexture, SETTING_SCENE::HEIGHT_FRAME_POS);
-        m_heightTitle->onRender();
-        for (auto& text: m_heightOption) {
-            text->onRender();
-        }
+void SettingScene::renderHeightOptionUI() {
+    SDL_Renderer* rdr = m_ctx.renderer;
+    Settings& s = m_ctx.settings;
+
+    int heightOptionCol = (MAX_HEIGHT + 1) / SETTING_SCENE::OPTION_ROW_NUM;
+    int height = s.getHeight();
+    m_heightOptionIcon->onRender(height / heightOptionCol, height % heightOptionCol);
+    renderTexture(rdr, m_heightFrameTexture, SETTING_SCENE::HEIGHT_FRAME_POS);
+    m_heightTitle->onRender();
+    for (auto& text: m_heightOptionText) {
+        text->onRender();
     }
+}
 
-    // 渲染记录表
+void SettingScene::renderRecordUI() {
     for (auto& text: m_recordTitle) {
         text->onRender();
     }
-    for (auto& text: m_recordOrder) {
+    for (auto& text: m_recordOrderText) {
         text->onRender();
     }
-    for (auto& text: m_recordName) {
+    for (auto& text: m_recordNameText) {
         text->onRender();
     }
-    for (auto& text: m_recordScore) {
+    for (auto& text: m_recordScoreText) {
         text->onRender();
     }
-    for (auto& text: m_recordLv) {
+    for (auto& text: m_recordLvText) {
         text->onRender();
     }
 }

@@ -27,8 +27,9 @@ set(SOURCE_FILES
     src/ui/layout.cpp
     src/ui/optionicon.cpp
     src/ui/text.cpp
+    src/util/common.cpp
+    src/util/render.cpp
     src/util/sdlresource.cpp
-    src/util/util.cpp
     src/main.cpp
 )
 
@@ -56,8 +57,9 @@ set(HEADER_FILES
     include/ui/layout.h
     include/ui/optionicon.h
     include/ui/text.h
+    include/util/common.h
+    include/util/render.h
     include/util/sdlresource.h
-    include/util/util.h
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})

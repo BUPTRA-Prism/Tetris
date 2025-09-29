@@ -10,7 +10,8 @@ inline const std::string CHUNK_DIR = "resource/audio/chunk/";   // 音效资源�
 
 /* 图像资源文件 */
 inline const std::string COYRIGHT_ICON_IMAGE_PATH = "copyright_icon.png";   // 版权图标
-inline const std::string GAME_FRAME_IMAGE_PATH = "game_frame.png";          // 游戏界面框架
+inline const std::string GAME_A_FRAME_IMAGE_PATH = "game_a_frame.png";      // A模式游戏界面框架
+inline const std::string GAME_B_FRAME_IMAGE_PATH = "game_b_frame.png";      // B模式游戏界面框架
 inline const std::string HEIGHT_FRAME_IMAGE_PATH = "height_frame.png";      // 高度选项框架
 inline const std::string LEVEL_A_FRAME_IMAGE_PATH = "level_a_frame.png";    // A模式关卡选项框架
 inline const std::string LEVEL_B_FRAME_IMAGE_PATH = "level_b_frame.png";    // B模式关卡选项框架

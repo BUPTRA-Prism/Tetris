@@ -1,22 +1,37 @@
 #include "scene/gamescene.h"
+#include "conf/keyconf.h"
 #include "conf/sceneconf.h"
-#include "util/util.h"
+#include "util/common.h"
+#include "util/render.h"
 
 GameScene::GameScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback)
     : Scene(ctx, loadSceneCallback) 
     , m_dasFrameTarget(TETRIS_DAS_FRAME)
     , m_arrFrameTarget(TETRIS_ARR_FRAME)
-    , m_moveFrameCnt(0)
     , m_accelerateFrameTarget(TETRIS_ACCELERATE_FRAME)
-    , m_dropFrameCnt(0)
-    , m_eraseFrameTarget(TETRIS_ERASE_FRAME)
-    , m_eraseFrameCnt(0)
-    , m_nextFrameTarget(0)
-    , m_nextFrameCnt(0) {
-    ResourceManager& rm = ctx.resourceManager;
+    , m_eraseFrameTarget(TETRIS_ERASE_FRAME) {
+    constructGameTypeUI();
+    constructTetrisCountUI();
+    constructLineCountUI();
+    constructScoreUI();
+    constructNextTetrisUI();
+    constructLevelUI();
 
-    m_gameFrameTexture = rm.getImage(GAME_FRAME_IMAGE_PATH);
+    ResourceManager& rm = m_ctx.resourceManager;
+    m_moveChunk = rm.getChunk(MOVE_CHUNK_PATH);
+    m_rotateChunk = rm.getChunk(ROTATE_CHUNK_PATH);
+    m_dropChunk = rm.getChunk(DROP_CHUNK_PATH);
+}
 
+void GameScene::constructGameTypeUI() {
+    m_gameTypeTitle = std::make_unique<Text>(
+        m_ctx,
+        "",
+        GAME_SCENE::GAME_TYPE_TITLE_POS
+    );
+}
+
+void GameScene::constructTetrisCountUI() {
     m_tetrisTemplateLayout = std::make_unique<VerticalLayout>(
         GAME_SCENE::TETRIS_TEMPLATE_CENTER_POS,
         GAME_SCENE::TETRIS_COUNT_SPACING
@@ -26,58 +41,66 @@ GameScene::GameScene(Context& ctx, std::function<void(const std::string&)> loadS
         GAME_SCENE::TETRIS_COUNT_SPACING
     );
 
-    m_gameTypeTitle = std::make_unique<Text>(
-        ctx,
-        "",
-        GAME_SCENE::GAME_TYPE_TITLE_POS
-    );
-    auto& count = m_game.getCount();
-    for (auto it = count.begin(); it != count.end(); ++it) {
-        m_tetrisCount.emplace(it->first, std::make_unique<Text>(
-            ctx,
+    auto& tetrisCount = m_game.getTetrisCount();
+    for (auto it = tetrisCount.begin(); it != tetrisCount.end(); ++it) {
+        m_tetrisCountText.emplace(it->first, std::make_unique<Text>(
+            m_ctx,
             "",
-            m_tetrisCountLayout->getElementPos(static_cast<int>(it->first))
+            m_tetrisCountLayout->getElementPos(static_cast<int>(it->first)),
+            GAME_SCENE::TETRIS_COUNT_COLOR
         ));
     }
-    m_lineCount = std::make_unique<Text>(
-        ctx,
+}
+
+void GameScene::constructLineCountUI() {
+    m_lineCountText = std::make_unique<Text>(
+        m_ctx,
         "",
         GAME_SCENE::LINE_COUNT_POS
     );
+}
+
+void GameScene::constructScoreUI() {
     m_topScoreTitle = std::make_unique<Text>(
-        ctx,
+        m_ctx,
         GAME_SCENE::TOP_TITLE_STR,
         GAME_SCENE::TOP_POS
     );
-    m_topScore = std::make_unique<Text>(
-        ctx,
+    m_topScoreText = std::make_unique<Text>(
+        m_ctx,
         "",
         SDL_Point { GAME_SCENE::TOP_POS.x, GAME_SCENE::TOP_POS.y + GAME_SCENE::SCORE_SPACING }
     );
     m_scoreTitle = std::make_unique<Text>(
-        ctx,
+        m_ctx,
         GAME_SCENE::SCORE_TITLE_STR,
         GAME_SCENE::SCORE_POS
     );
-    m_score = std::make_unique<Text>(
-        ctx,
+    m_scoreText = std::make_unique<Text>(
+        m_ctx,
         "",
         SDL_Point { GAME_SCENE::SCORE_POS.x, GAME_SCENE::SCORE_POS.y + GAME_SCENE::SCORE_SPACING }
     );
+}
+
+void GameScene::constructNextTetrisUI() {
     m_nextTetrisTitle = std::make_unique<Text>(
-        ctx,
+        m_ctx,
         GAME_SCENE::NEXT_TETRIS_TITLE_STR,
         GAME_SCENE::NEXT_TETRIS_TITLE_POS
     );
+}
+
+void GameScene::constructLevelUI() {
     m_levelTitle = std::make_unique<Text>(
-        ctx,
+        m_ctx,
         GAME_SCENE::LEVEL_TITLE_STR,
-        GAME_SCENE::LEVEL_POS
+        GAME_SCENE::LEVEL_TITLE_POS
     );
-    m_level = std::make_unique<Text>(
-        ctx,
+    m_levelText = std::make_unique<Text>(
+        m_ctx,
         "",
-        SDL_Point { GAME_SCENE::LEVEL_POS.x, GAME_SCENE::LEVEL_POS.y + GAME_SCENE::LEVEL_SPACING }
+        GAME_SCENE::LEVEL_TEXT_POS
     );
 }
 
@@ -86,11 +109,63 @@ void GameScene::onEnter() {
     AudioManager& am = m_ctx.audioManager;
     Settings& s = m_ctx.settings;
 
-    m_gameTypeTitle->setStr(s.getGameType());
     m_game.resetGame(s.getLevel(), s.getHeight());
+    m_dropFrameTarget = TETRIS_GRAVITY_FRAME[s.getLevel()];
+    m_moveFrameCnt = 0;
+    m_dropFrameCnt = 0;
+    m_eraseFrameCnt = 0;
+    m_nextFrameCnt = 0;
+    m_curStatus = Status::Generate;
+    m_preMoveDir = 0;
+    m_curMoveDir = 0;
+    m_justMove = false;
+    m_accelerateLineCount = 0;
 
     m_music = rm.getMusic(s.getMusicPath());
     am.playMusic(m_music);
+
+    initGameTypeUI();
+    initTetrisCountUI();
+    initLineCountUI();
+    initScoreUI();
+    initLevelUI();
+}
+
+void GameScene::initGameTypeUI() {
+    ResourceManager& rm = m_ctx.resourceManager;
+    Settings& s = m_ctx.settings;
+
+    std::string gameType = s.getGameType();
+    if (gameType == GAME_TYPE_A) {
+        m_gameFrameTexture = rm.getImage(GAME_A_FRAME_IMAGE_PATH);
+    } else if (gameType == GAME_TYPE_B) {
+        m_gameFrameTexture = rm.getImage(GAME_B_FRAME_IMAGE_PATH);
+    }
+    
+    m_gameTypeTitle->setStr(gameType);
+}
+
+void GameScene::initTetrisCountUI() {
+    for (auto it = m_tetrisCountText.begin(); it != m_tetrisCountText.end(); ++it) {
+        it->second->setStr(std::string(GAME_SCENE::TETRIS_COUNT_MAX_LEN, '0'));
+    }
+}
+
+void GameScene::initLineCountUI() {
+    m_lineCountText->setStr(GAME_SCENE::LINE_COUNT_STR + std::string(GAME_SCENE::LINE_COUNT_MAX_LEN, '0'));
+}
+
+void GameScene::initScoreUI() {
+    Settings& s = m_ctx.settings;
+    std::string topScoreStr = std::to_string(s.getRecordScore(0));
+    padLeft(topScoreStr, GAME_SCENE::SCORE_MAX_LEN, '0');
+    m_topScoreText->setStr(topScoreStr);
+
+    m_scoreText->setStr(std::string(GAME_SCENE::SCORE_MAX_LEN, '0'));
+}
+
+void GameScene::initLevelUI() {
+    m_levelText->setStr(std::string(GAME_SCENE::LEVEL_MAX_LEN, '0'));
 }
 
 void GameScene::onExit() {
@@ -100,7 +175,105 @@ void GameScene::onExit() {
 }
 
 void GameScene::onUpdate() {
+    switch (m_curStatus) {
+        case Status::Generate: {
+            m_game.generate();
+            m_curStatus = Status::Move;
+            break;
+        }
+        case Status::Move: {
+            move();
+            rotate();
+            drop();
+            break;
+        }
+        case Status::Erase: {
+            // std::vector<int> 
+            break;
+        }
+        case Status::Calculate: {
+            break;
+        }
+        case Status::Win: {
+            break;
+        }
+        case Status::Lose: {
+            break;
+        }
+        default: break;
+    }
+}
+
+void GameScene::move() {
+    InputManager& im = m_ctx.inputManager;
+    AudioManager& am = m_ctx.audioManager;
+
+    if (im.isKeyPressed(LEFT_KEY)) {
+        ++m_curMoveDir;
+    }
+    if (im.isKeyPressed(RIGHT_KEY)) {
+        --m_curMoveDir;
+    }
+    if (m_curMoveDir != 0) {
+        if (m_curMoveDir != m_preMoveDir) {
+            if (m_game.move(m_curMoveDir)) {
+                am.playChunk(m_moveChunk);
+            }
+            m_justMove = true;
+        } else {
+            ++m_moveFrameCnt;
+            int moveFrameTarget = m_justMove ? m_dasFrameTarget : m_arrFrameTarget;
+            if (m_moveFrameCnt >= moveFrameTarget) {
+                if (m_game.move(m_curMoveDir)) {
+                    am.playChunk(m_moveChunk);
+                }
+                m_justMove = true;
+                m_moveFrameCnt = 0;
+            }
+        }
+    } else {
+        m_moveFrameCnt = 0;
+    }
+    m_preMoveDir = m_curMoveDir;
+    m_curMoveDir = 0;
+}
+
+void GameScene::rotate() {
+    InputManager& im = m_ctx.inputManager;
+    AudioManager& am = m_ctx.audioManager;
+
+    int delta = 0;
+    if (im.isKeyJustPressed(CW_ROTATE_KEY)) {
+        delta = 1;
+    } else if (im.isKeyJustPressed(CCW_ROTATE_KEY)) {
+        delta = -1;
+    }
     
+    if (m_game.rotate(delta)) {
+        am.playChunk(m_rotateChunk);
+    }
+}
+
+void GameScene::drop() {
+    InputManager& im = m_ctx.inputManager;
+    AudioManager& am = m_ctx.audioManager;
+
+    ++m_dropFrameCnt;
+    if (im.isKeyPressed(DOWN_KEY)) {
+        if (m_dropFrameCnt >= m_accelerateFrameTarget) {
+            if (!m_game.drop()) {
+                am.playChunk(m_dropChunk);
+            }
+            m_dropFrameCnt = 0;
+        }
+    } else {
+        if (m_dropFrameCnt >= m_dropFrameTarget) {
+            if (!m_game.drop()) {
+                am.playChunk(m_dropChunk);
+            }
+            m_dropFrameCnt = 0;
+        }
+    }
 }
 
 void GameScene::renderContent() {
@@ -109,12 +282,15 @@ void GameScene::renderContent() {
     renderTexture(rdr, m_gameFrameTexture);
 
     m_gameTypeTitle->onRender();
-    m_lineCount->onRender();
+    for (auto it = m_tetrisCountText.begin(); it != m_tetrisCountText.end(); ++it) {
+        it->second->onRender();
+    }
+    m_lineCountText->onRender();
     m_topScoreTitle->onRender();
-    m_topScore->onRender();
+    m_topScoreText->onRender();
     m_scoreTitle->onRender();
-    m_score->onRender();
+    m_scoreText->onRender();
     m_nextTetrisTitle->onRender();
     m_levelTitle->onRender();
-    m_level->onRender();
+    m_levelText->onRender();
 }

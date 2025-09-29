@@ -18,10 +18,10 @@ private:
     std::unique_ptr<VerticalLayout> m_musicTypeOptionLayout;        // 音乐模式选项布局
     std::unique_ptr<VerticalLayout> m_musicTypeOptionIconLayout;    // 音乐模式选项图标布局
 
-    std::unique_ptr<Text> m_gameTypeTitle;                  // 游戏模式标题
-    std::unique_ptr<Text> m_musicTypeTitle;                 // 音乐模式标题
-    std::vector<std::unique_ptr<Text>> m_gameTypeOption;    // 游戏模式选项
-    std::vector<std::unique_ptr<Text>> m_musicTypeOption;   // 音乐模式选项
+    std::unique_ptr<Text> m_gameTypeTitle;                      // 游戏模式标题
+    std::unique_ptr<Text> m_musicTypeTitle;                     // 音乐模式标题
+    std::vector<std::unique_ptr<Text>> m_gameTypeOptionText;    // 游戏模式选项
+    std::vector<std::unique_ptr<Text>> m_musicTypeOptionText;   // 音乐模式选项
 
     std::array<std::unique_ptr<OptionIcon>, 2> m_gameTypeOptionIcon;    // 游戏模式选项图标
     std::array<std::unique_ptr<OptionIcon>, 2> m_musicTypeOptionIcon;   // 音乐模式选项图标
@@ -58,11 +58,29 @@ public:
 
 private:
     /**
+     * @brief 构造游戏类型选项相关组件
+     */
+    void constructGameTypeOptionUI();
+    /**
+     * @brief 构造音乐类型选项相关组件
+     */
+    void constructMusicTypeOptionUI();
+
+    /**
      * @brief 初始化游戏类型选项相关组件
      */
-    void initGameTypeOption();
+    void initGameTypeOptionUI();
     /**
-     * @brief 初始化音乐类型选项相关组件
+     * @brief 初始音乐类型选项相关组件
      */
-    void initMusicTypeOption();
+    void initMusicTypeOptionUI();
+
+    /**
+     * @brief 渲染游戏类型选项相关组件
+     */
+    void renderGameTypeOptionUI();
+    /**
+     * @brief 渲染音乐类型选项相关组件
+     */
+    void renderMusicTypeOptionUI();
 };

@@ -10,8 +10,10 @@ private:
     enum class Status {
         Generate,
         Move,
+        Erase,
         Calculate,
-        GameOver
+        Win, 
+        Lose
     };
 
     SDL_Texture* m_gameFrameTexture;
@@ -20,17 +22,20 @@ private:
     std::unique_ptr<VerticalLayout> m_tetrisCountLayout;
 
     std::unique_ptr<Text> m_gameTypeTitle;
-    std::unordered_map<TetrisMode, std::unique_ptr<Text>> m_tetrisCount;
-    std::unique_ptr<Text> m_lineCount;
+    std::unordered_map<TetrisMode, std::unique_ptr<Text>> m_tetrisCountText;
+    std::unique_ptr<Text> m_lineCountText;
     std::unique_ptr<Text> m_topScoreTitle;
-    std::unique_ptr<Text> m_topScore;
+    std::unique_ptr<Text> m_topScoreText;
     std::unique_ptr<Text> m_scoreTitle;
-    std::unique_ptr<Text> m_score;
+    std::unique_ptr<Text> m_scoreText;
     std::unique_ptr<Text> m_nextTetrisTitle;
     std::unique_ptr<Text> m_levelTitle;
-    std::unique_ptr<Text> m_level;
+    std::unique_ptr<Text> m_levelText;
 
     Mix_Music* m_music;
+    Mix_Chunk* m_moveChunk;
+    Mix_Chunk* m_rotateChunk;
+    Mix_Chunk* m_dropChunk;
 
     Game m_game;
 
@@ -46,6 +51,10 @@ private:
     int m_nextFrameCnt;
 
     Status m_curStatus;
+    int m_preMoveDir;
+    int m_curMoveDir;
+    bool m_justMove;
+    int m_accelerateLineCount;
 
 public:
     GameScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback);
@@ -55,4 +64,22 @@ public:
     void onExit() override;
     void onUpdate() override;
     void renderContent() override;
+
+private:
+    void constructGameTypeUI();
+    void constructTetrisCountUI();
+    void constructLineCountUI();
+    void constructScoreUI();
+    void constructNextTetrisUI();
+    void constructLevelUI();
+
+    void initGameTypeUI();
+    void initTetrisCountUI();
+    void initLineCountUI();
+    void initScoreUI();
+    void initLevelUI();
+
+    void move();
+    void rotate();
+    void drop();
 };

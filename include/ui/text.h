@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/context.h"
+#include "ui/layout.h"
 #include <SDL.h>
 #include <string>
 #include <vector>
@@ -14,8 +15,9 @@ class Text {
 private:
     Context& m_ctx;     // 全局上下文
     std::string m_str;  // 文本内容
-    SDL_Point m_pos;    // 文本位置（左上角坐标）
     SDL_Color m_color;  // 文本颜色
+
+    std::unique_ptr<HorizontalLayout> m_layout; // 文本布局
 
 public:
     /**

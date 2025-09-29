@@ -1,4 +1,4 @@
-#include "util/util.h"
+#include "util/render.h"
 
 void renderTexture(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Point dstPos, SDL_Rect* srcRect, SDL_RendererFlip flip) {
     if (texture) {
@@ -35,14 +35,4 @@ UniqueTexture createSolidTexture(SDL_Renderer* renderer, SDL_Color color, int w,
     SDL_SetRenderTarget(renderer, nullptr);
 
     return UniqueTexture(texture);
-}
-
-int getRandomInt(int min, int max) {
-    // 使用静态变量，只初始化一次
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    static std::uniform_int_distribution<> dis;
-    
-    // 每次调用时使用相同的生成器，但重新设置分布范围
-    return dis(gen, std::uniform_int_distribution<>::param_type(min, max));
 }

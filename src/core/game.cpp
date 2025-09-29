@@ -1,14 +1,14 @@
 #include "core/game.h"
-#include "util/util.h"
+#include "util/common.h"
 
 Game::Game() {
-    m_count.emplace(TetrisMode::T, 0);
-    m_count.emplace(TetrisMode::J, 0);
-    m_count.emplace(TetrisMode::Z, 0);
-    m_count.emplace(TetrisMode::O, 0);
-    m_count.emplace(TetrisMode::S, 0);
-    m_count.emplace(TetrisMode::L, 0);
-    m_count.emplace(TetrisMode::I, 0);
+    m_tetrisCount.emplace(TetrisMode::T, 0);
+    m_tetrisCount.emplace(TetrisMode::J, 0);
+    m_tetrisCount.emplace(TetrisMode::Z, 0);
+    m_tetrisCount.emplace(TetrisMode::O, 0);
+    m_tetrisCount.emplace(TetrisMode::S, 0);
+    m_tetrisCount.emplace(TetrisMode::L, 0);
+    m_tetrisCount.emplace(TetrisMode::I, 0);
 }
 
 TetrisStyle Game::getFieldStyle(int row, int col) const { 
@@ -24,9 +24,9 @@ int Game::getHeight() const { return m_height; }
 
 int Game::getScore() const { return m_score; }
 
-int Game::getLines() const { return m_lines; }
+int Game::getLineCount() const { return m_lineCount; }
 
-const std::unordered_map<TetrisMode, int>& Game::getCount() { return m_count; }
+const std::unordered_map<TetrisMode, int>& Game::getTetrisCount() { return m_tetrisCount; }
 
 void Game::resetGame(int level, int height) {
     for (int row = 0; row < m_field.size(); ++row) {
@@ -35,20 +35,21 @@ void Game::resetGame(int level, int height) {
     m_level = level;
     m_height = height;
     m_score = 0;
-    m_lines = 0;
+    m_lineCount = 0;
 
-    for (auto it = m_count.begin(); it != m_count.end(); ++it) {
+    for (auto it = m_tetrisCount.begin(); it != m_tetrisCount.end(); ++it) {
         it->second = 0;
     }
 
-    m_nextMode = static_cast<TetrisMode>(getRandomInt(0, m_count.size() - 1));
+    m_nextMode = static_cast<TetrisMode>(getRandomInt(0, m_tetrisCount.size() - 1));
 }
 
 bool Game::generate() {
     bool success = true;
 
     m_curMode = m_nextMode;
-    m_nextMode = static_cast<TetrisMode>(getRandomInt(0, m_count.size() - 1));
+    m_nextMode = static_cast<TetrisMode>(getRandomInt(0, m_tetrisCount.size() - 1));
+    ++m_tetrisCount.at(m_curMode);
     m_tetrisRotateStatus = 0;
 
     for (int i = 0; i < m_tetrisPos.size(); ++i) {
@@ -66,7 +67,7 @@ bool Game::generate() {
     return success;
 }
 
-void Game::move(int delta) {
+bool Game::move(int delta) {
     std::array<std::pair<int, int>, TETRIS_NUM> targetPos;
     bool success = true;
 
@@ -94,9 +95,11 @@ void Game::move(int delta) {
     for (int i = 0; i < m_tetrisPos.size(); ++i) {
         m_field[m_tetrisPos[i].first][m_tetrisPos[i].second] = TETRIS_MODE_STYLE.at(m_curMode);
     }
+
+    return success;
 }
 
-void Game::rotate(int delta) {
+bool Game::rotate(int delta) {
     std::array<std::pair<int, int>, TETRIS_NUM> targetPos;
     bool success = true;
 
@@ -130,6 +133,8 @@ void Game::rotate(int delta) {
             m_field[m_tetrisPos[i].first][m_tetrisPos[i].second] = TETRIS_MODE_STYLE.at(m_curMode);
         }
     }
+
+    return success;
 }
 
 bool Game::drop() {
@@ -202,10 +207,10 @@ void Game::erase(std::vector<int>& lines, int order) {
     }
 }
 
-int Game::calculate() {
-
+int Game::calculate(int eraseLine, int accelerateLine) {
+    return TETRIS_ERASE_SCORE[eraseLine] + accelerateLine;
 }
 
 bool Game::win() {
-
+    return false;
 }
