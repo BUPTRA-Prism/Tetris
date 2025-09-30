@@ -169,8 +169,8 @@ bool Game::drop() {
     return success;
 }
 
-std::vector<int> Game::checkEraseLine() {
-    std::vector<int> lines;
+int Game::checkEraseLine() {
+    m_eraseLines.clear();
     for (int i = 0; i < TETRIS_FIELD_HEIGHT; ++i) {
         bool isErase = true;
         for (int j = 0; j < TETRIS_FIELD_WIDTH; ++j) {
@@ -180,13 +180,13 @@ std::vector<int> Game::checkEraseLine() {
             }
         }
         if (isErase) {
-            lines.emplace_back(i);
+            m_eraseLines.emplace_back(i);
         }
     }
-    return lines;
+    return m_eraseLines.size();
 }
 
-void Game::erase(std::vector<int>& lines, int order) {
+bool Game::eraseComplete(int order) {
     if (2 * order >= TETRIS_FIELD_WIDTH) {
         for (int j = 0; j < TETRIS_FIELD_WIDTH; ++j) {
             int slow = 0;
@@ -199,16 +199,19 @@ void Game::erase(std::vector<int>& lines, int order) {
                 m_field[slow][j] = TetrisStyle::Blank;
             }
         }
+        return true;
     } else {
-        for (auto line: lines) {
+        for (auto line: m_eraseLines) {
             m_field[line][TETRIS_FIELD_WIDTH / 2 + order] = TetrisStyle::Blank;
             m_field[line][(TETRIS_FIELD_WIDTH - 1) / 2 - order] = TetrisStyle::Blank;
         }
+        return false;
     }
 }
 
-int Game::calculate(int eraseLine, int accelerateLine) {
-    return TETRIS_ERASE_SCORE[eraseLine] + accelerateLine;
+int Game::calculate(int accelerateLineCount) {
+    m_score += TETRIS_ERASE_SCORE[m_eraseLines.size()] + accelerateLineCount;
+    return m_score;
 }
 
 bool Game::win() {

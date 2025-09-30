@@ -17,6 +17,14 @@ GameScene::GameScene(Context& ctx, std::function<void(const std::string&)> loadS
     constructNextTetrisUI();
     constructLevelUI();
 
+    SDL_Renderer* rdr = m_ctx.renderer;
+    m_tetrisFieldLayout = std::make_unique<GridLayout>(
+        GAME_SCENE::TETRIS_FIELD_POS,
+        -GAME_SCENE::TETRIS_FIELD_SPACING,
+        GAME_SCENE::TETRIS_FIELD_SPACING
+    );
+    m_tetrisBasicTexture = createSolidTexture(rdr, GAME_SCENE::TETRIS_BASIC_COLOR, GAME_SCENE::TETRIS_SIZE, GAME_SCENE::TETRIS_SIZE);
+
     ResourceManager& rm = m_ctx.resourceManager;
     m_moveChunk = rm.getChunk(MOVE_CHUNK_PATH);
     m_rotateChunk = rm.getChunk(ROTATE_CHUNK_PATH);
@@ -120,6 +128,7 @@ void GameScene::onEnter() {
     m_curMoveDir = 0;
     m_justMove = false;
     m_accelerateLineCount = 0;
+    m_eraseOrder = 0;
 
     m_music = rm.getMusic(s.getMusicPath());
     am.playMusic(m_music);
@@ -187,11 +196,31 @@ void GameScene::onUpdate() {
             drop();
             break;
         }
+        case Status::Check: {
+            m_curStatus = Status::Calculate;
+            if (m_game.checkEraseLine() != 0) {
+                m_curStatus = Status::Erase;
+            }
+            break;
+        }
         case Status::Erase: {
-            // std::vector<int> 
+            ++m_eraseFrameCnt;
+            if (m_eraseFrameCnt >= m_eraseFrameTarget) {
+                if (m_game.eraseComplete(m_eraseOrder)) {
+                    m_curStatus = Status::Calculate;
+                } else {
+                    ++m_eraseOrder;
+                }
+                m_eraseFrameCnt = 0;
+            }
             break;
         }
         case Status::Calculate: {
+            int score = m_game.calculate(m_accelerateLineCount);
+            std::string scoreStr = std::to_string(score);
+            padLeft(scoreStr, GAME_SCENE::SCORE_MAX_LEN, '0');
+            m_scoreText->setStr(scoreStr);
+            m_curStatus = Status::Generate;
             break;
         }
         case Status::Win: {
@@ -209,10 +238,10 @@ void GameScene::move() {
     AudioManager& am = m_ctx.audioManager;
 
     if (im.isKeyPressed(LEFT_KEY)) {
-        ++m_curMoveDir;
+        --m_curMoveDir;
     }
     if (im.isKeyPressed(RIGHT_KEY)) {
-        --m_curMoveDir;
+        ++m_curMoveDir;
     }
     if (m_curMoveDir != 0) {
         if (m_curMoveDir != m_preMoveDir) {
@@ -259,20 +288,16 @@ void GameScene::drop() {
     AudioManager& am = m_ctx.audioManager;
 
     ++m_dropFrameCnt;
-    if (im.isKeyPressed(DOWN_KEY)) {
-        if (m_dropFrameCnt >= m_accelerateFrameTarget) {
-            if (!m_game.drop()) {
-                am.playChunk(m_dropChunk);
-            }
-            m_dropFrameCnt = 0;
+    bool isAccelerate = im.isKeyPressed(DOWN_KEY);
+    int dropFrameTarget = isAccelerate ? m_accelerateFrameTarget : m_dropFrameTarget;
+    if (m_dropFrameCnt >= dropFrameTarget) {
+        if (!m_game.drop()) {
+            am.playChunk(m_dropChunk);
+            m_curStatus = Status::Check;
+        } else if (isAccelerate) {
+            ++m_accelerateLineCount;
         }
-    } else {
-        if (m_dropFrameCnt >= m_dropFrameTarget) {
-            if (!m_game.drop()) {
-                am.playChunk(m_dropChunk);
-            }
-            m_dropFrameCnt = 0;
-        }
+        m_dropFrameCnt = 0;
     }
 }
 
@@ -293,4 +318,12 @@ void GameScene::renderContent() {
     m_nextTetrisTitle->onRender();
     m_levelTitle->onRender();
     m_levelText->onRender();
+
+    for (int i = 0; i < TETRIS_FIELD_HEIGHT; ++i) {
+        for (int j = 0; j < TETRIS_FIELD_WIDTH; ++j) {
+            if (m_game.getFieldStyle(i, j) != TetrisStyle::Blank) {
+                renderTexture(rdr, m_tetrisBasicTexture.get(), m_tetrisFieldLayout->getElementPos(i, j));
+            }
+        }
+    }
 }

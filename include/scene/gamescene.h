@@ -10,6 +10,7 @@ private:
     enum class Status {
         Generate,
         Move,
+        Check,
         Erase,
         Calculate,
         Win, 
@@ -20,6 +21,7 @@ private:
 
     std::unique_ptr<VerticalLayout> m_tetrisTemplateLayout;
     std::unique_ptr<VerticalLayout> m_tetrisCountLayout;
+    std::unique_ptr<GridLayout> m_tetrisFieldLayout;
 
     std::unique_ptr<Text> m_gameTypeTitle;
     std::unordered_map<TetrisMode, std::unique_ptr<Text>> m_tetrisCountText;
@@ -31,6 +33,8 @@ private:
     std::unique_ptr<Text> m_nextTetrisTitle;
     std::unique_ptr<Text> m_levelTitle;
     std::unique_ptr<Text> m_levelText;
+
+    UniqueTexture m_tetrisBasicTexture;
 
     Mix_Music* m_music;
     Mix_Chunk* m_moveChunk;
@@ -55,6 +59,7 @@ private:
     int m_curMoveDir;
     bool m_justMove;
     int m_accelerateLineCount;
+    int m_eraseOrder;
 
 public:
     GameScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback);

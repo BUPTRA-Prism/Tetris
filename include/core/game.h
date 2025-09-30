@@ -19,6 +19,8 @@ private:
     std::array<std::pair<int, int>, TETRIS_NUM> m_tetrisPos;
     int m_tetrisRotateStatus;
 
+    std::vector<int> m_eraseLines;
+
 public:
     Game();
     ~Game() = default;
@@ -37,8 +39,8 @@ public:
     bool rotate(int delta);
     bool drop();
 
-    std::vector<int> checkEraseLine();
-    void erase(std::vector<int>& lines, int order);
-    int calculate(int eraseLine, int accelerateLine);
+    int checkEraseLine();
+    bool eraseComplete(int order);
+    int calculate(int accelerateLineCount);
     bool win();
 };

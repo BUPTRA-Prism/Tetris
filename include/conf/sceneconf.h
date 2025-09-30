@@ -93,8 +93,10 @@ namespace GAME_SCENE {
     inline const int LINE_COUNT_MAX_LEN = 3;                            // 消除行数最大长度
     inline const int SCORE_MAX_LEN = 6;                                 // 分数最大长度
     inline const int LEVEL_MAX_LEN = 2;                                 // 关卡数最大长度
-    inline const SDL_Point TETRIS_FIELD_POS = { 384, 796 };
+    inline const SDL_Point TETRIS_FIELD_POS = { 384, 764 };
     inline const int TETRIS_FIELD_SPACING = 32;
+    inline const int TETRIS_SIZE = 28;
+    inline const SDL_Color TETRIS_BASIC_COLOR = { 255, 255, 255, 255 };
 };
 
 // 结算场景
