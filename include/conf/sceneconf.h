@@ -97,6 +97,30 @@ namespace GAME_SCENE {
     inline const int TETRIS_FIELD_SPACING = 32;
     inline const int TETRIS_SIZE = 28;
     inline const SDL_Color TETRIS_BASIC_COLOR = { 255, 255, 255, 255 };
+    inline const std::vector<SDL_Color> TETRIS_PATTERN_DARK_COLOR = {
+        { 0, 88, 248, 255 },
+        { 0, 168, 0, 255 },
+        { 216, 0, 204, 255 },
+        { 0, 88, 248, 255 },
+        { 228, 0, 88, 255 },
+        { 88, 248, 152, 255 },
+        { 248, 56, 0, 255 },
+        { 104, 68, 252, 255 },
+        { 0, 88, 248, 255 },
+        { 248, 56, 0, 255 }
+    };
+    inline const std::vector<SDL_Color> TETRIS_PATTERN_LIGHT_COLOR = {
+        { 60, 188, 252, 255 },
+        { 184, 248, 24, 255 },
+        { 248, 120, 248, 255 },
+        { 88, 216, 84, 255 },
+        { 88, 248, 152, 255 },
+        { 104, 136, 252, 255 },
+        { 124, 124, 124, 255 },
+        { 168, 0, 32, 255 },
+        { 248, 56, 0, 255 },
+        { 252, 160, 68, 255 }
+    };
 };
 
 // 结算场景

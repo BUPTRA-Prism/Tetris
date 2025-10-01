@@ -24,6 +24,8 @@ bool ResourceManager::loadResource(SDL_Renderer* renderer) {
         TITLE_FRAME_IMAGE_PATH, 
         TYPE_A_FRAME_IMAGE_PATH,
         TYPE_B_FRAME_IMAGE_PATH, 
+        TETRIS_SOLID_PATTERN_IMAGE_PATH,
+        TETRIS_HOLLOW_PATTERN_IMAGE_PATH
     };
     // 字体文件名列表
     std::vector<std::string> fontPaths{
@@ -46,7 +48,7 @@ bool ResourceManager::loadResource(SDL_Renderer* renderer) {
         DROP_CHUNK_PATH,
         ERASE_FOUR_CHUNK_PATH,
         ERASE_CHUNK_PATH,
-        LEVEL_CHUNK_PATH,
+        UPGRADE_CHUNK_PATH,
         MOVE_CHUNK_PATH,
         OPTION_CHUNK_PATH,
         ROTATE_CHUNK_PATH,

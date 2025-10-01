@@ -11,13 +11,6 @@ Game::Game() {
     m_tetrisCount.emplace(TetrisMode::I, 0);
 }
 
-TetrisStyle Game::getFieldStyle(int row, int col) const { 
-    if (row < 0 || row >= m_field.size() || col < 0 || col >= m_field[0].size() ) {
-        return TetrisStyle::Blank;
-    }
-    return m_field[row][col];
-}
-
 int Game::getLevel() const { return m_level; }
 
 int Game::getHeight() const { return m_height; }
@@ -26,7 +19,23 @@ int Game::getScore() const { return m_score; }
 
 int Game::getLineCount() const { return m_lineCount; }
 
-const std::unordered_map<TetrisMode, int>& Game::getTetrisCount() { return m_tetrisCount; }
+TetrisMode Game::getCurMode() const { return m_curMode; }
+
+bool Game::isUpgrade() const { return m_upgrade; }
+
+int Game::getTetrisCount(TetrisMode mode) const { 
+    if (!m_tetrisCount.count(mode)) {
+        return 0;
+    }
+    return m_tetrisCount.at(mode); 
+}
+
+TetrisStyle Game::getFieldStyle(int row, int col) const { 
+    if (row < 0 || row >= m_field.size() || col < 0 || col >= m_field[0].size() ) {
+        return TetrisStyle::Blank;
+    }
+    return m_field[row][col];
+}
 
 void Game::resetGame(int level, int height) {
     for (int row = 0; row < m_field.size(); ++row) {
@@ -42,6 +51,9 @@ void Game::resetGame(int level, int height) {
     }
 
     m_nextMode = static_cast<TetrisMode>(getRandomInt(0, m_tetrisCount.size() - 1));
+
+    m_levelLineCount = 0;
+    m_upgrade = false;
 }
 
 bool Game::generate() {
@@ -129,9 +141,7 @@ bool Game::rotate(int delta) {
         }
     }
     for (int i = 0; i < m_tetrisPos.size(); ++i) {
-        if (m_tetrisPos[i].first < TETRIS_FIELD_HEIGHT) {
-            m_field[m_tetrisPos[i].first][m_tetrisPos[i].second] = TETRIS_MODE_STYLE.at(m_curMode);
-        }
+        m_field[m_tetrisPos[i].first][m_tetrisPos[i].second] = TETRIS_MODE_STYLE.at(m_curMode);
     }
 
     return success;
@@ -190,9 +200,12 @@ bool Game::eraseComplete(int order) {
     if (2 * order >= TETRIS_FIELD_WIDTH) {
         for (int j = 0; j < TETRIS_FIELD_WIDTH; ++j) {
             int slow = 0;
+            int eraseIdx = 0;
             for (int fast = 0; fast < TETRIS_FIELD_HEIGHT; ++fast) {
-                if (m_field[fast][j] != TetrisStyle::Blank) {
+                if (eraseIdx == m_eraseLines.size() || fast != m_eraseLines[eraseIdx]) {
                     m_field[slow++][j] = m_field[fast][j];
+                } else {
+                    ++eraseIdx;
                 }
             } 
             for (; slow < TETRIS_FIELD_HEIGHT; ++slow) {
@@ -209,9 +222,17 @@ bool Game::eraseComplete(int order) {
     }
 }
 
-int Game::calculate(int accelerateLineCount) {
-    m_score += TETRIS_ERASE_SCORE[m_eraseLines.size()] + accelerateLineCount;
-    return m_score;
+void Game::calculate(int accelerateLineCount) {
+    m_lineCount += m_eraseLines.size();
+    m_levelLineCount += m_eraseLines.size();
+    if (m_levelLineCount >= 10 * (m_level + 1)) {
+        ++m_level;
+        m_levelLineCount = 0;
+        m_upgrade = true;
+    } else {
+        m_upgrade = false;
+    }
+    m_score += TETRIS_ERASE_SCORE[m_eraseLines.size()] * (m_level + 1) + accelerateLineCount;
 }
 
 bool Game::win() {

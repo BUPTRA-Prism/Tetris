@@ -35,11 +35,16 @@ private:
     std::unique_ptr<Text> m_levelText;
 
     UniqueTexture m_tetrisBasicTexture;
+    SDL_Texture* m_tetrisSolidPatternTexture;
+    SDL_Texture* m_tetrisHollowPatternTexture;
 
     Mix_Music* m_music;
     Mix_Chunk* m_moveChunk;
     Mix_Chunk* m_rotateChunk;
     Mix_Chunk* m_dropChunk;
+    Mix_Chunk* m_eraseChunk;
+    Mix_Chunk* m_eraseFourChunk;
+    Mix_Chunk* m_upgradeChunk;
 
     Game m_game;
 

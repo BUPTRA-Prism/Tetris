@@ -22,6 +22,8 @@ inline const std::string SETTING_FRAME_IMAGE_PATH = "setting_frame.png";    // �
 inline const std::string TITLE_FRAME_IMAGE_PATH = "title_frame.png";        // 标题界面框架
 inline const std::string TYPE_A_FRAME_IMAGE_PATH = "type_a_frame.png";      // A模式框架
 inline const std::string TYPE_B_FRAME_IMAGE_PATH = "type_b_frame.png";      // B模式框架
+inline const std::string TETRIS_SOLID_PATTERN_IMAGE_PATH = "tetris_solid_pattern.png";
+inline const std::string TETRIS_HOLLOW_PATTERN_IMAGE_PATH = "tetris_hollow_pattern.png";
 
 /* 字体资源文件 */
 inline const std::string DIGIT_FONT_PATH = "digit.png";                 // 数字
@@ -42,7 +44,7 @@ inline const std::string WIN_MUSIC_PATH = "win.ogg";        // 游戏胜利背�
 inline const std::string DROP_CHUNK_PATH = "drop.ogg";              // 方块下落音效
 inline const std::string ERASE_FOUR_CHUNK_PATH = "erase_four.ogg";  // 消除4行音效
 inline const std::string ERASE_CHUNK_PATH = "erase.ogg";            // 消除音效（非4行）
-inline const std::string LEVEL_CHUNK_PATH = "level.ogg";            // 下一关音效
+inline const std::string UPGRADE_CHUNK_PATH = "upgrade.ogg";            // 下一关音效
 inline const std::string MOVE_CHUNK_PATH = "move.ogg";              // 方块移动音效
 inline const std::string OPTION_CHUNK_PATH = "option.ogg";          // 选项切换音效
 inline const std::string ROTATE_CHUNK_PATH = "rotate.ogg";          // 方块旋转音效

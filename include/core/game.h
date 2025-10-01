@@ -6,7 +6,7 @@
 
 class Game {
 private: 
-    std::array<std::array<TetrisStyle, TETRIS_FIELD_WIDTH>, TETRIS_FIELD_HEIGHT> m_field;
+    std::array<std::array<TetrisStyle, TETRIS_FIELD_WIDTH>, TETRIS_FIELD_HEIGHT + TETRIS_RESERVE_HEIGHT> m_field;
     int m_level;
     int m_height;
     int m_score;
@@ -20,17 +20,22 @@ private:
     int m_tetrisRotateStatus;
 
     std::vector<int> m_eraseLines;
+    int m_levelLineCount;
+
+    bool m_upgrade;
 
 public:
     Game();
     ~Game() = default;
 
-    TetrisStyle getFieldStyle(int row, int col) const;
     int getLevel() const;
     int getHeight() const;
     int getScore() const;
     int getLineCount() const;
-    const std::unordered_map<TetrisMode, int>& getTetrisCount();
+    TetrisMode getCurMode() const;
+    bool isUpgrade() const;
+    int getTetrisCount(TetrisMode mode) const;
+    TetrisStyle getFieldStyle(int row, int col) const;
 
     void resetGame(int level, int height);
 
@@ -41,6 +46,6 @@ public:
 
     int checkEraseLine();
     bool eraseComplete(int order);
-    int calculate(int accelerateLineCount);
+    void calculate(int accelerateLineCount);
     bool win();
 };

@@ -79,6 +79,7 @@ inline const std::unordered_map<TetrisMode, TetrisStyle> TETRIS_MODE_STYLE = {
 
 inline const int TETRIS_FIELD_WIDTH = 10;
 inline const int TETRIS_FIELD_HEIGHT = 20;
+inline const int TETRIS_RESERVE_HEIGHT = 2;
 inline const int TETRIS_DAS_FRAME = 16;
 inline const int TETRIS_ARR_FRAME = 6;
 inline const int TETRIS_ACCELERATE_FRAME = 2;

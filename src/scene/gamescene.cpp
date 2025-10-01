@@ -3,6 +3,7 @@
 #include "conf/sceneconf.h"
 #include "util/common.h"
 #include "util/render.h"
+#include <iostream>
 
 GameScene::GameScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback)
     : Scene(ctx, loadSceneCallback) 
@@ -17,6 +18,7 @@ GameScene::GameScene(Context& ctx, std::function<void(const std::string&)> loadS
     constructNextTetrisUI();
     constructLevelUI();
 
+    ResourceManager& rm = m_ctx.resourceManager;
     SDL_Renderer* rdr = m_ctx.renderer;
     m_tetrisFieldLayout = std::make_unique<GridLayout>(
         GAME_SCENE::TETRIS_FIELD_POS,
@@ -24,11 +26,15 @@ GameScene::GameScene(Context& ctx, std::function<void(const std::string&)> loadS
         GAME_SCENE::TETRIS_FIELD_SPACING
     );
     m_tetrisBasicTexture = createSolidTexture(rdr, GAME_SCENE::TETRIS_BASIC_COLOR, GAME_SCENE::TETRIS_SIZE, GAME_SCENE::TETRIS_SIZE);
+    m_tetrisSolidPatternTexture = rm.getImage(TETRIS_SOLID_PATTERN_IMAGE_PATH);
+    m_tetrisHollowPatternTexture = rm.getImage(TETRIS_HOLLOW_PATTERN_IMAGE_PATH);
 
-    ResourceManager& rm = m_ctx.resourceManager;
     m_moveChunk = rm.getChunk(MOVE_CHUNK_PATH);
     m_rotateChunk = rm.getChunk(ROTATE_CHUNK_PATH);
     m_dropChunk = rm.getChunk(DROP_CHUNK_PATH);
+    m_eraseChunk = rm.getChunk(ERASE_CHUNK_PATH);
+    m_eraseFourChunk = rm.getChunk(ERASE_FOUR_CHUNK_PATH);
+    m_upgradeChunk = rm.getChunk(UPGRADE_CHUNK_PATH);
 }
 
 void GameScene::constructGameTypeUI() {
@@ -49,8 +55,7 @@ void GameScene::constructTetrisCountUI() {
         GAME_SCENE::TETRIS_COUNT_SPACING
     );
 
-    auto& tetrisCount = m_game.getTetrisCount();
-    for (auto it = tetrisCount.begin(); it != tetrisCount.end(); ++it) {
+    for (auto it = TETRIS_MODE_STYLE.begin(); it != TETRIS_MODE_STYLE.end(); ++it) {
         m_tetrisCountText.emplace(it->first, std::make_unique<Text>(
             m_ctx,
             "",
@@ -184,10 +189,18 @@ void GameScene::onExit() {
 }
 
 void GameScene::onUpdate() {
+    AudioManager& am = m_ctx.audioManager;
+
     switch (m_curStatus) {
         case Status::Generate: {
-            m_game.generate();
-            m_curStatus = Status::Move;
+            bool generateSuccess = m_game.generate();
+
+            TetrisMode curMode = m_game.getCurMode();
+            std::string curModeCountStrStr = std::to_string(m_game.getTetrisCount(curMode));
+            padLeft(curModeCountStrStr, GAME_SCENE::TETRIS_COUNT_MAX_LEN, '0');
+            m_tetrisCountText[curMode]->setStr(curModeCountStrStr);
+            
+            m_curStatus = generateSuccess ? Status::Move : Status::Lose;
             break;
         }
         case Status::Move: {
@@ -198,8 +211,10 @@ void GameScene::onUpdate() {
         }
         case Status::Check: {
             m_curStatus = Status::Calculate;
-            if (m_game.checkEraseLine() != 0) {
+            int eraseLineCount = m_game.checkEraseLine();
+            if (eraseLineCount != 0) {
                 m_curStatus = Status::Erase;
+                am.playChunk(eraseLineCount == 4 ? m_eraseFourChunk : m_eraseChunk);
             }
             break;
         }
@@ -207,6 +222,7 @@ void GameScene::onUpdate() {
             ++m_eraseFrameCnt;
             if (m_eraseFrameCnt >= m_eraseFrameTarget) {
                 if (m_game.eraseComplete(m_eraseOrder)) {
+                    m_eraseOrder = 0;
                     m_curStatus = Status::Calculate;
                 } else {
                     ++m_eraseOrder;
@@ -216,11 +232,26 @@ void GameScene::onUpdate() {
             break;
         }
         case Status::Calculate: {
-            int score = m_game.calculate(m_accelerateLineCount);
-            std::string scoreStr = std::to_string(score);
+            m_game.calculate(m_accelerateLineCount);
+
+            std::string lineCountStr = std::to_string(m_game.getLineCount());
+            padLeft(lineCountStr, GAME_SCENE::LINE_COUNT_MAX_LEN, '0');
+            m_lineCountText->setStr(GAME_SCENE::LINE_COUNT_STR + lineCountStr);
+
+            std::string scoreStr = std::to_string(m_game.getScore());
             padLeft(scoreStr, GAME_SCENE::SCORE_MAX_LEN, '0');
             m_scoreText->setStr(scoreStr);
+
+            std::string levelStr = std::to_string(m_game.getLevel());
+            padLeft(levelStr, GAME_SCENE::LEVEL_MAX_LEN, '0');
+            m_levelText->setStr(levelStr);
+
+            if (m_game.isUpgrade()) {
+                am.playChunk(m_upgradeChunk);
+            }
+
             m_curStatus = Status::Generate;
+            m_accelerateLineCount = 0;
             break;
         }
         case Status::Win: {
@@ -278,7 +309,7 @@ void GameScene::rotate() {
         delta = -1;
     }
     
-    if (m_game.rotate(delta)) {
+    if (delta != 0 && m_game.rotate(delta)) {
         am.playChunk(m_rotateChunk);
     }
 }
@@ -294,8 +325,8 @@ void GameScene::drop() {
         if (!m_game.drop()) {
             am.playChunk(m_dropChunk);
             m_curStatus = Status::Check;
-        } else if (isAccelerate) {
-            ++m_accelerateLineCount;
+        } else {
+            m_accelerateLineCount = isAccelerate ? (m_accelerateLineCount + 1) : 0;
         }
         m_dropFrameCnt = 0;
     }
@@ -323,6 +354,26 @@ void GameScene::renderContent() {
         for (int j = 0; j < TETRIS_FIELD_WIDTH; ++j) {
             if (m_game.getFieldStyle(i, j) != TetrisStyle::Blank) {
                 renderTexture(rdr, m_tetrisBasicTexture.get(), m_tetrisFieldLayout->getElementPos(i, j));
+                SDL_Color darkColor = GAME_SCENE::TETRIS_PATTERN_DARK_COLOR[m_game.getLevel() % GAME_SCENE::TETRIS_PATTERN_DARK_COLOR.size()];
+                SDL_Color lightColor = GAME_SCENE::TETRIS_PATTERN_LIGHT_COLOR[m_game.getLevel() % GAME_SCENE::TETRIS_PATTERN_LIGHT_COLOR.size()];
+                switch (m_game.getFieldStyle(i, j)) {
+                    case TetrisStyle::SolidDark: {
+                        SDL_SetTextureColorMod(m_tetrisSolidPatternTexture, darkColor.r, darkColor.g, darkColor.b);
+                        renderTexture(rdr, m_tetrisSolidPatternTexture, m_tetrisFieldLayout->getElementPos(i, j));
+                        break;
+                    }
+                    case TetrisStyle::SolidLight: {
+                        SDL_SetTextureColorMod(m_tetrisSolidPatternTexture, lightColor.r, lightColor.g, lightColor.b);
+                        renderTexture(rdr, m_tetrisSolidPatternTexture, m_tetrisFieldLayout->getElementPos(i, j));
+                        break;
+                    }
+                    case TetrisStyle::HollowDark: {
+                        SDL_SetTextureColorMod(m_tetrisHollowPatternTexture, darkColor.r, darkColor.g, darkColor.b);
+                        renderTexture(rdr, m_tetrisHollowPatternTexture, m_tetrisFieldLayout->getElementPos(i, j));
+                        break;
+                    }
+                    default: break;
+                }
             }
         }
     }
