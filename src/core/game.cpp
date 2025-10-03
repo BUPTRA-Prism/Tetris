@@ -21,6 +21,8 @@ int Game::getLineCount() const { return m_lineCount; }
 
 TetrisMode Game::getCurMode() const { return m_curMode; }
 
+TetrisMode Game::getNextMode() const { return m_nextMode; }
+
 bool Game::isUpgrade() const { return m_upgrade; }
 
 int Game::getTetrisCount(TetrisMode mode) const { 
@@ -37,14 +39,37 @@ TetrisStyle Game::getFieldStyle(int row, int col) const {
     return m_field[row][col];
 }
 
-void Game::resetGame(int level, int height) {
-    for (int row = 0; row < m_field.size(); ++row) {
-        m_field[row].fill(TetrisStyle::Blank);
+int Game::getTetrisLowestRow() const {
+    int row = m_tetrisPos[0].first;
+    for (auto pos: m_tetrisPos) {
+        if (pos.first < row) {
+            row = pos.first;
+        }
     }
+    return row;
+}
+
+void Game::resetGame(int level, int height, bool isGameTypeB) {
     m_level = level;
     m_height = height;
     m_score = 0;
-    m_lineCount = 0;
+    m_isGameTypeB = isGameTypeB;
+    m_lineCount = isGameTypeB ? TYPE_B_TARGET_LINE_COUNT : 0;
+
+    for (int row = 0; row < m_field.size(); ++row) {
+        m_field[row].fill(TetrisStyle::Blank);
+    }
+    if (m_isGameTypeB) {
+        for (int i = 0; i < TETRIS_HEIGHT_LINE[height]; ++i) {
+            int garbageCount = getRandomInt(TYPE_B_GARBAGE_MIN_COUNT, TYPE_B_GARBAGE_MAX_COUNT);
+            std::vector<int> garbageIdxList = getRandomIntList(0, TETRIS_FIELD_WIDTH - 1, garbageCount);
+            for (auto idx: garbageIdxList) {
+                m_field[i][idx] = static_cast<TetrisStyle>(
+                    getRandomInt(static_cast<int>(TetrisStyle::SolidDark), static_cast<int>(TetrisStyle::HollowDark))
+                );
+            }
+        }
+    }
 
     for (auto it = m_tetrisCount.begin(); it != m_tetrisCount.end(); ++it) {
         it->second = 0;
@@ -52,7 +77,6 @@ void Game::resetGame(int level, int height) {
 
     m_nextMode = static_cast<TetrisMode>(getRandomInt(0, m_tetrisCount.size() - 1));
 
-    m_levelLineCount = 0;
     m_upgrade = false;
 }
 
@@ -223,18 +247,20 @@ bool Game::eraseComplete(int order) {
 }
 
 void Game::calculate(int accelerateLineCount) {
-    m_lineCount += m_eraseLines.size();
-    m_levelLineCount += m_eraseLines.size();
-    if (m_levelLineCount >= 10 * (m_level + 1)) {
+    if (m_isGameTypeB) {
+        m_lineCount -= m_eraseLines.size();
+        if (m_lineCount < 0) {
+            m_lineCount = 0;
+        } 
+    } else {
+        m_lineCount += m_eraseLines.size();
+    }
+    
+    if (!m_isGameTypeB && m_lineCount >= 10 * (m_level + 1)) {
         ++m_level;
-        m_levelLineCount = 0;
         m_upgrade = true;
     } else {
         m_upgrade = false;
     }
     m_score += TETRIS_ERASE_SCORE[m_eraseLines.size()] * (m_level + 1) + accelerateLineCount;
-}
-
-bool Game::win() {
-    return false;
 }

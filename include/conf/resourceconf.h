@@ -17,13 +17,16 @@ inline const std::string LEVEL_A_FRAME_IMAGE_PATH = "level_a_frame.png";    // A
 inline const std::string LEVEL_B_FRAME_IMAGE_PATH = "level_b_frame.png";    // B模式关卡选项框架
 inline const std::string MENU_FRAME_IMAGE_PATH = "menu_frame.png";          // 菜单界面框架
 inline const std::string OPTION_ICON_IMAGE_PATH = "option_icon.png";        // 选项图标框架
-inline const std::string RESULT_FRAME_IMAGE_PATH = "result_frame.png";      // 游戏结束框架
+inline const std::string RESULT_OUTER_FRAME_IMAGE_PATH = "result_outer_frame.png";      // 游戏结束框架
+inline const std::string RESULT_INNER_FRAME_IMAGE_PATH = "result_inner_frame.png";
 inline const std::string SETTING_FRAME_IMAGE_PATH = "setting_frame.png";    // 设置界面框架
 inline const std::string TITLE_FRAME_IMAGE_PATH = "title_frame.png";        // 标题界面框架
 inline const std::string TYPE_A_FRAME_IMAGE_PATH = "type_a_frame.png";      // A模式框架
 inline const std::string TYPE_B_FRAME_IMAGE_PATH = "type_b_frame.png";      // B模式框架
 inline const std::string TETRIS_SOLID_PATTERN_IMAGE_PATH = "tetris_solid_pattern.png";
 inline const std::string TETRIS_HOLLOW_PATTERN_IMAGE_PATH = "tetris_hollow_pattern.png";
+inline const std::string TETRIS_MODE_SOLID_PATTERN_IMAGE_PATH = "tetris_mode_solid_pattern.png";
+inline const std::string TETRIS_MODE_HOLLOW_PATTERN_IMAGE_PATH = "tetris_mode_hollow_pattern.png";
 
 /* 字体资源文件 */
 inline const std::string DIGIT_FONT_PATH = "digit.png";                 // 数字

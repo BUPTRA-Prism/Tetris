@@ -11,6 +11,7 @@ private:
     int m_height;
     int m_score;
     int m_lineCount;
+    bool m_isGameTypeB;
     std::unordered_map<TetrisMode, int> m_tetrisCount;
 
     TetrisMode m_curMode;
@@ -20,7 +21,6 @@ private:
     int m_tetrisRotateStatus;
 
     std::vector<int> m_eraseLines;
-    int m_levelLineCount;
 
     bool m_upgrade;
 
@@ -33,11 +33,13 @@ public:
     int getScore() const;
     int getLineCount() const;
     TetrisMode getCurMode() const;
+    TetrisMode getNextMode() const;
     bool isUpgrade() const;
     int getTetrisCount(TetrisMode mode) const;
     TetrisStyle getFieldStyle(int row, int col) const;
+    int getTetrisLowestRow() const;
 
-    void resetGame(int level, int height);
+    void resetGame(int level, int height, bool isGameTypeB = false);
 
     bool generate();
     bool move(int delta);
@@ -47,5 +49,4 @@ public:
     int checkEraseLine();
     bool eraseComplete(int order);
     void calculate(int accelerateLineCount);
-    bool win();
 };

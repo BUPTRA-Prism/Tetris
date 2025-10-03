@@ -43,3 +43,5 @@ inline std::array<Record, RECORD_COUNT> RECORD_B = {
     Record { "TONY", 1000, 5 },
     Record { "NINTEN", 500, 0 }
 };
+
+inline const std::string RECORD_DEFAULT_NAME = "------";

@@ -15,6 +15,7 @@ private:
     int m_curMusicTypeIdx;  // 当前音乐类型索引
     int m_curLevel;         // 当前关卡
     int m_curHeight;        // 当前高度
+    int m_newRecordOrder;
 
 public:
     /**
@@ -53,7 +54,8 @@ public:
      * @return bool 设置成功返回 true ，否则返回 false
      */
     bool setHeight(int delta);
-    bool setRecord(std::string name, int score, int lv);
+    void insertRecord(int score, int lv);
+    void updateRecordName(std::string name);
 
     /**
      * @brief 获取当前游戏类型索引
@@ -104,6 +106,7 @@ public:
      * @return int 记录关卡数
      */
     int getRecordLv(int order) const;
+    int getNewRecordOrder() const;
 
 private:
     Settings();             // 私有构造函数

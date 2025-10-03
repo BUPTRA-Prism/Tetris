@@ -3,7 +3,6 @@
 #include "conf/sceneconf.h"
 #include "util/common.h"
 #include "util/render.h"
-#include <iostream>
 
 GameScene::GameScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback)
     : Scene(ctx, loadSceneCallback) 
@@ -22,13 +21,27 @@ GameScene::GameScene(Context& ctx, std::function<void(const std::string&)> loadS
     SDL_Renderer* rdr = m_ctx.renderer;
     m_tetrisFieldLayout = std::make_unique<GridLayout>(
         GAME_SCENE::TETRIS_FIELD_POS,
-        -GAME_SCENE::TETRIS_FIELD_SPACING,
-        GAME_SCENE::TETRIS_FIELD_SPACING
+        -GAME_SCENE::TETRIS_SPACING,
+        GAME_SCENE::TETRIS_SPACING
     );
+
+    m_resultText = std::make_unique<Text>(
+        m_ctx,
+        "",
+        GAME_SCENE::RESULT_TEXT_POS
+    );
+
     m_tetrisBasicTexture = createSolidTexture(rdr, GAME_SCENE::TETRIS_BASIC_COLOR, GAME_SCENE::TETRIS_SIZE, GAME_SCENE::TETRIS_SIZE);
+    m_tetrisModeBasicTexture = createSolidTexture(rdr, GAME_SCENE::TETRIS_BASIC_COLOR, GAME_SCENE::TETRIS_MODE_SIZE, GAME_SCENE::TETRIS_MODE_SIZE);
     m_tetrisSolidPatternTexture = rm.getImage(TETRIS_SOLID_PATTERN_IMAGE_PATH);
     m_tetrisHollowPatternTexture = rm.getImage(TETRIS_HOLLOW_PATTERN_IMAGE_PATH);
+    m_tetrisModeSolidPatternTexture = rm.getImage(TETRIS_MODE_SOLID_PATTERN_IMAGE_PATH);
+    m_tetrisModeHollowPatternTexture = rm.getImage(TETRIS_MODE_HOLLOW_PATTERN_IMAGE_PATH);
+    m_resultOuterFrameTexture = rm.getImage(RESULT_OUTER_FRAME_IMAGE_PATH);
+    m_resultInnerFrameTexture = rm.getImage(RESULT_INNER_FRAME_IMAGE_PATH);
 
+    m_winMusic = rm.getMusic(WIN_MUSIC_PATH);
+    m_loseMusic = rm.getMusic(LOSE_MUSIC_PATH);
     m_moveChunk = rm.getChunk(MOVE_CHUNK_PATH);
     m_rotateChunk = rm.getChunk(ROTATE_CHUNK_PATH);
     m_dropChunk = rm.getChunk(DROP_CHUNK_PATH);
@@ -46,8 +59,8 @@ void GameScene::constructGameTypeUI() {
 }
 
 void GameScene::constructTetrisCountUI() {
-    m_tetrisTemplateLayout = std::make_unique<VerticalLayout>(
-        GAME_SCENE::TETRIS_TEMPLATE_CENTER_POS,
+    m_tetrisModeLayout = std::make_unique<VerticalLayout>(
+        GAME_SCENE::TETRIS_MODE_CENTER_POS,
         GAME_SCENE::TETRIS_COUNT_SPACING
     );
     m_tetrisCountLayout = std::make_unique<VerticalLayout>(
@@ -122,8 +135,9 @@ void GameScene::onEnter() {
     AudioManager& am = m_ctx.audioManager;
     Settings& s = m_ctx.settings;
 
-    m_game.resetGame(s.getLevel(), s.getHeight());
-    m_dropFrameTarget = TETRIS_GRAVITY_FRAME[s.getLevel()];
+    m_game.resetGame(s.getLevel(), s.getHeight(), s.getGameType() == GAME_TYPE_B);
+    m_generateDelayFrameTarget = 0;
+    m_generateDelayFrameCount = 0;
     m_moveFrameCnt = 0;
     m_dropFrameCnt = 0;
     m_eraseFrameCnt = 0;
@@ -134,6 +148,7 @@ void GameScene::onEnter() {
     m_justMove = false;
     m_accelerateLineCount = 0;
     m_eraseOrder = 0;
+    m_resultMusicStarted = false;
 
     m_music = rm.getMusic(s.getMusicPath());
     am.playMusic(m_music);
@@ -190,17 +205,28 @@ void GameScene::onExit() {
 
 void GameScene::onUpdate() {
     AudioManager& am = m_ctx.audioManager;
+    Settings& s = m_ctx.settings;
 
     switch (m_curStatus) {
         case Status::Generate: {
-            bool generateSuccess = m_game.generate();
+            if (m_generateDelayFrameCount >= m_generateDelayFrameTarget) {
+                bool generateSuccess = m_game.generate();
 
-            TetrisMode curMode = m_game.getCurMode();
-            std::string curModeCountStrStr = std::to_string(m_game.getTetrisCount(curMode));
-            padLeft(curModeCountStrStr, GAME_SCENE::TETRIS_COUNT_MAX_LEN, '0');
-            m_tetrisCountText[curMode]->setStr(curModeCountStrStr);
+                TetrisMode curMode = m_game.getCurMode();
+                std::string curModeCountStrStr = std::to_string(m_game.getTetrisCount(curMode));
+                padLeft(curModeCountStrStr, GAME_SCENE::TETRIS_COUNT_MAX_LEN, '0');
+                m_tetrisCountText[curMode]->setStr(curModeCountStrStr);
+                
+                m_curStatus = generateSuccess ? Status::Move : Status::Lose;
+                if (!generateSuccess) {
+                    am.stopMusic();
+                }
+
+                m_generateDelayFrameCount = 0;
+            } else {
+                ++m_generateDelayFrameCount;
+            }
             
-            m_curStatus = generateSuccess ? Status::Move : Status::Lose;
             break;
         }
         case Status::Move: {
@@ -242,7 +268,8 @@ void GameScene::onUpdate() {
             padLeft(scoreStr, GAME_SCENE::SCORE_MAX_LEN, '0');
             m_scoreText->setStr(scoreStr);
 
-            std::string levelStr = std::to_string(m_game.getLevel());
+            int level = m_game.getLevel();
+            std::string levelStr = std::to_string(level);
             padLeft(levelStr, GAME_SCENE::LEVEL_MAX_LEN, '0');
             m_levelText->setStr(levelStr);
 
@@ -251,13 +278,19 @@ void GameScene::onUpdate() {
             }
 
             m_curStatus = Status::Generate;
-            m_accelerateLineCount = 0;
+            std::string gameType = s.getGameType();
+            if ((gameType == GAME_TYPE_A && level >= TETRIS_GRAVITY_FRAME.size()) || (gameType == GAME_TYPE_B && m_game.getLineCount() <= 0)) {
+                m_curStatus = Status::Win;
+            } 
+            
             break;
         }
         case Status::Win: {
+            resultUpdate(true);
             break;
         }
         case Status::Lose: {
+            resultUpdate(false);
             break;
         }
         default: break;
@@ -287,7 +320,7 @@ void GameScene::move() {
                 if (m_game.move(m_curMoveDir)) {
                     am.playChunk(m_moveChunk);
                 }
-                m_justMove = true;
+                m_justMove = false;
                 m_moveFrameCnt = 0;
             }
         }
@@ -319,16 +352,52 @@ void GameScene::drop() {
     AudioManager& am = m_ctx.audioManager;
 
     ++m_dropFrameCnt;
+    m_dropFrameTarget = TETRIS_GRAVITY_FRAME[m_game.getLevel()];
     bool isAccelerate = im.isKeyPressed(DOWN_KEY);
     int dropFrameTarget = isAccelerate ? m_accelerateFrameTarget : m_dropFrameTarget;
     if (m_dropFrameCnt >= dropFrameTarget) {
         if (!m_game.drop()) {
+            int lowestRow = m_game.getTetrisLowestRow();
+            m_generateDelayFrameTarget = (lowestRow - 1) / 4 * 2 + 10;
+
             am.playChunk(m_dropChunk);
             m_curStatus = Status::Check;
         } else {
             m_accelerateLineCount = isAccelerate ? (m_accelerateLineCount + 1) : 0;
         }
         m_dropFrameCnt = 0;
+    }
+}
+
+void GameScene::resultUpdate(bool win) {
+    AudioManager& am = m_ctx.audioManager;
+    InputManager& im = m_ctx.inputManager;
+    Settings& s = m_ctx.settings;
+
+    if (!m_resultMusicStarted) {
+        int score = m_game.getScore();
+        int level = m_game.getLevel();
+        int height = m_game.getHeight();
+        if (s.getGameType() == GAME_TYPE_B && win) {
+            score += 1000 * (level + height);
+        }
+        s.insertRecord(score, level);
+
+        SDL_Color darkColor = GAME_SCENE::TETRIS_PATTERN_DARK_COLOR[m_game.getLevel() % GAME_SCENE::TETRIS_PATTERN_DARK_COLOR.size()];
+        SDL_Color lightColor = GAME_SCENE::TETRIS_PATTERN_LIGHT_COLOR[m_game.getLevel() % GAME_SCENE::TETRIS_PATTERN_LIGHT_COLOR.size()];
+        SDL_SetTextureColorMod(m_resultOuterFrameTexture, lightColor.r, lightColor.g, lightColor.b);
+        m_resultText->setStr(win ? GAME_SCENE::WIN_TEXT_STR : GAME_SCENE::LOSE_TEXT_STR);
+        m_resultText->setColor(darkColor);
+        Mix_Music* music = win ? m_winMusic : m_loseMusic;
+
+        am.playMusic(music, 0);
+        m_resultMusicStarted = true;
+    } else {
+        if (!am.isPlayingMusic()) {
+            if (im.isKeyJustPressed(NEXT_SCENE_KEY)) {
+                m_loadSceneCallback(s.getNewRecordOrder() == RECORD_COUNT ? SETTING_SCENE::NAME : COUNT_SCENE::NAME);
+            }
+        }
     }
 }
 
@@ -350,31 +419,75 @@ void GameScene::renderContent() {
     m_levelTitle->onRender();
     m_levelText->onRender();
 
+    for (auto it = TETRIS_MODE_STYLE.begin(); it != TETRIS_MODE_STYLE.end(); ++it) {
+        TetrisMode mode = it->first;
+        renderTetrisMode(m_tetrisModeLayout->getElementPos(static_cast<int>(mode)), mode, true);
+    }
+
+    renderTetrisMode(GAME_SCENE::NEXT_TETRIS_CENTER_POS, m_game.getNextMode(), false);
+
     for (int i = 0; i < TETRIS_FIELD_HEIGHT; ++i) {
         for (int j = 0; j < TETRIS_FIELD_WIDTH; ++j) {
             if (m_game.getFieldStyle(i, j) != TetrisStyle::Blank) {
-                renderTexture(rdr, m_tetrisBasicTexture.get(), m_tetrisFieldLayout->getElementPos(i, j));
-                SDL_Color darkColor = GAME_SCENE::TETRIS_PATTERN_DARK_COLOR[m_game.getLevel() % GAME_SCENE::TETRIS_PATTERN_DARK_COLOR.size()];
-                SDL_Color lightColor = GAME_SCENE::TETRIS_PATTERN_LIGHT_COLOR[m_game.getLevel() % GAME_SCENE::TETRIS_PATTERN_LIGHT_COLOR.size()];
-                switch (m_game.getFieldStyle(i, j)) {
-                    case TetrisStyle::SolidDark: {
-                        SDL_SetTextureColorMod(m_tetrisSolidPatternTexture, darkColor.r, darkColor.g, darkColor.b);
-                        renderTexture(rdr, m_tetrisSolidPatternTexture, m_tetrisFieldLayout->getElementPos(i, j));
-                        break;
-                    }
-                    case TetrisStyle::SolidLight: {
-                        SDL_SetTextureColorMod(m_tetrisSolidPatternTexture, lightColor.r, lightColor.g, lightColor.b);
-                        renderTexture(rdr, m_tetrisSolidPatternTexture, m_tetrisFieldLayout->getElementPos(i, j));
-                        break;
-                    }
-                    case TetrisStyle::HollowDark: {
-                        SDL_SetTextureColorMod(m_tetrisHollowPatternTexture, darkColor.r, darkColor.g, darkColor.b);
-                        renderTexture(rdr, m_tetrisHollowPatternTexture, m_tetrisFieldLayout->getElementPos(i, j));
-                        break;
-                    }
-                    default: break;
-                }
+                renderSingleSquare(m_tetrisFieldLayout->getElementPos(i, j), m_game.getFieldStyle(i, j), false);
             }
         }
+    }
+
+    if (m_curStatus == Status::Win || m_curStatus == Status::Lose) {
+        renderTexture(rdr, m_resultOuterFrameTexture, GAME_SCENE::RESULT_OUTER_FRAME_POS);
+        renderTexture(rdr, m_resultInnerFrameTexture, GAME_SCENE::RESULT_INNER_FRAME_POS);
+        m_resultText->onRender();
+    }
+}
+
+void GameScene::renderSingleSquare(SDL_Point pos, TetrisStyle style, bool isCount) {
+    SDL_Renderer* rdr = m_ctx.renderer;
+    
+    SDL_Texture* basicTexture = isCount ? m_tetrisModeBasicTexture.get() : m_tetrisBasicTexture.get();
+    SDL_Texture* solidPatternTexture = isCount ? m_tetrisModeSolidPatternTexture : m_tetrisSolidPatternTexture;
+    SDL_Texture* hollowPatternTexture = isCount ? m_tetrisModeHollowPatternTexture : m_tetrisHollowPatternTexture;
+
+    renderTexture(rdr, basicTexture, pos);
+
+    SDL_Color darkColor = GAME_SCENE::TETRIS_PATTERN_DARK_COLOR[m_game.getLevel() % GAME_SCENE::TETRIS_PATTERN_DARK_COLOR.size()];
+    SDL_Color lightColor = GAME_SCENE::TETRIS_PATTERN_LIGHT_COLOR[m_game.getLevel() % GAME_SCENE::TETRIS_PATTERN_LIGHT_COLOR.size()];
+    switch (style) {
+        case TetrisStyle::SolidDark: {
+            SDL_SetTextureColorMod(solidPatternTexture, darkColor.r, darkColor.g, darkColor.b);
+            renderTexture(rdr, solidPatternTexture, pos);
+            break;
+        }
+        case TetrisStyle::SolidLight: {
+            SDL_SetTextureColorMod(solidPatternTexture, lightColor.r, lightColor.g, lightColor.b);
+            renderTexture(rdr, solidPatternTexture, pos);
+            break;
+        }
+        case TetrisStyle::HollowDark: {
+            SDL_SetTextureColorMod(hollowPatternTexture, darkColor.r, darkColor.g, darkColor.b);
+            renderTexture(rdr, hollowPatternTexture, pos);
+            break;
+        }
+        default: break;
+    }
+}
+
+void GameScene::renderTetrisMode(SDL_Point centerPos, TetrisMode mode, bool isCount) {
+    int size = isCount ? GAME_SCENE::TETRIS_MODE_SIZE : GAME_SCENE::TETRIS_SIZE;
+    int spacing = isCount ? GAME_SCENE::TETRIS_MODE_SPACING : GAME_SCENE::TETRIS_SPACING;
+    SDL_Point anchorPos;
+    switch (mode) {
+        case TetrisMode::I: anchorPos = { centerPos.x - (spacing + size) / 2, centerPos.y - size / 2 }; break;
+        case TetrisMode::O: anchorPos = { centerPos.x - (spacing + size) / 2, centerPos.y - (spacing + size) / 2 }; break;
+        default: anchorPos = { centerPos.x - spacing - size / 2, centerPos.y - (spacing + size) / 2 }; break;
+    }
+
+    auto& modeInitShape = (TETRIS_MODE_ROTATE.at(mode))[0];
+    for (auto& shape: modeInitShape) {
+        SDL_Point shapePos = { 
+            anchorPos.x + shape.second * spacing, 
+            anchorPos.y - shape.first * spacing
+        };
+        renderSingleSquare(shapePos, TETRIS_MODE_STYLE.at(mode), isCount);
     }
 }

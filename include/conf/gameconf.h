@@ -94,3 +94,9 @@ inline const std::vector<int> TETRIS_HEIGHT_LINE = { 0, 3, 5, 8, 10, 12 };
 inline const std::pair<int, int> TETRIS_INIT_POS = { 19, 4 };
 
 inline const std::vector<int> TETRIS_ERASE_SCORE = { 0, 40, 100, 300, 1200 };
+
+inline const int TYPE_B_TARGET_LINE_COUNT = 25;
+
+inline const int TYPE_B_GARBAGE_MIN_COUNT = 3;
+
+inline const int TYPE_B_GARBAGE_MAX_COUNT = 6;

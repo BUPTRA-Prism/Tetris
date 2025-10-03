@@ -27,6 +27,10 @@ void AudioManager::stopMusic() {
     Mix_HaltMusic();
 }
 
+bool AudioManager::isPlayingMusic() {
+    return Mix_PlayingMusic();
+}
+
 void AudioManager::playChunk(Mix_Chunk* chunk, int loop) {
     if (chunk) {
         Mix_PlayChannel(-1, chunk, loop);

@@ -73,7 +73,8 @@ namespace GAME_SCENE {
     inline const std::string NAME = "game";                             // 场景名
     inline const SDL_Point GAME_TYPE_TITLE_POS = { 96, 96 };            // 游戏类型标题位置
     inline const SDL_Point TETRIS_COUNT_POS = { 192, 352 };             // 方块计数区域位置
-    inline const SDL_Point TETRIS_TEMPLATE_CENTER_POS = { 138, 366 };   // 方块模板中心点位置
+    inline const SDL_Point TETRIS_MODE_CENTER_POS = { 138, 366 };       // 方块模板位置
+    inline const SDL_Point NEXT_TETRIS_CENTER_POS = { 830, 478 };
     inline const int TETRIS_COUNT_SPACING = 64;                         // 方块计数区域间距
     inline const SDL_Color TETRIS_COUNT_COLOR = { 181, 49, 32, 255 };   // 方块计数文本颜色
     inline const std::string LINE_COUNT_STR = "LINES-";                 // 消除行文本内容
@@ -94,8 +95,10 @@ namespace GAME_SCENE {
     inline const int SCORE_MAX_LEN = 6;                                 // 分数最大长度
     inline const int LEVEL_MAX_LEN = 2;                                 // 关卡数最大长度
     inline const SDL_Point TETRIS_FIELD_POS = { 384, 764 };
-    inline const int TETRIS_FIELD_SPACING = 32;
+    inline const int TETRIS_SPACING = 32;
     inline const int TETRIS_SIZE = 28;
+    inline const int TETRIS_MODE_SPACING = 24;
+    inline const int TETRIS_MODE_SIZE = 20;
     inline const SDL_Color TETRIS_BASIC_COLOR = { 255, 255, 255, 255 };
     inline const std::vector<SDL_Color> TETRIS_PATTERN_DARK_COLOR = {
         { 0, 88, 248, 255 },
@@ -121,9 +124,31 @@ namespace GAME_SCENE {
         { 248, 56, 0, 255 },
         { 252, 160, 68, 255 }
     };
+    inline const SDL_Point RESULT_OUTER_FRAME_POS = { 384, 384 };
+    inline const SDL_Point RESULT_INNER_FRAME_POS = { 400, 400 };
+    inline const SDL_Point RESULT_TEXT_POS = { 416, 416 };
+    inline const std::string WIN_TEXT_STR = "YOU  WIN";
+    inline const std::string LOSE_TEXT_STR = "YOU LOSE";
 };
 
 // 结算场景
 namespace COUNT_SCENE {
     inline const std::string NAME = "count";        // 场景名
+    inline const std::vector<std::string> COUNT_TEXT_STR = {
+        "CONGRATULATIONS",
+        "YOU ARE A",
+        "TETRIS MASTER.",
+        "PLEASE ENTER YOUR NAME"
+    };
+    inline const std::vector<SDL_Point> COUNT_TEXT_POS = {
+        { 288, 192 }, { 352, 288 }, { 288, 352 }, { 160, 448 }
+    };
+    inline const SDL_Color COUNT_TITLE_COLOR = { 181, 49, 32, 255 };
+    inline const SDL_Color RECORD_NAME_ICON_COLOR = { 255, 129, 112, 255 };
+    inline const int RECORD_NAME_ICON_SIZE = 32;
+    inline const int RECORD_NAME_ICON_SPACING = 32;
+    inline const int RECORD_NAME_ICON_SHOW_FRAME = 3;
+    inline const int RECORD_NAME_ICON_HIDE_FRAME = 1;
+    inline const std::string RECORD_NAME_OPTIONAL_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,/()\". -";
+    inline const int RECORD_NAME_CHANGE_FRAME = 8;
 };

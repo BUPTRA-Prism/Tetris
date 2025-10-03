@@ -19,7 +19,7 @@ private:
 
     SDL_Texture* m_gameFrameTexture;
 
-    std::unique_ptr<VerticalLayout> m_tetrisTemplateLayout;
+    std::unique_ptr<VerticalLayout> m_tetrisModeLayout;
     std::unique_ptr<VerticalLayout> m_tetrisCountLayout;
     std::unique_ptr<GridLayout> m_tetrisFieldLayout;
 
@@ -33,12 +33,20 @@ private:
     std::unique_ptr<Text> m_nextTetrisTitle;
     std::unique_ptr<Text> m_levelTitle;
     std::unique_ptr<Text> m_levelText;
+    std::unique_ptr<Text> m_resultText;
 
     UniqueTexture m_tetrisBasicTexture;
+    UniqueTexture m_tetrisModeBasicTexture;
     SDL_Texture* m_tetrisSolidPatternTexture;
     SDL_Texture* m_tetrisHollowPatternTexture;
+    SDL_Texture* m_tetrisModeSolidPatternTexture;
+    SDL_Texture* m_tetrisModeHollowPatternTexture;
+    SDL_Texture* m_resultOuterFrameTexture;
+    SDL_Texture* m_resultInnerFrameTexture;
 
     Mix_Music* m_music;
+    Mix_Music* m_winMusic;
+    Mix_Music* m_loseMusic;
     Mix_Chunk* m_moveChunk;
     Mix_Chunk* m_rotateChunk;
     Mix_Chunk* m_dropChunk;
@@ -48,6 +56,8 @@ private:
 
     Game m_game;
 
+    int m_generateDelayFrameTarget;
+    int m_generateDelayFrameCount;
     int m_dasFrameTarget;
     int m_arrFrameTarget;
     int m_moveFrameCnt;
@@ -65,6 +75,7 @@ private:
     bool m_justMove;
     int m_accelerateLineCount;
     int m_eraseOrder;
+    bool m_resultMusicStarted;
 
 public:
     GameScene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback);
@@ -92,4 +103,8 @@ private:
     void move();
     void rotate();
     void drop();
+    void resultUpdate(bool win);
+
+    void renderSingleSquare(SDL_Point pos, TetrisStyle style, bool isCount);
+    void renderTetrisMode(SDL_Point centerPos, TetrisMode mode, bool isCount);
 };
