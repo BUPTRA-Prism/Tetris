@@ -12,35 +12,35 @@ class SettingScene : public Scene {
 private:
     // 选项枚举
     enum class SettingItem {
-        LevelSetting,  // 关卡选项
+        LevelSetting,  // 等级选项
         HeightSetting  // 高度选项
     };
 
     SettingItem m_curSettingItem;   // 目前正在设置的选项
 
     SDL_Texture* m_settingFrameTexture;     // 设置场景框架纹理
-    SDL_Texture* m_typeFrameTexture;        // 游戏类型框架纹理
-    SDL_Texture* m_levelFrameTexture;       // 关卡设置框架纹理
+    SDL_Texture* m_typeFrameTexture;        // 游戏模式框架纹理
+    SDL_Texture* m_levelFrameTexture;       // 等级设置框架纹理
     SDL_Texture* m_heightFrameTexture;      // 高度设置框架纹理
     UniqueTexture m_optionIconTexture;      // 选项图标纹理
 
-    std::unique_ptr<GridLayout> m_levelOptionIconLayout;    // 关卡选项图标布局
+    std::unique_ptr<GridLayout> m_levelOptionIconLayout;    // 等级选项图标布局
     std::unique_ptr<GridLayout> m_heightOptionIconLayout;   // 高度选项图标布局
-    std::unique_ptr<VerticalLayout> m_recordOrderLayout;    // 记录表排名布局
-    std::unique_ptr<GridLayout> m_recordLayout;             // 记录表布局
+    std::unique_ptr<VerticalLayout> m_recordOrderLayout;    // 排行榜排名布局
+    std::unique_ptr<GridLayout> m_recordLayout;             // 排行榜布局
 
-    std::unique_ptr<Text> m_gameTypeTitle;                  // 游戏类型
-    std::unique_ptr<Text> m_levelTitle;                     // 关卡标题
-    std::vector<std::unique_ptr<Text>> m_levelOptionText;   // 关卡选项
+    std::unique_ptr<Text> m_gameTypeTitle;                  // 游戏模式
+    std::unique_ptr<Text> m_levelTitle;                     // 等级标题
+    std::vector<std::unique_ptr<Text>> m_levelOptionText;   // 等级选项
     std::unique_ptr<Text> m_heightTitle;                    // 高度标题
     std::vector<std::unique_ptr<Text>> m_heightOptionText;  // 高度选项
-    std::vector<std::unique_ptr<Text>> m_recordTitle;       // 记录表头
-    std::vector<std::unique_ptr<Text>> m_recordOrderText;   // 记录名次
-    std::vector<std::unique_ptr<Text>> m_recordNameText;    // 记录姓名
-    std::vector<std::unique_ptr<Text>> m_recordScoreText;   // 记录分数
-    std::vector<std::unique_ptr<Text>> m_recordLvText;      // 记录关卡数
+    std::vector<std::unique_ptr<Text>> m_recordTitle;       // 排行榜表头
+    std::vector<std::unique_ptr<Text>> m_recordOrderText;   // 排行榜名次
+    std::vector<std::unique_ptr<Text>> m_recordNameText;    // 排行榜姓名
+    std::vector<std::unique_ptr<Text>> m_recordScoreText;   // 排行榜分数
+    std::vector<std::unique_ptr<Text>> m_recordLvText;      // 排行榜等级
     
-    std::unique_ptr<OptionIcon> m_levelOptionIcon;      // 关卡选项图标
+    std::unique_ptr<OptionIcon> m_levelOptionIcon;      // 等级选项图标
     std::unique_ptr<OptionIcon> m_heightOptionIcon;     // 高度选项图标
 
     Mix_Chunk* m_optionChunk;   // 选项切换音效
@@ -74,49 +74,98 @@ public:
 
 private:
     /**
-     * @brief 构造游戏类型相关组件
+     * @brief 初始化场景框架
      */
-    void constructGameTypeUI();
+    void setupFrame();
     /**
-     * @brief 构造关卡选项相关组件
+     * @brief 初始化游戏模式区域
      */
-    void constructLevelOptionUI();
+    void setupGameTypeRegion();
     /**
-     * @brief 构造高度选项相关组件
+     * @brief 初始化等级选项区域
      */
-    void constructHeightOptionUI();
+    void setupLevelOptionRegion();
     /**
-     * @brief 构造记录表相关组件
+     * @brief 初始化高度选项区域
      */
-    void constructRecordUI();
+    void setupHeightOptionRegion();
+    /**
+     * @brief 初始化排行榜区域
+     */
+    void setupRecordRegion();
+    /**
+     * @brief 初始化相关音频
+     */
+    void setupAudio();
 
     /**
-     * @brief 初始化游戏类型相关组件
+     * @brief 激活场景框架
      */
-    void initGameTypeUI();
+    void enableFrame();
     /**
-     * @brief 初始化关卡选项相关组件
+     * @brief 激活游戏模式区域
      */
-    void initLevelOptionUI();
+    void enableGameTypeRegion();
     /**
-     * @brief 初始化记录表相关组件
+     * @brief 激活等级选项区域
      */
-    void initRecordUI();
+    void enableLevelOptionRegion();
+    /**
+     * @brief 激活排行榜区域
+     */
+    void enableRecordRegion();
+
+    /**
+     * @brief 禁用选项区域
+     */
+    void disableOptionRegion();
+    /**
+     * @brief 禁用相关音频
+     */
+    void disableAudio();
+
+    /**
+     * @brief 更新选项图标动画
+     */
+    void updateOptionIconAnimation();
+    /**
+     * @brief 切换场景
+     * @return 成功切换场景返回 true ，否则返回 false
+     */
+    bool updateSceneSwitch();
+    /**
+     * @brief 切换设置项
+     * @return 成功切换设置项返回 true ，否则返回 false
+     */
+    bool updateSettingItemSwitch();
+    /**
+     * @brief 切换设置
+     * @return 成功切换设置返回 true ，否则返回 false
+     */
+    bool updateSettingValue();
+    /**
+     * @brief 更新相关音频
+     */
+    void updateAudio();
     
     /**
-     * @brief 渲染游戏类型相关组件
+     * @brief 渲染场景框架
      */
-    void renderGameTypeUI();
+    void renderFrame();
     /**
-     * @brief 渲染关卡选项相关组件
+     * @brief 渲染游戏模式区域
      */
-    void renderLevelOptionUI();
+    void renderGameTypeRegion();
     /**
-     * @brief 渲染高度选项相关组件
+     * @brief 渲染等级选项区域
      */
-    void renderHeightOptionUI();
+    void renderLevelOptionRegion();
     /**
-     * @brief 渲染记录表相关组件
+     * @brief 渲染高度选项区域
      */
-    void renderRecordUI();
+    void renderHeightOptionRegion();
+    /**
+     * @brief 渲染排行榜区域
+     */
+    void renderRecordRegion();
 };

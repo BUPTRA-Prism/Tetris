@@ -28,7 +28,7 @@ private:
 
     Mix_Music* m_music;         // 背景音乐
     Mix_Chunk* m_optionChunk;   // 选项切换音效
-    Mix_Chunk* m_sceneChunk;    // 切换场景音效
+    Mix_Chunk* m_sceneChunk;    // 场景切换音效
 
 public:
     /**
@@ -58,29 +58,76 @@ public:
 
 private:
     /**
-     * @brief 构造游戏类型选项相关组件
+     * @brief 初始化场景框架
      */
-    void constructGameTypeOptionUI();
+    void setupFrame();
     /**
-     * @brief 构造音乐类型选项相关组件
+     * @brief 初始化游戏模式选项区域
      */
-    void constructMusicTypeOptionUI();
+    void setupGameTypeOptionRegion();
+    /**
+     * @brief 初始化音乐模式选项区域
+     */
+    void setupMusicTypeOptionRegion();
+    /**
+     * @brief 初始化相关音频
+     */
+    void setupAudio();
 
     /**
-     * @brief 初始化游戏类型选项相关组件
+     * @brief 激活选项区域
      */
-    void initGameTypeOptionUI();
+    void enableOptionRegion();
     /**
-     * @brief 初始音乐类型选项相关组件
+     * @brief 激活相关音频
      */
-    void initMusicTypeOptionUI();
+    void enableAudio();
 
     /**
-     * @brief 渲染游戏类型选项相关组件
+     * @brief 禁用选项区域
      */
-    void renderGameTypeOptionUI();
+    void disableOptionRegion();
     /**
-     * @brief 渲染音乐类型选项相关组件
+     * @brief 禁用相关音频
      */
-    void renderMusicTypeOptionUI();
+    void disableAudio();
+
+    /**
+     * @brief 更新选项图标动画
+     */
+    void updateOptionIconAnimation();
+    /**
+     * @brief 切换场景
+     * @return 成功切换场景返回 true ，否则返回 false
+     */
+    bool updateSceneSwitch();
+    /**
+     * @brief 切换游戏模式
+     * @return 成功切换游戏模式返回 true ，否则返回 false
+     */
+    bool updateGameTypeSwitch();
+    /**
+     * @brief 切换音乐模式
+     * @return 成功切换音乐模式返回 true ，否则返回 false
+     */
+    bool updateMusicTypeSwitch();
+    /**
+     * @brief 更新音频
+     * @param gameTypeChanged 是否成功切换游戏模式
+     * @param musicTypeChanged 是否成功切换音乐模式
+     */
+    void updateAudio(bool gameTypeChanged, bool musicTypeChanged);
+
+    /**
+     * @brief 渲染场景框架
+     */
+    void renderFrame();
+    /**
+     * @brief 渲染游戏模式选项区域
+     */
+    void renderGameTypeOptionRegion();
+    /**
+     * @brief 渲染音乐模式选项区域
+     */
+    void renderMusicTypeOptionRegion();
 };

@@ -19,7 +19,7 @@ public:
      * @param loopTarget 动画循环次数上限，-1 表示无限循环，>=0 表示动画最多执行指定次数
      */
     Animation(int loopTarget);
-    ~Animation() = default;     // 析构函数
+    virtual ~Animation() = default;     // 析构函数
 
     /**
      * @brief 每帧更新动画状态

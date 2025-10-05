@@ -13,16 +13,19 @@ int getRandomInt(int min, int max) {
 }
 
 std::vector<int> getRandomIntList(int min, int max, int count) {
+    // 构造备选范围数组
     std::vector<int> allNums(max - min + 1);
     for (int i = 0; i <= max - min; ++i) {
         allNums[i] = min + i;
     }
 
+    // 使用静态变量，只初始化一次
     static std::random_device rd;
     static std::mt19937 gen(rd());
+    // 打乱备选范围数组
     std::shuffle(allNums.begin(), allNums.end(), gen);
     
-    // 每次调用时使用相同的生成器，但重新设置分布范围
+    // 获取子列表
     return std::vector<int>(allNums.begin(), allNums.begin() + count);
 }
 

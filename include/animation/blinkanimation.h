@@ -21,7 +21,7 @@ public:
      * @param showFrameTarget 显示状态持续的帧数
      * @param hideFrameTarget 隐藏状态持续的帧数
      */
-    BlinkAnimation(int loopTarget, int showGrameTarget, int hideFrameTarget);
+    BlinkAnimation(int loopTarget, int showFrameTarget, int hideFrameTarget);
     ~BlinkAnimation() = default;    // 析构函数
 
     /**

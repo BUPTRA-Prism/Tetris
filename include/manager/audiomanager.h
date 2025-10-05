@@ -39,6 +39,10 @@ public:
      * @brief 停止音乐播放
      */
     void stopMusic();
+    /**
+     * @brief 判断是否正在播放音乐
+     * @return bool 正在播放音乐返回 true ，否则返回 false
+     */
     bool isPlayingMusic();
 
     /**

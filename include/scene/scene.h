@@ -23,7 +23,7 @@ public:
      * @param m_bgColor 场景背景颜色（默认黑色）
      */
     Scene(Context& ctx, std::function<void(const std::string&)> loadSceneCallback, SDL_Color m_bgColor = {0, 0, 0, 255});
-    ~Scene() = default;     // 析构函数
+    virtual ~Scene() = default;     // 析构函数
 
     /**
      * @brief 进入场景

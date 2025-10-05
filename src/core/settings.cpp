@@ -7,126 +7,114 @@ Settings& Settings::getInstance() {
 }
 
 Settings::Settings()
-    : m_curGameTypeIdx(0)
-    , m_curMusicTypeIdx(0)
-    , m_curLevel(0)
-    , m_curHeight(0)
+    : m_gameTypeIdx(0)
+    , m_musicTypeIdx(0)
+    , m_initLevel(0)
+    , m_initHeight(0)
     , m_newRecordOrder(RECORD_COUNT) {}
 
 bool Settings::setGameType(int delta) {
-    if (m_curGameTypeIdx + delta >= 0 && m_curGameTypeIdx + delta < GAME_TYPE.size()) {
-        m_curGameTypeIdx += delta;
-        return true;
+    // 检查调整后的索引是否在有效范围内
+    if (m_gameTypeIdx + delta >= 0 && m_gameTypeIdx + delta < GAME_TYPE.size()) {
+        m_gameTypeIdx += delta; // 更新索引
+        return true;            // 设置成功
     }
-    return false;
+    return false;   // 设置失败
 }
 
 bool Settings::setMusicType(int delta) {
-    if (m_curMusicTypeIdx + delta >= 0 && m_curMusicTypeIdx + delta < MUSIC_TYPE.size()) {
-        m_curMusicTypeIdx += delta;
-        return true;
+    // 检查调整后的索引是否在有效范围内
+    if (m_musicTypeIdx + delta >= 0 && m_musicTypeIdx + delta < MUSIC_TYPE.size()) {
+        m_musicTypeIdx += delta;    // 更新索引
+        return true;                // 设置成功
     }
-    return false;
+    return false;   // 设置失败
 }
 
-bool Settings::setLevel(int delta) {
-    if (m_curLevel + delta >= 0 && m_curLevel + delta <= MAX_LEVEL) {
-        m_curLevel += delta;
-        return true;
+bool Settings::setInitLevel(int delta) {
+    // 检查调整后的初始等级是否在有效范围内
+    if (m_initLevel + delta >= 0 && m_initLevel + delta <= MAX_INIT_LEVEL) {
+        m_initLevel += delta;   // 更新初始等级
+        return true;            // 设置成功
     }
-    return false;
+    return false;   // 设置失败
 }
 
-bool Settings::setHeight(int delta) {
-    if (m_curHeight + delta >= 0 && m_curHeight + delta <= MAX_HEIGHT) {
-        m_curHeight += delta;
-        return true;
+bool Settings::setInitHeight(int delta) {
+    // 检查调整后的初始高度是否在有效范围内
+    if (m_initHeight + delta >= 0 && m_initHeight + delta <= MAX_INIT_HEIGHT) {
+        m_initHeight += delta;  // 更新初始高度
+        return true;            // 设置成功
     }
-    return false;
+    return false;   // 设置失败
 }
 
 void Settings::insertRecord(int score, int lv) {
-    int idx = RECORD_COUNT - 1;
-    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_A) {
-        for (; idx >= 0; --idx) {
-            if (RECORD_A[idx].score > score || 
-                (RECORD_A[idx].score == score && RECORD_A[idx].lv > lv)) {
-                break;
-            }
-        }
-        if (idx != RECORD_COUNT - 1) {
-            for (int i = RECORD_COUNT - 1; i > idx + 1; --i) {
-                RECORD_A[i] = RECORD_A[i - 1];
-            }
-            RECORD_A[idx + 1] = Record { RECORD_DEFAULT_NAME, score, lv };
+    int idx = RECORD_COUNT - 1; // 从纪录最后一名开始比较
+    // 获取当前模式排行榜
+    auto* records = getCurrentRecords();
+    if (!records) {
+        return ;
+    }
+    // 倒序比较，优先比较分数，分数相同比较等级
+    for (; idx >= 0; --idx) {
+        if ((*records)[idx].score > score || ((*records)[idx].score == score && (*records)[idx].lv > lv)) {
+            break;
         }
     }
-    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_B) {
-        for (; idx >= 0; --idx) {
-            if (RECORD_B[idx].score > score || 
-                (RECORD_B[idx].score == score && RECORD_B[idx].lv > lv)) {
-                break;
-            }
+    // 如果新纪录能进入排行榜
+    if (idx != RECORD_COUNT - 1) {
+        // 将插入位置后面的纪录依次后移一位
+        for (int i = RECORD_COUNT - 1; i > idx + 1; --i) {
+            (*records)[i] = (*records)[i - 1];
         }
-        if (idx != RECORD_COUNT - 1) {
-            for (int i = RECORD_COUNT - 1; i > idx + 1; --i) {
-                RECORD_B[i] = RECORD_B[i - 1];
-            }
-            RECORD_B[idx + 1] = Record { RECORD_DEFAULT_NAME, score, lv };
-        }
+        // 插入新纪录
+        (*records)[idx + 1] = Record { "", score, lv };
     }
+    // 更新新纪录所在次序
     m_newRecordOrder = idx + 1;
 }
 
 void Settings::updateRecordName(std::string name) {
-    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_A) {
-        RECORD_A[m_newRecordOrder].name = name;
-    }
-    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_B) {
-        RECORD_B[m_newRecordOrder].name = name;
+    // 获取当前模式排行榜
+    auto* records = getCurrentRecords();
+    if (records && m_newRecordOrder >= 0 && m_newRecordOrder < records->size() ) {
+        // 更新新纪录姓名
+        (*records)[m_newRecordOrder].name = name;
     }
 }
 
-int Settings::getGameTypeIdx() const { return m_curGameTypeIdx; }
+int Settings::getGameTypeIdx() const { return m_gameTypeIdx; }
 
-int Settings::getMusicTypeIdx() const { return m_curMusicTypeIdx; }
+int Settings::getMusicTypeIdx() const { return m_musicTypeIdx; }
 
-int Settings::getLevel() const { return m_curLevel; }
+int Settings::getInitLevel() const { return m_initLevel; }
 
-int Settings::getHeight() const { return m_curHeight; }
-
-std::string Settings::getGameType() const { return GAME_TYPE[m_curGameTypeIdx]; }
-
-std::string Settings::getMusicPath() const { return MUSIC_TYPE[m_curMusicTypeIdx].path; }
-
-std::string Settings::getRecordName(int order) const {
-    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_A && order >= 0 && order <= RECORD_A.size()) {
-        return RECORD_A[order].name;
-    }
-    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_B && order >= 0 && order <= RECORD_B.size()) {
-        return RECORD_B[order].name;
-    }
-    return "";
-}
-
-int Settings::getRecordScore(int order) const {
-    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_A && order >= 0 && order <= RECORD_A.size()) {
-        return RECORD_A[order].score;
-    }
-    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_B && order >= 0 && order <= RECORD_B.size()) {
-        return RECORD_B[order].score;
-    }
-    return 0;
-}
-
-int Settings::getRecordLv(int order) const {
-    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_A && order >= 0 && order <= RECORD_A.size()) {
-        return RECORD_A[order].lv;
-    }
-    if (GAME_TYPE[m_curGameTypeIdx] == GAME_TYPE_B && order >= 0 && order <= RECORD_B.size()) {
-        return RECORD_B[order].lv;
-    }
-    return 0;
-}
+int Settings::getInitHeight() const { return m_initHeight; }
 
 int Settings::getNewRecordOrder() const { return m_newRecordOrder; }
+
+std::string Settings::getGameType() const { return GAME_TYPE[m_gameTypeIdx]; }
+
+std::string Settings::getMusicPath() const { return MUSIC_TYPE[m_musicTypeIdx].path; }
+
+Record Settings::getRecordInfo(int order) const {
+    // 获取当前模式排行榜
+    auto* records = getCurrentRecords();
+    if (records && order >= 0 && order < records->size()) {
+        return (*records)[order];
+    }
+    // 兜底
+    return Record { "", 0, 0 };
+}
+
+decltype(&RECORD_A) Settings::getCurrentRecords() const {
+    // 根据游戏模式返回排行榜
+    if (GAME_TYPE[m_gameTypeIdx] == GAME_TYPE_A) {
+        return &RECORD_A;
+    } else if (GAME_TYPE[m_gameTypeIdx] == GAME_TYPE_B) {
+        return &RECORD_B;
+    }
+    // 兜底
+    return nullptr;
+}
