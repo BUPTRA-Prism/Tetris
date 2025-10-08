@@ -3,6 +3,7 @@
 #include "conf/basicconf.h"
 #include "core/context.h"
 #include "scene/scenemanager.h"
+#include <SDL_Image.h>
 #include <iostream>
 
 int main(int argc, char* argv[]) {
@@ -13,6 +14,13 @@ int main(int argc, char* argv[]) {
     }
     
     {
+        // 读取窗口图标
+        UniqueSurface icon(IMG_Load((IMAGE_DIR + ICON_IMAGE_PATH).c_str()));
+        if (!icon) {
+            std::cerr << "Load Icon Error: " << SDL_GetError() << std::endl;
+            return 1;
+        }
+
         // 创建 SDL 窗口
         UniqueWindow window(
             SDL_CreateWindow(SCREEN_TITLE.c_str(), 
@@ -25,6 +33,7 @@ int main(int argc, char* argv[]) {
             std::cerr << "Create Window Error: " << SDL_GetError() << std::endl;
             return 1;
         }
+        SDL_SetWindowIcon(window.get(), icon.get());
 
         // 创建 SDL 渲染器 
         UniqueRenderer renderer(

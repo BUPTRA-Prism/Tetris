@@ -22,6 +22,8 @@ file(GLOB HEADER_FILES
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
 
+target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-subsystem,windows")
+
 target_include_directories(${PROJECT_NAME} PRIVATE include/)
 
 target_link_libraries(${PROJECT_NAME}

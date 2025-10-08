@@ -9,6 +9,7 @@ inline const std::string MUSIC_DIR = "resource/audio/music/";   // 音乐资源�
 inline const std::string CHUNK_DIR = "resource/audio/chunk/";   // 音效资源目录
 
 /* 图像资源文件 */
+inline const std::string ICON_IMAGE_PATH = "icon.png";                                  // 游戏图标
 inline const std::string COYRIGHT_ICON_IMAGE_PATH = "copyright_icon.png";               // 版权图标
 inline const std::string GAME_A_FRAME_IMAGE_PATH = "game_a_frame.png";                  // A模式游戏界面框架
 inline const std::string GAME_B_FRAME_IMAGE_PATH = "game_b_frame.png";                  // B模式游戏界面框架
