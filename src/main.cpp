@@ -80,6 +80,10 @@ int main(int argc, char* argv[]) {
             SDL_Delay(MSPF);
         }
 
+        // 停止所有音乐与音效播放
+        audioManager.stopChunk();
+        audioManager.stopMusic();
+
         // 退出游戏时，销毁资源
         resourceManager.destroyResource();
     }

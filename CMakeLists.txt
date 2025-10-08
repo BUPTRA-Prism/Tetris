@@ -45,3 +45,5 @@ install(RUNTIME_DEPENDENCY_SET game_deps
     POST_EXCLUDE_REGEXES ".*system32.*" "api-ms-" "KERNEL32" "USER32" "GDI32" "ADVAPI32"
     DESTINATION .
 )
+
+install(DIRECTORY resource DESTINATION .)
