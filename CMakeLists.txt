@@ -1,67 +1,23 @@
-# set(CMAKE_BUILD_TYPE Debug)
-
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.21)
 project(Tetris)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(MSYS2_PREFIX "C:/msys64/mingw64")
+
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 
-set(SOURCE_FILES
-    src/animation/animation.cpp
-    src/animation/blinkanimation.cpp
-    src/core/context.cpp
-    src/core/game.cpp
-    src/core/settings.cpp
-    src/manager/audiomanager.cpp
-    src/manager/inputmanager.cpp
-    src/manager/resourcemanager.cpp
-    src/scene/scene.cpp
-    src/scene/titlescene.cpp
-    src/scene/menuscene.cpp
-    src/scene/settingscene.cpp
-    src/scene/gamescene.cpp
-    src/scene/countscene.cpp
-    src/scene/scenemanager.cpp
-    src/ui/layout.cpp
-    src/ui/optionicon.cpp
-    src/ui/text.cpp
-    src/util/common.cpp
-    src/util/render.cpp
-    src/util/sdlresource.cpp
-    src/main.cpp
+file(GLOB SOURCE_FILES 
+    "src/*.cpp"
+    "src/*/*.cpp"
 )
 
-set(HEADER_FILES
-    include/animation/animation.h
-    include/animation/blinkanimation.h
-    include/conf/basicconf.h
-    include/conf/keyconf.h
-    include/conf/resourceconf.h
-    include/conf/sceneconf.h
-    include/conf/settingconf.h
-    include/core/context.h
-    include/core/game.h
-    include/core/settings.h
-    include/manager/audiomanager.h
-    include/manager/inputmanager.h
-    include/manager/resourcemanager.h
-    include/scene/scene.h
-    include/scene/titlescene.h
-    include/scene/menuscene.h
-    include/scene/settingscene.h
-    include/scene/gamescene.h
-    include/scene/countscene.h
-    include/scene/scenemanager.h
-    include/ui/layout.h
-    include/ui/optionicon.h
-    include/ui/text.h
-    include/util/common.h
-    include/util/render.h
-    include/util/sdlresource.h
+file(GLOB HEADER_FILES 
+    "include/*.h"
+    "include/*/*.h"
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
@@ -74,20 +30,18 @@ target_link_libraries(${PROJECT_NAME}
     SDL2_mixer::SDL2_mixer
 )
 
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy
-        "C:/msys64/mingw64/bin/SDL2.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    COMMAND ${CMAKE_COMMAND} -E copy
-        "C:/msys64/mingw64/bin/SDL2_mixer.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    COMMAND ${CMAKE_COMMAND} -E copy
-        "C:/msys64/mingw64/bin/libvorbisfile-3.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    COMMAND ${CMAKE_COMMAND} -E copy
-        "C:/msys64/mingw64/bin/libogg-0.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    COMMAND ${CMAKE_COMMAND} -E copy
-        "C:/msys64/mingw64/bin/libvorbis-0.dll"
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+install(TARGETS ${PROJECT_NAME} 
+    RUNTIME_DEPENDENCY_SET game_deps
+    DESTINATION .
+)
+
+install(RUNTIME_DEPENDENCY_SET game_deps
+    DIRECTORIES 
+        "${MSYS2_PREFIX}/bin"
+        # "$<TARGET_FILE_DIR:SDL2::SDL2>"
+        # "$<TARGET_FILE_DIR:SDL2_image::SDL2_image>"
+        # "$<TARGET_FILE_DIR:SDL2_mixer::SDL2_mixer>"
+    PRE_EXCLUDE_REGEXES ".*system32.*" "api-ms-" "KERNEL32" "USER32" "GDI32" "ADVAPI32"
+    POST_EXCLUDE_REGEXES ".*system32.*" "api-ms-" "KERNEL32" "USER32" "GDI32" "ADVAPI32"
+    DESTINATION .
 )
