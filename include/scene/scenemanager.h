@@ -7,8 +7,6 @@
 
 /**
  * @brief 场景管理器，管理游戏中所有场景的切换、更新与渲染
- *
- * 使用单例模式，保证全局唯一实例。
  */
 class SceneManager {
 private:
@@ -18,11 +16,11 @@ private:
 
 public:
     /**
-     * @brief 获取场景管理器单例
+     * @brief 构造函数，初始化场景管理器
      * @param ctx 全局上下文
-     * @return SceneManager& 全局唯一实例
      */
-    static SceneManager& getInstance(Context& ctx);
+    SceneManager(Context& ctx);
+    ~SceneManager() = default;      // 析构函数
 
     // 禁用拷贝与移动
     SceneManager(const SceneManager&) = delete;
@@ -40,13 +38,6 @@ public:
     void onRender();
 
 private:
-    /**
-     * @brief 私有构造函数，初始化场景管理器
-     * @param ctx 全局上下文
-     */
-    SceneManager(Context& ctx);
-    ~SceneManager() = default;      // 私有析构函数
-
     /**
      * @brief 注册场景
      * @param sceneName 场景名称

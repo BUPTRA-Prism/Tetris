@@ -1,8 +1,9 @@
 #include "manager/audiomanager.h"
+#include <SDL.h>
 
-AudioManager& AudioManager::getInstance() {
-    static AudioManager instance;
-    return instance;
+AudioManager::~AudioManager() {
+    stopMusic();
+    stopChunk();
 }
 
 void AudioManager::playMusic(Mix_Music* music, int loop) {

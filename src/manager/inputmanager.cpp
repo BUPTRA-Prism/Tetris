@@ -1,10 +1,5 @@
 #include "manager/inputmanager.h"
 
-InputManager& InputManager::getInstance() {
-    static InputManager instance;
-    return instance;
-}
-
 InputManager::InputManager() {
     // 初始化按键状态数组为全false
     m_preKey.fill(false);

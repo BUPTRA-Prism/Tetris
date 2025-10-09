@@ -5,8 +5,6 @@
 
 /**
  * @brief 输入管理器类，用于管理游戏中的输入状态
- *
- * 使用单例模式，保证全局唯一实例
  */
 class InputManager {
 private:
@@ -14,11 +12,8 @@ private:
     std::array<bool, SDL_NUM_SCANCODES> m_curKey;   // 当前帧按键状态
 
 public:
-    /**
-     * @brief 获取输入管理器单例
-     * @return InputManager& 全局唯一实例
-     */
-    static InputManager& getInstance();
+    InputManager();             // 构造函数
+    ~InputManager() = default;  // 析构函数
 
     // 禁用拷贝与移动
     InputManager(const InputManager&) = delete;
@@ -54,8 +49,4 @@ public:
      * @return bool 刚刚松开返回 true ，否则返回 false
      */
     bool isKeyReleased(SDL_Scancode key) const;
-
-private:
-    InputManager();             // 私有构造函数
-    ~InputManager() = default;  // 私有析构函数
 };

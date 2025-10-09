@@ -7,8 +7,6 @@
 
 /**
  * @brief 资源管理器类，用于保存和访问图像、字体、音乐、音效资源
- *
- * 使用单例模式，保证全局唯一实例
  */
 class ResourceManager {
 private:
@@ -18,11 +16,8 @@ private:
     std::unordered_map<std::string, UniqueChunk> m_chunkMap;    // 音效资源映射表
 
 public:
-    /**
-     * @brief 获取资源管理器单例
-     * @return ResourceManager& 全局唯一实例
-     */
-    static ResourceManager& getInstance();
+    ResourceManager() = default;    // 构造函数
+    ~ResourceManager() = default;   // 析构函数
 
     // 禁用拷贝与移动
     ResourceManager(const ResourceManager&) = delete;
@@ -36,10 +31,6 @@ public:
      * @return bool 所有资源加载成功返回 true ，否则返回 false
      */
     bool loadResource(SDL_Renderer* renderer);
-    /**
-     * @brief 销毁所有资源
-     */
-    void destroyResource();
 
     /**
      * @brief 获取图像资源
@@ -67,9 +58,6 @@ public:
     Mix_Chunk* getChunk(const std::string& path);
 
 private:
-    ResourceManager() = default;    // 私有构造函数
-    ~ResourceManager() = default;   // 私有析构函数
-
     /**
      * @brief 加载单个图像资源
      * @param renderer SDL 渲染器

@@ -1,11 +1,6 @@
 #include "core/settings.h"
 #include "conf/resourceconf.h"
 
-Settings& Settings::getInstance() {
-    static Settings instance;
-    return instance;
-}
-
 Settings::Settings()
     : m_gameTypeIdx(0)
     , m_musicTypeIdx(0)

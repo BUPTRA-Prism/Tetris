@@ -3,11 +3,6 @@
 #include <SDL_Image.h>
 #include <iostream>
 
-ResourceManager& ResourceManager::getInstance() {
-    static ResourceManager instance;
-    return instance;
-}
-
 bool ResourceManager::loadResource(SDL_Renderer* renderer) {
     // 图像文件名列表
     std::vector<std::string> imagePaths{
@@ -84,13 +79,6 @@ bool ResourceManager::loadResource(SDL_Renderer* renderer) {
     }
 
     return true;
-}
-
-void ResourceManager::destroyResource() {
-    // 清空图像、音乐、音效映射表，由智能指针自动释放内存
-    m_imageMap.clear();
-    m_musicMap.clear();
-    m_chunkMap.clear();
 }
 
 bool ResourceManager::loadImage(SDL_Renderer* renderer, const std::string& path) {

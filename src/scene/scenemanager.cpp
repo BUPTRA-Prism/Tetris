@@ -7,11 +7,6 @@
 #include "scene/countscene.h"
 #include <iostream>
 
-SceneManager& SceneManager::getInstance(Context& ctx) {
-    static SceneManager instance(ctx);
-    return instance;
-}
-
 SceneManager::SceneManager(Context& ctx)
     : m_ctx(ctx)
     , m_curScene(nullptr) {

@@ -4,16 +4,11 @@
 
 /**
  * @brief 音频管理器类，用于管理游戏中的音乐/音效播放
- *
- * 使用单例模式，保证全局唯一实例
  */
 class AudioManager {
 public:
-    /**
-     * @brief 获取音频管理器单例
-     * @return AudioManager& 全局唯一实例
-     */
-    static AudioManager& getInstance();
+    AudioManager() = default;   // 构造函数
+    ~AudioManager();            // 析构函数
 
     // 禁用拷贝与移动
     AudioManager(const AudioManager&) = delete;
@@ -63,8 +58,4 @@ public:
      * @brief 停止音效播放
      */
     void stopChunk();
-
-private:
-    AudioManager() = default;   // 私有构造函数
-    ~AudioManager() = default;  // 私有析构函数
 };

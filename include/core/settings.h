@@ -5,9 +5,7 @@
 #include <vector>
 
 /**
- * @brief 游戏设置类（单例），管理如下游戏参数：游戏模式、音乐类型、当前等级、当前高度
- * 
- * 使用单例模式，所有设置通过 Settings::getInstance() 访问。
+ * @brief 游戏设置类，管理如下游戏参数：游戏模式、音乐类型、当前等级、当前高度
  */
 class Settings {
 private:
@@ -18,11 +16,8 @@ private:
     int m_newRecordOrder;   // 新纪录次序
 
 public:
-    /**
-     * @brief 获取 Settings 单例
-     * @return Settings& 全局唯一实例
-     */
-    static Settings& getInstance();
+    Settings();             // 构造函数
+    ~Settings() = default;  // 析构函数
 
     // 禁用拷贝与移动
     Settings(const Settings&) = delete;
@@ -110,8 +105,6 @@ public:
     Record getRecordInfo(int order) const;
 
 private:
-    Settings();             // 私有构造函数
-    ~Settings() = default;  // 私有析构函数
     /**
      * @brief 获取当前模式排行榜
      * @return Record[3] 当前模式排行榜

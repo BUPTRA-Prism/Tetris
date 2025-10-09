@@ -8,7 +8,7 @@
 /**
  * @brief 全局上下文结构体
  *
- * 保存各个单例管理器、游戏设置数据和 SDL_Renderer 的引用，用于在游戏各模块间统一访问资源、音频、输入和设置
+ * 保存各个管理器、游戏设置数据和 SDL_Renderer 的引用，用于在游戏各模块间统一访问资源、音频、输入和设置
  */
 struct Context {
     ResourceManager& resourceManager;   // 资源管理器引用
