@@ -57,3 +57,5 @@ void Text::onRender() {
         
     }
 }
+
+HorizontalLayout* Text::getLayout() const { return m_layout.get(); }

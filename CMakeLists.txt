@@ -20,7 +20,7 @@ file(GLOB HEADER_FILES
     "include/*/*.h"
 )
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/resource/icon.rc)
 
 target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-subsystem,windows")
 

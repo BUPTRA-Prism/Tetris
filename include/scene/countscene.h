@@ -15,7 +15,6 @@ private:
 
     std::unique_ptr<VerticalLayout> m_recordOrderLayout;        // 排行榜排名布局
     std::unique_ptr<GridLayout> m_recordLayout;                 // 排行榜布局
-    std::unique_ptr<HorizontalLayout> m_recordNameIconLayout;   // 新纪录姓名图标布局
 
     std::unique_ptr<Text> m_gameTypeTitle;                  // 游戏模式标题
     std::vector<std::unique_ptr<Text>> m_countText;         // 结算文本

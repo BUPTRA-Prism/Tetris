@@ -19,23 +19,19 @@ namespace TITLE_SCENE {
 
 // 菜单场景
 namespace MENU_SCENE {
-    inline const std::string NAME = "menu";                             // 场景名
-    inline const std::string GAME_TYPE_TITLE_STR = "GAME  TYPE";        // 游戏模式标题内容
-    inline const SDL_Point GAME_TYPE_TITLE_POS = { 160, 96 };           // 游戏模式标题位置
-    inline const SDL_Point GAME_TYPE_OPTION_POS = { 288, 224 };         // 游戏模式选项位置
-    inline const int GAME_TYPE_OPTION_SPACING = 384;                    // 游戏模式选项间距
-    inline const std::string MUSIC_TYPE_TITLE_STR = "MUSIC TYPE";       // 音乐模式标题内容
-    inline const SDL_Point MUSIC_TYPE_TITLE_POS = { 160, 384 };         // 音乐模式标题位置
-    inline const SDL_Point MUSIC_TYPE_OPTION_POS = { 448, 544 };        // 音乐模式选项位置
-    inline const int MUSIC_TYPE_OPTION_SPACING = 64;                    // 音乐模式选项间距
-    inline const SDL_Point GAME_TYPE_OPTION_ICON_POS = { 252, 224 };    // 游戏模式选项图标位置
-    inline const int GAME_TYPE_OPTION_ICON_INNER_SPACING = 236;         // 游戏模式选项图标组内间距
-    inline const int GAME_TYPE_OPTION_ICON_OUTER_SPACING = 384;         // 游戏模式选项图标选项间距
-    inline const SDL_Point MUSIC_TYPE_OPTION_ICON_POS = { 412, 544 };   // 音乐模式选项图标位置
-    inline const int MUSIC_TYPE_OPTION_ICON_INNER_SPACING = 300;        // 游戏模式选项图标组内间距
-    inline const int MUSIC_TYPE_OPTION_ICON_OUTER_SPACING = 64;         // 游戏模式选项图标选项间距
-    inline const int OPTION_ICON_SHOW_FRAME = 3;                        // 选项图标显示帧数
-    inline const int OPTION_ICON_HIDE_FRAME = 1;                        // 选项图标隐藏帧数
+    inline const std::string NAME = "menu";                                         // 场景名
+    inline const std::string GAME_TYPE_TITLE_STR = "GAME  TYPE";                    // 游戏模式标题内容
+    inline const SDL_Point GAME_TYPE_TITLE_POS = { 160, 96 };                       // 游戏模式标题位置
+    inline const SDL_Point GAME_TYPE_OPTION_POS = { 288, 224 };                     // 游戏模式选项位置
+    inline const int GAME_TYPE_OPTION_SPACING = 384;                                // 游戏模式选项间距
+    inline const std::array<int, 2> GAME_TYPE_OPTION_ICON_OFFSET = { -36, 200 };    // 游戏模式选项图标位置偏移量
+    inline const std::string MUSIC_TYPE_TITLE_STR = "MUSIC TYPE";                   // 音乐模式标题内容
+    inline const SDL_Point MUSIC_TYPE_TITLE_POS = { 160, 384 };                     // 音乐模式标题位置
+    inline const SDL_Point MUSIC_TYPE_OPTION_POS = { 448, 544 };                    // 音乐模式选项位置
+    inline const int MUSIC_TYPE_OPTION_SPACING = 64;                                // 音乐模式选项间距
+    inline const std::array<int, 2> MUSIC_TYPE_OPTION_ICON_OFFSET = { -36, 264 };   // 音乐模式选项图标位置偏移量
+    inline const int OPTION_ICON_SHOW_FRAME = 3;                                    // 选项图标显示帧数
+    inline const int OPTION_ICON_HIDE_FRAME = 1;                                    // 选项图标隐藏帧数
 };
 
 // 设置场景
@@ -49,11 +45,11 @@ namespace SETTING_SCENE {
     inline const SDL_Point HEIGHT_FRAME_POS = { 616, 200 };             // 高度选项框架位置
     inline const std::string HEIGHT_TITLE_STR = "HEIGHT";               // 高度选项标题内容
     inline const SDL_Point HEIGHT_TITLE_POS = { 640, 224 };             // 高度选项标题位置
-    inline const SDL_Point LEVEL_OPTION_ICON_POS = { 208, 304 };        // 等级选项图标位置
-    inline const SDL_Point HEIGHT_OPTION_ICON_POS = { 624, 304 };       // 高度选项图标位置
+    inline const SDL_Point LEVEL_OPTION_POS = { 224, 320 };             // 等级选项位置
+    inline const SDL_Point HEIGHT_OPTION_POS = { 640, 320 };            // 高度选项位置
     inline const int OPTION_ROW_NUM = 2;                                // 选项行数
-    inline const int OPTION_ICON_SPACING = 64;                          // 选项间距
-    inline const int OPTION_MARGIN = 16;                                // 选项边距
+    inline const int OPTION_SPACING = 64;                               // 选项间距
+    inline const int OPTION_ICON_OFFSET = -16;                          // 选项图标位置偏移量
     inline const SDL_Color OPTION_COLOR = { 181, 49, 32, 255 };         // 选项文本颜色
     inline const int OPTION_ICON_SIZE = 64;                             // 选项图标尺寸
     inline const SDL_Color OPTION_ICON_COLOR = { 234, 158, 34, 255 };   // 选项图标颜色
@@ -147,7 +143,6 @@ namespace COUNT_SCENE {
     inline const SDL_Color COUNT_TITLE_COLOR = { 181, 49, 32, 255 };        // 结算界面首条文本颜色
     inline const SDL_Color RECORD_NAME_ICON_COLOR = { 255, 129, 112, 255 }; // 新纪录图标颜色
     inline const int RECORD_NAME_ICON_SIZE = 32;        // 新纪录图标尺寸
-    inline const int RECORD_NAME_ICON_SPACING = 32;     // 新纪录图标间隔
     inline const int RECORD_NAME_ICON_SHOW_FRAME = 3;   // 新纪录图标显示帧数
     inline const int RECORD_NAME_ICON_HIDE_FRAME = 1;   // 新纪录图标隐藏帧数
     inline const std::string RECORD_NAME_OPTIONAL_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,/()\". -";  // 新纪录姓名可用字符集

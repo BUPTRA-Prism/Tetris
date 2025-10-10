@@ -68,14 +68,10 @@ void MenuScene::setupFrame() {
 }
 
 void MenuScene::setupGameTypeOptionRegion() {
-    // 创建游戏模式选项与图标布局
+    // 创建游戏模式选项布局
     m_gameTypeOptionLayout = std::make_unique<HorizontalLayout>(
         MENU_SCENE::GAME_TYPE_OPTION_POS,
         MENU_SCENE::GAME_TYPE_OPTION_SPACING
-    );
-    m_gameTypeOptionIconLayout = std::make_unique<HorizontalLayout>(
-        MENU_SCENE::GAME_TYPE_OPTION_ICON_POS,
-        MENU_SCENE::GAME_TYPE_OPTION_ICON_OUTER_SPACING
     );
 
     // 创建游戏模式标题文本
@@ -103,9 +99,9 @@ void MenuScene::setupGameTypeOptionRegion() {
         m_gameTypeOptionIcon[i] = std::make_unique<OptionIcon>(
             m_ctx, 
             m_optionIconTexture, 
-            [layoutPtr = m_gameTypeOptionIconLayout.get(), i](int row, int col) { 
-                SDL_Point pos = layoutPtr->getElementPos(col);
-                pos.x += i * MENU_SCENE::GAME_TYPE_OPTION_ICON_INNER_SPACING;
+            [layoutPtr = m_gameTypeOptionLayout.get(), i](int idx) { 
+                SDL_Point pos = layoutPtr->getElementPos(idx);
+                pos.x += MENU_SCENE::GAME_TYPE_OPTION_ICON_OFFSET[i];
                 return pos;
             }, 
             MENU_SCENE::OPTION_ICON_SHOW_FRAME, 
@@ -120,10 +116,6 @@ void MenuScene::setupMusicTypeOptionRegion() {
     m_musicTypeOptionLayout = std::make_unique<VerticalLayout>(
         MENU_SCENE::MUSIC_TYPE_OPTION_POS,
         MENU_SCENE::MUSIC_TYPE_OPTION_SPACING
-    );
-    m_musicTypeOptionIconLayout = std::make_unique<VerticalLayout>(
-        MENU_SCENE::MUSIC_TYPE_OPTION_ICON_POS,
-        MENU_SCENE::MUSIC_TYPE_OPTION_ICON_OUTER_SPACING
     );
 
     // 创建音乐类型标题文本
@@ -151,9 +143,9 @@ void MenuScene::setupMusicTypeOptionRegion() {
         m_musicTypeOptionIcon[i] = std::make_unique<OptionIcon>(
             m_ctx, 
             m_optionIconTexture, 
-            [layoutPtr = m_musicTypeOptionIconLayout.get(), i](int row, int col) { 
-                SDL_Point pos = layoutPtr->getElementPos(row);
-                pos.x += i * MENU_SCENE::MUSIC_TYPE_OPTION_ICON_INNER_SPACING;
+            [layoutPtr = m_musicTypeOptionLayout.get(), i](int idx) { 
+                SDL_Point pos = layoutPtr->getElementPos(idx);
+                pos.x += MENU_SCENE::MUSIC_TYPE_OPTION_ICON_OFFSET[i];
                 return pos;
             }, 
             MENU_SCENE::OPTION_ICON_SHOW_FRAME, 
@@ -302,7 +294,7 @@ void MenuScene::renderGameTypeOptionRegion() {
     Settings& s = m_ctx.settings;
     int gameTypeIdx = s.getGameTypeIdx();
     for (int i = 0; i < 2; ++i) {
-        m_gameTypeOptionIcon[i]->onRender(0, gameTypeIdx);
+        m_gameTypeOptionIcon[i]->onRender(gameTypeIdx);
     }
 }
 
@@ -318,6 +310,6 @@ void MenuScene::renderMusicTypeOptionRegion() {
     Settings& s = m_ctx.settings;
     int musicTypeIdx = s.getMusicTypeIdx();
     for (int i = 0; i < 2; ++i) {
-        m_musicTypeOptionIcon[i]->onRender(musicTypeIdx, 0);
+        m_musicTypeOptionIcon[i]->onRender(musicTypeIdx);
     }
 }

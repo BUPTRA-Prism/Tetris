@@ -12,7 +12,7 @@
 class OptionIcon {
 private:
     Context& m_ctx;                             // 全局上下文
-    std::function<SDL_Point(int, int)> m_func;  // 位置列表
+    std::function<SDL_Point(int)> m_func;       // 位置计算函数
     SDL_Texture* m_texture;                     // 图标纹理
     std::unique_ptr<BlinkAnimation> m_anim;     // 闪烁动画
     SDL_RendererFlip m_flip;                    // 图标翻转方式
@@ -27,7 +27,7 @@ public:
      * @param hideFrameTarget 闪烁动画中隐藏状态的持续帧数
      * @param flip 图标翻转方式
      */
-    OptionIcon(Context& ctx, SDL_Texture* texture, std::function<SDL_Point(int, int)> func, int showFrameTarget, int hideFrameTarget, SDL_RendererFlip flip = SDL_FLIP_NONE);
+    OptionIcon(Context& ctx, SDL_Texture* texture, std::function<SDL_Point(int)> func, int showFrameTarget, int hideFrameTarget, SDL_RendererFlip flip = SDL_FLIP_NONE);
     ~OptionIcon() = default;    // 析构函数
 
     /**
@@ -44,9 +44,8 @@ public:
     void onUpdate();
     /**
      * @brief 渲染图标
-     * @param row 图标所处行数
-     * @param col 图标所处列数
+     * @param idx 图标对应的选项序号
      * @param isFlip 是否水平翻转渲染
      */
-    void onRender(int row, int col);
+    void onRender(int idx);
 };

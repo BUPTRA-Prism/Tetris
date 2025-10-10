@@ -200,13 +200,6 @@ void CountScene::enableGameTypeRegion() {
 void CountScene::enableRecordRegion() {
     Settings& s = m_ctx.settings;
 
-    // 激活新纪录姓名图标布局
-    m_recordNameIconLayout = std::make_unique<HorizontalLayout>(
-        // 布局位置就是新纪录姓名的位置，行：新纪录名次+1，列：0
-        m_recordLayout->getElementPos(s.getNewRecordOrder() + 1, 0),
-        COUNT_SCENE::RECORD_NAME_ICON_SPACING
-    );
-
     // 排行榜内容文本赋值
     for (int i = 0; i < RECORD_COUNT; ++i) {
         Record record = s.getRecordInfo(i);
@@ -226,8 +219,8 @@ void CountScene::enableRecordRegion() {
     m_recordNameIcon = std::make_unique<OptionIcon>(
         m_ctx, 
         m_recordNameIconTexture.get(), 
-        [layoutPtr = m_recordNameIconLayout.get()](int row, int col) { 
-            return layoutPtr->getElementPos(col);
+        [layoutPtr = m_recordNameText[s.getNewRecordOrder()]->getLayout()](int idx) { 
+            return layoutPtr->getElementPos(idx);
         }, 
         COUNT_SCENE::RECORD_NAME_ICON_SHOW_FRAME, 
         COUNT_SCENE::RECORD_NAME_ICON_HIDE_FRAME
@@ -372,7 +365,7 @@ void CountScene::renderCountText() {
 
 void CountScene::renderRecordRegion() {
     // 渲染新纪录姓名图标
-    m_recordNameIcon->onRender(0, m_recordNamePosIdx);
+    m_recordNameIcon->onRender(m_recordNamePosIdx);
 
     // 渲染排行榜
     for (auto& text: m_recordTitle) {

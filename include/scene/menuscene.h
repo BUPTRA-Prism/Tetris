@@ -14,9 +14,7 @@ private:
     SDL_Texture* m_optionIconTexture;   // 选项图标纹理
 
     std::unique_ptr<HorizontalLayout> m_gameTypeOptionLayout;       // 游戏模式选项布局
-    std::unique_ptr<HorizontalLayout> m_gameTypeOptionIconLayout;   // 游戏模式选项图标布局
     std::unique_ptr<VerticalLayout> m_musicTypeOptionLayout;        // 音乐模式选项布局
-    std::unique_ptr<VerticalLayout> m_musicTypeOptionIconLayout;    // 音乐模式选项图标布局
 
     std::unique_ptr<Text> m_gameTypeTitle;                      // 游戏模式标题
     std::unique_ptr<Text> m_musicTypeTitle;                     // 音乐模式标题

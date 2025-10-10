@@ -121,22 +121,21 @@ void SettingScene::setupLevelOptionRegion() {
         SETTING_SCENE::LEVEL_TITLE_POS
     );
 
-    // 创建等级选项图标布局
-    m_levelOptionIconLayout = std::make_unique<GridLayout>(
-        SETTING_SCENE::LEVEL_OPTION_ICON_POS,
-        SETTING_SCENE::OPTION_ICON_SPACING,
-        SETTING_SCENE::OPTION_ICON_SPACING
+    // 创建等级选项布局
+    m_levelOptionLayout = std::make_unique<GridLayout>(
+        SETTING_SCENE::LEVEL_OPTION_POS,
+        SETTING_SCENE::OPTION_SPACING,
+        SETTING_SCENE::OPTION_SPACING
     );
 
     // 创建等级选项文本
     m_levelOptionText.reserve(MAX_INIT_LEVEL + 1);
     for (int i = 0; i <= MAX_INIT_LEVEL; ++i) {
-        SDL_Point pos = m_levelOptionIconLayout->getElementPos(i / levelOptionCol, i % levelOptionCol);
         m_levelOptionText.emplace_back(
             std::make_unique<Text>(
                 m_ctx,
                 std::to_string(i),
-                SDL_Point{ pos.x + SETTING_SCENE::OPTION_MARGIN, pos.y + SETTING_SCENE::OPTION_MARGIN },
+                m_levelOptionLayout->getElementPos(i / levelOptionCol, i % levelOptionCol),
                 SETTING_SCENE::OPTION_COLOR
             )
         );
@@ -146,8 +145,12 @@ void SettingScene::setupLevelOptionRegion() {
     m_levelOptionIcon = std::make_unique<OptionIcon>(
         m_ctx, 
         m_optionIconTexture.get(), 
-        [layoutPtr = m_levelOptionIconLayout.get()](int row, int col) { 
-            return layoutPtr->getElementPos(row, col); 
+        [layoutPtr = m_levelOptionLayout.get(), levelOptionCol](int idx) {
+            SDL_Point optionPos = layoutPtr->getElementPos(idx / levelOptionCol, idx % levelOptionCol);
+            return SDL_Point{
+                optionPos.x + SETTING_SCENE::OPTION_ICON_OFFSET, 
+                optionPos.y + SETTING_SCENE::OPTION_ICON_OFFSET
+            }; 
         }, 
         SETTING_SCENE::OPTION_ICON_SHOW_FRAME, 
         SETTING_SCENE::OPTION_ICON_HIDE_FRAME
@@ -170,21 +173,20 @@ void SettingScene::setupHeightOptionRegion() {
     );
 
     // 创建高度选项图标布局
-    m_heightOptionIconLayout = std::make_unique<GridLayout>(
-        SETTING_SCENE::HEIGHT_OPTION_ICON_POS,
-        SETTING_SCENE::OPTION_ICON_SPACING,
-        SETTING_SCENE::OPTION_ICON_SPACING
+    m_heightOptionLayout = std::make_unique<GridLayout>(
+        SETTING_SCENE::HEIGHT_OPTION_POS,
+        SETTING_SCENE::OPTION_SPACING,
+        SETTING_SCENE::OPTION_SPACING
     );
 
     // 创建高度选项文本
     m_heightOptionText.reserve(MAX_INIT_HEIGHT + 1);
     for (int i = 0; i <= MAX_INIT_HEIGHT; ++i) {
-        SDL_Point pos = m_heightOptionIconLayout->getElementPos(i / heightOptionCol, i % heightOptionCol);
         m_heightOptionText.emplace_back(
             std::make_unique<Text>(
                 m_ctx,
                 std::to_string(i),
-                SDL_Point{ pos.x + SETTING_SCENE::OPTION_MARGIN, pos.y + SETTING_SCENE::OPTION_MARGIN },
+                m_heightOptionLayout->getElementPos(i / heightOptionCol, i % heightOptionCol),
                 SETTING_SCENE::OPTION_COLOR
             )
         );
@@ -194,8 +196,12 @@ void SettingScene::setupHeightOptionRegion() {
     m_heightOptionIcon = std::make_unique<OptionIcon>(
         m_ctx, 
         m_optionIconTexture.get(), 
-        [layoutPtr = m_heightOptionIconLayout.get()](int row, int col) { 
-            return layoutPtr->getElementPos(row, col); 
+        [layoutPtr = m_heightOptionLayout.get(), heightOptionCol](int idx) { 
+            SDL_Point optionPos = layoutPtr->getElementPos(idx / heightOptionCol, idx % heightOptionCol);
+            return SDL_Point{
+                optionPos.x + SETTING_SCENE::OPTION_ICON_OFFSET, 
+                optionPos.y + SETTING_SCENE::OPTION_ICON_OFFSET
+            };
         }, 
         SETTING_SCENE::OPTION_ICON_SHOW_FRAME, 
         SETTING_SCENE::OPTION_ICON_HIDE_FRAME
@@ -447,10 +453,9 @@ void SettingScene::renderLevelOptionRegion() {
     SDL_Renderer* rdr = m_ctx.renderer;
     Settings& s = m_ctx.settings;
 
-    int levelOptionCol = (MAX_INIT_LEVEL + 1) / SETTING_SCENE::OPTION_ROW_NUM;
     int level = s.getInitLevel();
     // 渲染等级选项图标
-    m_levelOptionIcon->onRender(level / levelOptionCol, level % levelOptionCol);
+    m_levelOptionIcon->onRender(level);
     // 渲染等级选项框架
     renderTexture(rdr, m_levelFrameTexture, SETTING_SCENE::LEVEL_FRAME_POS);
     // 渲染等级选项标题与文本
@@ -464,10 +469,9 @@ void SettingScene::renderHeightOptionRegion() {
     SDL_Renderer* rdr = m_ctx.renderer;
     Settings& s = m_ctx.settings;
 
-    int heightOptionCol = (MAX_INIT_HEIGHT + 1) / SETTING_SCENE::OPTION_ROW_NUM;
     int height = s.getInitHeight();
     // 渲染高度选项图标
-    m_heightOptionIcon->onRender(height / heightOptionCol, height % heightOptionCol);
+    m_heightOptionIcon->onRender(height);
     // 渲染高度选项框架
     renderTexture(rdr, m_heightFrameTexture, SETTING_SCENE::HEIGHT_FRAME_POS);
     // 渲染高度选项标题与文本

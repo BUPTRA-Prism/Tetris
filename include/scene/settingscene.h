@@ -24,8 +24,8 @@ private:
     SDL_Texture* m_heightFrameTexture;      // 高度设置框架纹理
     UniqueTexture m_optionIconTexture;      // 选项图标纹理
 
-    std::unique_ptr<GridLayout> m_levelOptionIconLayout;    // 等级选项图标布局
-    std::unique_ptr<GridLayout> m_heightOptionIconLayout;   // 高度选项图标布局
+    std::unique_ptr<GridLayout> m_levelOptionLayout;        // 等级选项布局
+    std::unique_ptr<GridLayout> m_heightOptionLayout;       // 高度选项布局
     std::unique_ptr<VerticalLayout> m_recordOrderLayout;    // 排行榜排名布局
     std::unique_ptr<GridLayout> m_recordLayout;             // 排行榜布局
 

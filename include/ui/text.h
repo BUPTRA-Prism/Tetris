@@ -50,4 +50,10 @@ public:
      * @brief 渲染文本到屏幕
      */
     void onRender();
+
+    /**
+     * @brief 获取文本布局
+     * @return HorizontalLayout* 文本布局指针
+     */
+    HorizontalLayout* getLayout() const;
 };
