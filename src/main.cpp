@@ -80,6 +80,9 @@ int main(int, char*[]) {
     SceneManager sceneMgr(ctx);
 
     bool running = true;
+    bool focused = true;             // 窗口聚焦状态
+    bool pausedMusicByFocus = false; // 音乐是否因失焦被暂停
+    bool pausedChunkByFocus = false; // 音效是否因失焦被暂停
     SDL_Event event;
 
     // 主循环：处理输入、更新与渲染，并做帧时间控制
@@ -93,17 +96,54 @@ int main(int, char*[]) {
                 running = false;
             }
 
-            inputMgr.ProcessEvent(event);
+            if (event.type == SDL_WINDOWEVENT) {
+                if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST && focused) {
+                    focused = false;
+                    inputMgr.ResetKeys();   // 失焦时清空按键状态
+                    // 暂停音乐与音效
+                    if (audioMgr.IsMusicPlaying()) {
+                        audioMgr.PauseMusic();
+                        pausedMusicByFocus = true;
+                    }
+                    if (audioMgr.IsChunkPlaying()) {
+                        audioMgr.PauseChunk();
+                        pausedChunkByFocus = true;
+                    }
+                } else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED && !focused) {
+                    focused = true;
+                    // 如果是因为失焦而暂停的音乐与音效，则恢复它们
+                    if (pausedMusicByFocus) {
+                        audioMgr.ResumeMusic();
+                        pausedMusicByFocus = false;
+                    }
+                    if (pausedChunkByFocus) {
+                        audioMgr.ResumeChunk();
+                        pausedChunkByFocus = false;
+                    }
+                }
+            }
+
+            // 键盘事件由 main 检测后回填到输入管理器
+            if (event.type == SDL_KEYDOWN) {
+                inputMgr.SetKeyState(event.key.keysym.scancode, true);
+            } else if (event.type == SDL_KEYUP) {
+                inputMgr.SetKeyState(event.key.keysym.scancode, false);
+            }
         }
 
-        sceneMgr.OnUpdate();
-        sceneMgr.OnRender();
+        if (focused) {
+            sceneMgr.OnUpdate();
+            sceneMgr.OnRender();
 
-        Uint32 finish = SDL_GetTicks();
-        Uint32 duration = finish - start;
-        if (duration < Config::Basic::FRAME_TIME) {
-            SDL_Delay(Config::Basic::FRAME_TIME - duration);
+            Uint32 finish = SDL_GetTicks();
+            Uint32 duration = finish - start;
+            if (duration < Config::Basic::FRAME_TIME) {
+                SDL_Delay(Config::Basic::FRAME_TIME - duration);
+            }
+        } else {
+            SDL_Delay(Config::Basic::FRAME_TIME);
         }
+        
     }
 
     return 0;

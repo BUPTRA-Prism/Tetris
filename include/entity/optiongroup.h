@@ -9,7 +9,8 @@
 #include <memory>
 #include <string_view>
 #include <vector>
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
 
 class ResourceManager;
 
@@ -62,7 +63,7 @@ public:
      * @param iconLayout 图标布局列表
      */
     OptionGroup(
-        ResourceManager& resourceMgr,
+        const ResourceManager& resourceMgr,
         SDL_Renderer* renderer,
         TextSpec titleSpec,
         std::vector<TextSpec> optionSpec,

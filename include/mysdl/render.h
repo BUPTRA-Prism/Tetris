@@ -6,7 +6,9 @@
 
 #include "mysdl/wrapper.h"
 #include <string_view>
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_render.h>
 
 namespace MySDL {
     /**
@@ -34,5 +36,5 @@ namespace MySDL {
      * @param str 字符串内容
      * @return 生成的纹理，失败或输入非法时返回空指针
      */
-    UniqueTexture Font2Texture(SDL_Renderer* renderer, TTF_Font* font, std::string_view str);
+    UniqueTexture Str2Texture(SDL_Renderer* renderer, TTF_Font* font, std::string_view str);
 }

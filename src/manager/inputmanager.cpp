@@ -20,28 +20,17 @@ void InputManager::BeginFrame() {
 }
 
 /**
- * @brief 处理单个 SDL 事件以更新按键状态
- *
- * 窗口失焦时清空当前按键状态，避免切换窗口后按键被持续判定为按下
+ * @brief 设置单个按键的按下状态
  */
-void InputManager::ProcessEvent(const SDL_Event& event) {
-    switch(event.type) {
-        case SDL_WINDOWEVENT: {
-            if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
-                m_curKey.fill(false);
-            }
-            break;
-        }
-        case SDL_KEYDOWN: {
-            m_curKey[event.key.keysym.scancode] = true;
-            break;
-        }
-        case SDL_KEYUP: {
-            m_curKey[event.key.keysym.scancode] = false;
-            break;
-        }
-        default: break;
-    }
+void InputManager::SetKeyState(SDL_Scancode key, bool down) {
+    m_curKey[key] = down;
+}
+
+/**
+ * @brief 清空全部按键状态（窗口失焦时由 main 调用）
+ */
+void InputManager::ResetKeys() {
+    m_curKey.fill(false);
 }
 
 /**

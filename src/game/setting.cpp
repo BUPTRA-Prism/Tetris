@@ -31,7 +31,7 @@ Setting::Setting()
 /**
  * @brief 获取游戏类型选项文本列表
  */
-std::vector<std::string_view> Setting::GetGameTypeOptionStr() const noexcept {
+std::vector<std::string_view> Setting::GetGameTypeOptionStr() const {
     std::vector<std::string_view> gameTypeOptionText(m_gameTypeOptions.size());
     for (size_t i = 0; i < m_gameTypeOptions.size(); ++i) {
         gameTypeOptionText[i] = m_gameTypeOptions[i].first;
@@ -42,7 +42,7 @@ std::vector<std::string_view> Setting::GetGameTypeOptionStr() const noexcept {
 /**
  * @brief 获取音乐选项文本列表
  */
-std::vector<std::string_view> Setting::GetMusicOptionStr() const noexcept {
+std::vector<std::string_view> Setting::GetMusicOptionStr() const {
     std::vector<std::string_view> musicOptionText(m_musicOptions.size());
     for (size_t i = 0; i < m_musicOptions.size(); ++i) {
         musicOptionText[i] = m_musicOptions[i].first;
@@ -129,7 +129,7 @@ void Setting::AdjustHeight(int delta) {
 /**
  * @brief 在 [0, max] 范围内调整下标，越界则忽略本次调整
  */
-void Setting::AdjustIdx(int& idx, int delta, int max) {
+void Setting::AdjustIdx(int& idx, int delta, int max) noexcept {
     if (idx + delta >= 0 && idx + delta <= max) {
         idx += delta;
     }

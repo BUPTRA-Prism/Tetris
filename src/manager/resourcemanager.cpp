@@ -107,7 +107,7 @@ bool ResourceManager::LoadResource(SDL_Renderer* renderer) {
  * @brief 获取图片纹理
  * @return 对应纹理，不存在时返回空指针
  */
-SDL_Texture* ResourceManager::GetImage(std::string_view path) const {
+SDL_Texture* ResourceManager::GetImage(std::string_view path) const noexcept {
     auto it = m_imageMap.find(path);
     return it != m_imageMap.end() ? it->second.get() : nullptr;
 }
@@ -116,7 +116,7 @@ SDL_Texture* ResourceManager::GetImage(std::string_view path) const {
  * @brief 获取字体
  * @return 对应字体，不存在时返回空指针
  */
-TTF_Font* ResourceManager::GetFont(std::string_view path) const {
+TTF_Font* ResourceManager::GetFont(std::string_view path) const noexcept {
     auto it = m_fontMap.find(path);
     return it != m_fontMap.end() ? it->second.get() : nullptr;
 }
@@ -125,7 +125,7 @@ TTF_Font* ResourceManager::GetFont(std::string_view path) const {
  * @brief 获取音乐
  * @return 对应音乐，不存在时返回空指针
  */
-Mix_Music* ResourceManager::GetMusic(std::string_view path) const {
+Mix_Music* ResourceManager::GetMusic(std::string_view path) const noexcept {
     auto it = m_musicMap.find(path);
     return it != m_musicMap.end() ? it->second.get() : nullptr;
 }
@@ -134,7 +134,7 @@ Mix_Music* ResourceManager::GetMusic(std::string_view path) const {
  * @brief 获取音效
  * @return 对应音效，不存在时返回空指针
  */
-Mix_Chunk* ResourceManager::GetChunk(std::string_view path) const {
+Mix_Chunk* ResourceManager::GetChunk(std::string_view path) const noexcept {
     auto it = m_chunkMap.find(path);
     return it != m_chunkMap.end() ? it->second.get() : nullptr;
 }

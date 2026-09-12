@@ -9,17 +9,16 @@
 #include "core/graphics/text.h"
 #include <memory>
 #include <vector>
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_rect.h>
 
 class ResourceManager;
-class LeaderBoard;
 
 /**
  * @brief 排行榜视图，负责渲染排行榜表头与各列内容
  */
 class LeaderBoardView {
 private:
-    ResourceManager& m_resourceMgr; ///< 资源管理器
+    const ResourceManager& m_resourceMgr; ///< 资源管理器
     SDL_Renderer* m_renderer;       ///< 渲染器
 
     std::unique_ptr<Text> m_nameHeaderText;  ///< 姓名表头
@@ -46,7 +45,7 @@ public:
      * @param entryHeight 条目行高
      */
     LeaderBoardView(
-        ResourceManager& resourceMgr,
+        const ResourceManager& resourceMgr,
         SDL_Renderer* renderer,
         int orderColumnWidth,
         int nameColumnWidth,
@@ -60,7 +59,7 @@ public:
      * @param leaderBoard 排行榜
      * @param gameType 游戏类型
      */
-    void Load(LeaderBoard& leaderBoard, Setting::GameType gameType);
+    void Load(const LeaderBoard& leaderBoard, Setting::GameType gameType);
 
     /**
      * @brief 更新玩家姓名的某一字符
@@ -81,7 +80,7 @@ public:
      * @param leaderBoard 排行榜
      * @return 相对位置
      */
-    SDL_Point GetPlayerNameRelativePos(LeaderBoard& leaderBoard) const;
+    SDL_Point GetPlayerNameRelativePos(const LeaderBoard& leaderBoard) const noexcept;
 
     /**
      * @brief 渲染排行榜

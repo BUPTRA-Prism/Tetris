@@ -7,7 +7,7 @@
 #include "mysdl/render.h"
 #include <optional>
 #include <string_view>
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_rect.h>
 
 class ResourceManager;
 
@@ -29,7 +29,7 @@ public:
      * @param path 图片资源路径
      * @param rect 可选的源矩形，缺省时按纹理尺寸
      */
-    Image(ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view path, std::optional<SDL_Rect> rect = std::nullopt);
+    Image(const ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view path, std::optional<SDL_Rect> rect = std::nullopt);
     ~Image() = default;
 
     /**
@@ -44,7 +44,7 @@ public:
      * @param path 图片资源路径
      * @param rect 可选的源矩形，缺省时按纹理尺寸
      */
-    void SetTexture(ResourceManager& resourceMgr, std::string_view path, std::optional<SDL_Rect> rect = std::nullopt);
+    void SetTexture(const ResourceManager& resourceMgr, std::string_view path, std::optional<SDL_Rect> rect = std::nullopt);
 
     /**
      * @brief 渲染图片

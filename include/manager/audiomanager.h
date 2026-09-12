@@ -30,7 +30,7 @@ public:
      * @param path 音乐资源路径
      * @param loop 循环次数（0 为无限，1 为单次）
      */
-    void PlayMusic(ResourceManager& resourceMgr, std::string_view path, unsigned int loop = 0);
+    void PlayMusic(const ResourceManager& resourceMgr, std::string_view path, unsigned int loop = 0);
     /** @brief 暂停音乐 */
     void PauseMusic();
     /** @brief 恢复音乐 */
@@ -42,7 +42,7 @@ public:
      * @brief 判断音乐是否正在播放
      * @return 播放中返回 true
      */
-    bool IsMusicPlaying() const;
+    bool IsMusicPlaying() const noexcept;
 
     /**
      * @brief 播放音效
@@ -50,11 +50,17 @@ public:
      * @param path 音效资源路径
      * @param loop 循环次数（1 为单次）
      */
-    void PlayChunk(ResourceManager& resourceMgr, std::string_view path, unsigned int loop = 1);
+    void PlayChunk(const ResourceManager& resourceMgr, std::string_view path, unsigned int loop = 1);
     /** @brief 暂停音效 */
     void PauseChunk();
     /** @brief 恢复音效 */
     void ResumeChunk();
     /** @brief 停止音效 */
     void StopChunk();
+
+    /**
+     * @brief 判断是否有音效正在播放
+     * @return 播放中返回 true
+     */
+    bool IsChunkPlaying() const noexcept;
 };

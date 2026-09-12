@@ -39,7 +39,7 @@ std::vector<LeaderBoard::Entry> LeaderBoard::GetLeaderBoard(Setting::GameType ga
 /**
  * @brief 获取指定类型的最高分（榜首分数）
  */
-int LeaderBoard::GetHiScore(Setting::GameType gameType) const {
+int LeaderBoard::GetHiScore(Setting::GameType gameType) const noexcept {
     switch (gameType) {
         case Setting::GameType::TypeA:
             return m_leaderBoardA.empty() ? 0 : m_leaderBoardA[0].score;
@@ -51,7 +51,7 @@ int LeaderBoard::GetHiScore(Setting::GameType gameType) const {
 }
 
 /** @brief 获取玩家当前排名 */
-int LeaderBoard::GetPlayerRank() const {
+int LeaderBoard::GetPlayerRank() const noexcept {
     return m_playerRank;
 }
 

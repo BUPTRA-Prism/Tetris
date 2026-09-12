@@ -352,7 +352,7 @@ void GameScene::RenderContent() {
         auto tetrominoType = static_cast<Rule::TetrominoType>(i);
         auto blockType = m_ctx.game.logic.GetTetrominoBlockType(tetrominoType);
         if (blockType != Config::GameSceneUI::BlockType::Blank) {
-            const auto& rotatePosDelta = m_ctx.game.logic.GetDefaultRotatePosDelta(tetrominoType);
+            const auto rotatePosDelta = m_ctx.game.logic.GetDefaultRotatePosDelta(tetrominoType);
             SDL_Point anchor = m_ctx.game.logic.GetIconPos(tetrominoType);
 
             for (auto& blockPosDelta: rotatePosDelta) {
@@ -386,7 +386,7 @@ void GameScene::RenderContent() {
     if (nextTetrominoType.has_value()) {
         auto blockType = m_ctx.game.logic.GetTetrominoBlockType(nextTetrominoType.value());
         if (blockType != Config::GameSceneUI::BlockType::Blank) {
-            const auto& rotatePosDelta = m_ctx.game.logic.GetDefaultRotatePosDelta(nextTetrominoType.value());
+            const auto rotatePosDelta = m_ctx.game.logic.GetDefaultRotatePosDelta(nextTetrominoType.value());
             SDL_Point anchor = Config::GameSceneUI::NEXT_TETROMINO_DEFAULT_POS;
             switch (nextTetrominoType.value()) {
                 case Rule::TetrominoType::I: {

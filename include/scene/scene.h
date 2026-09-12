@@ -6,7 +6,7 @@
 
 #include <functional>
 #include <string_view>
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_pixels.h>
 
 class Context;
 

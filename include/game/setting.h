@@ -44,9 +44,9 @@ public:
     Setting& operator=(Setting&& setting) = delete;
 
     /** @brief 获取游戏类型选项文本列表 */
-    std::vector<std::string_view> GetGameTypeOptionStr() const noexcept;
+    std::vector<std::string_view> GetGameTypeOptionStr() const;
     /** @brief 获取音乐选项文本列表 */
-    std::vector<std::string_view> GetMusicOptionStr() const noexcept;
+    std::vector<std::string_view> GetMusicOptionStr() const;
     /** @brief 获取最大可选等级 */
     int GetMaxLevel() const noexcept;
     /** @brief 获取最大可选高度 */
@@ -93,5 +93,5 @@ private:
      * @param delta 偏移量
      * @param max 上限
      */
-    void AdjustIdx(int& idx, int delta, int max);
+    static void AdjustIdx(int& idx, int delta, int max) noexcept;
 };

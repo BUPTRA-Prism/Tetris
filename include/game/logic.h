@@ -14,7 +14,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_rect.h>
 
 /**
  * @brief 游戏核心逻辑类
@@ -73,45 +73,45 @@ public:
     Logic& operator=(Logic&& logic) = delete;
 
     /** @brief 获取方块类型列表 */
-    const std::vector<Rule::TetrominoType>& GetTetrominoTypes() const;
+    const std::vector<Rule::TetrominoType>& GetTetrominoTypes() const noexcept;
     /** @brief 获取当前行数 */
-    int GetLinesCnt() const;
+    int GetLinesCnt() const noexcept;
     /** @brief 获取当前分数 */
-    int GetScore() const;
+    int GetScore() const noexcept;
     /** @brief 获取当前等级 */
-    int GetLevel() const;
+    int GetLevel() const noexcept;
     /** @brief 获取当前初始高度 */
-    int GetHeight() const;
+    int GetHeight() const noexcept;
     /**
      * @brief 获取某方块的显示类型
      * @param tetrominoType 方块类型
      * @return 对应显示类型，不存在时返回 Blank
      */
-    Config::GameSceneUI::BlockType GetTetrominoBlockType(Rule::TetrominoType tetrominoType) const;
+    Config::GameSceneUI::BlockType GetTetrominoBlockType(Rule::TetrominoType tetrominoType) const noexcept;
     /**
      * @brief 获取某方块的图标位置
      * @param tetrominoType 方块类型
      * @return 图标位置
      */
-    SDL_Point GetIconPos(Rule::TetrominoType tetrominoType) const;
+    SDL_Point GetIconPos(Rule::TetrominoType tetrominoType) const noexcept;
     /**
      * @brief 获取某方块的使用计数
      * @param tetrominoType 方块类型
      * @return 使用计数
      */
-    int GetTetrominoCnt(Rule::TetrominoType tetrominoType) const;
+    int GetTetrominoCnt(Rule::TetrominoType tetrominoType) const noexcept;
     /** @brief 获取游戏区只读引用 */
-    const Field& GetField() const;
+    const Field& GetField() const noexcept;
     /** @brief 获取当前方块类型（可能为 nullopt） */
-    std::optional<Rule::TetrominoType> GetCurTetrominoType() const;
+    std::optional<Rule::TetrominoType> GetCurTetrominoType() const noexcept;
     /** @brief 获取下一个方块类型（可能为 nullopt） */
-    std::optional<Rule::TetrominoType> GetNextTetrominoType() const;
+    std::optional<Rule::TetrominoType> GetNextTetrominoType() const noexcept;
     /**
      * @brief 获取某方块默认（旋转态 0）的位置偏移
      * @param tetrominoType 方块类型
      * @return 位置偏移集合
      */
-    Rule::RotatePosDelta GetDefaultRotatePosDelta(Rule::TetrominoType tetrominoType) const;
+    Rule::RotatePosDelta GetDefaultRotatePosDelta(Rule::TetrominoType tetrominoType) const noexcept;
 
     /**
      * @brief 重置游戏状态
@@ -143,7 +143,7 @@ public:
      */
     bool Rotate(int delta);
     /** @brief 获取当前方块最底小格的行，用于计算生成延迟 */
-    int GetLockRow() const;
+    int GetLockRow() const noexcept;
 
     /**
      * @brief 检测并记录可消除的行

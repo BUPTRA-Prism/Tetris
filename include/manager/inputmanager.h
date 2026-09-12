@@ -5,7 +5,7 @@
 #pragma once
 
 #include <array>
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_scancode.h>
 
 /**
  * @brief 输入管理器，维护上一帧与当前帧的键盘状态
@@ -28,10 +28,13 @@ public:
     /** @brief 帧开始，将当前状态滚动为上一帧状态 */
     void BeginFrame();
     /**
-     * @brief 处理单个 SDL 事件以更新按键状态
-     * @param event SDL 事件
+     * @brief 设置单个按键的按下状态
+     * @param key 扫描码
+     * @param down 按下为 true，释放为 false
      */
-    void ProcessEvent(const SDL_Event& event);
+    void SetKeyState(SDL_Scancode key, bool down);
+    /** @brief 清空全部按键状态 */
+    void ResetKeys();
 
     /**
      * @brief 判断按键当前是否被按住

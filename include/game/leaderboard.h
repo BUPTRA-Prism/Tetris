@@ -52,9 +52,9 @@ public:
      * @param gameType 游戏类型
      * @return 最高分，空榜返回 0
      */
-    int GetHiScore(Setting::GameType gameType) const;
+    int GetHiScore(Setting::GameType gameType) const noexcept;
     /** @brief 获取玩家当前排名 */
-    int GetPlayerRank() const;
+    int GetPlayerRank() const noexcept;
 
     /**
      * @brief 插入玩家成绩并按序更新排行榜

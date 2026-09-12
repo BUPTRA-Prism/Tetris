@@ -257,7 +257,7 @@ void SettingScene::RenderContent() {
 /**
  * @brief 计算给定数量与行数下的列数（向上取整）
  */
-int SettingScene::GetOptionCol(int optionCnt, int optionRow) {
+int SettingScene::GetOptionCol(int optionCnt, int optionRow) noexcept {
     int optionCol = optionCnt / optionRow;
     if (optionCnt % optionRow != 0) {
         ++optionCol;

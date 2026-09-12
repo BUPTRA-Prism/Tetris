@@ -30,9 +30,9 @@ public:
      * @brief 判断当前是否处于显示状态
      * @return 显示返回 true
      */
-    bool IsShow() const;
+    bool IsShow() const noexcept;
 
 private:
-    bool IsCycleComplete() override;
-    void ResetCycle() override;
+    bool AdvanceFrame() override;
+    void Reset() override;
 };

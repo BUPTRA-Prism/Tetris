@@ -8,7 +8,7 @@
 /**
  * @brief 构造并生成文本纹理
  */
-Text::Text(ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view str, std::string_view fontPath)
+Text::Text(const ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view str, std::string_view fontPath)
     : m_active(true)
     , m_font(resourceMgr.GetFont(fontPath))
     , m_renderer(renderer) {
@@ -27,12 +27,10 @@ void Text::SetActive(bool active) {
  * @brief 更新文本内容并重新生成纹理
  */
 void Text::SetStr(std::string_view str) {
-    m_texture = MySDL::Font2Texture(m_renderer, m_font, str);
+    m_texture = MySDL::Str2Texture(m_renderer, m_font, str);
     m_rect = {};
     if (m_texture) {
         SDL_QueryTexture(m_texture.get(), nullptr, nullptr, &m_rect.w, &m_rect.h);
-    } else {
-        m_rect = {};
     }
 }
 

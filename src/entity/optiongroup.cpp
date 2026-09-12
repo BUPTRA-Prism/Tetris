@@ -9,7 +9,7 @@
  * @brief 构造选项组，构建标题、选项文本与图标
  */
 OptionGroup::OptionGroup(
-    ResourceManager& resourceMgr,
+    const ResourceManager& resourceMgr,
     SDL_Renderer* renderer,
     TextSpec titleSpec, 
     std::vector<TextSpec> optionSpec, 

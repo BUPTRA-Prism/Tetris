@@ -60,5 +60,5 @@ private:
      * @param optionRow 行数
      * @return 列数
      */
-    int GetOptionCol(int optionCnt, int optionRow);
+    static int GetOptionCol(int optionCnt, int optionRow) noexcept;
 };

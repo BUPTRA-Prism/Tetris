@@ -7,7 +7,7 @@
 #include "mysdl/render.h"
 #include "config/resource.h"
 #include <string_view>
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_rect.h>
 
 class ResourceManager;
 
@@ -30,7 +30,7 @@ public:
      * @param str 文本内容
      * @param fontPath 字体资源路径
      */
-    Text(ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view str, std::string_view fontPath = Resource::Font::DEFAULT_FONT);
+    Text(const ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view str, std::string_view fontPath = Resource::Font::DEFAULT_FONT);
     ~Text() = default;
 
     /**

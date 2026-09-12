@@ -11,7 +11,7 @@
  * @brief 构造排行榜视图，创建三个表头文本
  */
 LeaderBoardView::LeaderBoardView(
-    ResourceManager& resourceMgr,
+    const ResourceManager& resourceMgr,
     SDL_Renderer* renderer,
     int orderColumnWidth,
     int nameColumnWidth,
@@ -33,10 +33,10 @@ LeaderBoardView::LeaderBoardView(
  * @brief 载入指定游戏类型的排行榜内容
  */
 void LeaderBoardView::Load(
-    LeaderBoard& leaderBoard,
+    const LeaderBoard& leaderBoard,
     Setting::GameType gameType
 ) {
-    const std::vector<LeaderBoard::Entry>& entries = leaderBoard.GetLeaderBoard(gameType);
+    const std::vector<LeaderBoard::Entry> entries = leaderBoard.GetLeaderBoard(gameType);
     LoadEntries(entries);
 }
 
@@ -52,7 +52,7 @@ void LeaderBoardView::UpdatePlayerName(
     if (delta != 0) {
         leaderBoard.UpdatePlayerName(gameType, charIdx, delta);
 
-        const std::vector<LeaderBoard::Entry>& entries = leaderBoard.GetLeaderBoard(gameType);
+        const std::vector<LeaderBoard::Entry> entries = leaderBoard.GetLeaderBoard(gameType);
         int playerRank = leaderBoard.GetPlayerRank();
         if (playerRank >= 0 && playerRank < static_cast<int>(entries.size())) {
             m_nameText[playerRank]->SetStr(entries[playerRank].name);
@@ -63,7 +63,7 @@ void LeaderBoardView::UpdatePlayerName(
 /**
  * @brief 获取玩家姓名相对排行榜面板的偏移
  */
-SDL_Point LeaderBoardView::GetPlayerNameRelativePos(LeaderBoard& leaderBoard) const {
+SDL_Point LeaderBoardView::GetPlayerNameRelativePos(const LeaderBoard& leaderBoard) const noexcept {
     return SDL_Point{ m_orderColumnWidth, m_entryHeight * (leaderBoard.GetPlayerRank() + 1) };
 }
 

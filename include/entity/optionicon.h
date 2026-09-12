@@ -27,7 +27,7 @@ public:
      * @param renderer 渲染器
      * @param path 图标资源路径
      */
-    OptionIcon(ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view path);
+    OptionIcon(const ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view path);
     ~OptionIcon() = default;
 
     /** @brief 更新动画并同步图片可见性 */

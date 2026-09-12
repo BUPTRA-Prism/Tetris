@@ -3,6 +3,7 @@
  * @brief 渲染辅助函数实现
  */
 #include "mysdl/render.h"
+#include <string>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 
@@ -41,9 +42,9 @@ void MySDL::RenderTexture(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect
  * @brief 将字符串渲染为纹理
  * @return 生成的纹理，失败或输入非法时返回空指针
  */
-MySDL::UniqueTexture MySDL::Font2Texture(SDL_Renderer* renderer, TTF_Font* font, std::string_view str) {
+MySDL::UniqueTexture MySDL::Str2Texture(SDL_Renderer* renderer, TTF_Font* font, std::string_view str) {
     if (renderer && font && !str.empty()) {
-        MySDL::UniqueSurface surface(TTF_RenderText_Solid(font, str.data(), SDL_Color{ 255, 255, 255, 255 }));
+        MySDL::UniqueSurface surface(TTF_RenderText_Solid(font, std::string(str).c_str(), SDL_Color{ 255, 255, 255, 255 }));
         if (!surface) {
             std::cerr << "TTF_RenderText_Solid failed: " << TTF_GetError() << std::endl;
             return nullptr;

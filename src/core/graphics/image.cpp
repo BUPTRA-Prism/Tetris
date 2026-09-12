@@ -8,7 +8,7 @@
 /**
  * @brief 构造并加载一张图片
  */
-Image::Image(ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view path, std::optional<SDL_Rect> rect)
+Image::Image(const ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view path, std::optional<SDL_Rect> rect)
     : m_active(true)
     , m_renderer(renderer) {
     SetTexture(resourceMgr, path, rect);
@@ -25,7 +25,7 @@ void Image::SetActive(bool active) {
 /**
  * @brief 替换纹理，并根据源矩形参数确定绘制尺寸
  */
-void Image::SetTexture(ResourceManager& resourceMgr, std::string_view path, std::optional<SDL_Rect> rect) {
+void Image::SetTexture(const ResourceManager& resourceMgr, std::string_view path, std::optional<SDL_Rect> rect) {
     m_texture = resourceMgr.GetImage(path);
     m_rect = {};
     if (m_texture) {

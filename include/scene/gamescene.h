@@ -12,7 +12,7 @@
 #include <memory>
 #include <string_view>
 #include <vector>
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_rect.h>
 
 /**
  * @brief 游戏场景，以状态机驱动一局的生成、移动、消行与结算全流程
@@ -97,7 +97,7 @@ private:
      * @param solidImg 实心纹样图片
      * @param hollowImg 空心纹样图片
      */
-    void RenderBlock(
+    static void RenderBlock(
         Config::GameSceneUI::BlockType type,
         SDL_Point pos,
         Config::GameSceneUI::LevelColor color,

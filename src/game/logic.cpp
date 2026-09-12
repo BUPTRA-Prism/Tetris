@@ -120,65 +120,65 @@ Logic::Logic()
 }
 
 /** @brief 获取方块类型列表 */
-const std::vector<Rule::TetrominoType>& Logic::GetTetrominoTypes() const {
+const std::vector<Rule::TetrominoType>& Logic::GetTetrominoTypes() const noexcept {
     return m_tetrominoTypes;
 }
 
 /** @brief 获取当前行数 */
-int Logic::GetLinesCnt() const {
+int Logic::GetLinesCnt() const noexcept {
     return m_linesCnt;
 }
 
 /** @brief 获取当前分数 */
-int Logic::GetScore() const {
+int Logic::GetScore() const noexcept {
     return m_score;
 }
 
 /** @brief 获取当前等级 */
-int Logic::GetLevel() const {
+int Logic::GetLevel() const noexcept {
     return m_level;
 }
 
 /** @brief 获取当前初始高度 */
-int Logic::GetHeight() const {
+int Logic::GetHeight() const noexcept {
     return m_height;
 }
 
 /** @brief 获取某方块的显示类型，不存在时返回 Blank */
-Config::GameSceneUI::BlockType Logic::GetTetrominoBlockType(Rule::TetrominoType tetrominoType) const {
+Config::GameSceneUI::BlockType Logic::GetTetrominoBlockType(Rule::TetrominoType tetrominoType) const noexcept {
     auto it = m_tetrominoData.find(tetrominoType);
     return it != m_tetrominoData.end() ? it->second.blockType : Config::GameSceneUI::BlockType::Blank;
 }
 
 /** @brief 获取某方块的图标位置 */
-SDL_Point Logic::GetIconPos(Rule::TetrominoType tetrominoType) const {
+SDL_Point Logic::GetIconPos(Rule::TetrominoType tetrominoType) const noexcept {
     auto it = m_tetrominoData.find(tetrominoType);
     return it != m_tetrominoData.end() ? it->second.iconPos : SDL_Point{ 0, 0 };
 }
 
 /** @brief 获取某方块的使用计数 */
-int Logic::GetTetrominoCnt(Rule::TetrominoType tetrominoType) const {
+int Logic::GetTetrominoCnt(Rule::TetrominoType tetrominoType) const noexcept {
     auto it = m_tetrominoData.find(tetrominoType);
     return it != m_tetrominoData.end() ? it->second.count : 0;
 }
 
 /** @brief 获取游戏区只读引用 */
-const Logic::Field& Logic::GetField() const {
+const Logic::Field& Logic::GetField() const noexcept {
     return m_field;
 }
 
 /** @brief 获取当前方块类型（可能为 nullopt） */
-std::optional<Rule::TetrominoType> Logic::GetCurTetrominoType() const {
+std::optional<Rule::TetrominoType> Logic::GetCurTetrominoType() const noexcept {
     return m_curTetrominoType;
 }
 
 /** @brief 获取下一个方块类型（可能为 nullopt） */
-std::optional<Rule::TetrominoType> Logic::GetNextTetrominoType() const {
+std::optional<Rule::TetrominoType> Logic::GetNextTetrominoType() const noexcept {
     return m_nextTetrominoType;
 }
 
 /** @brief 获取某方块默认（旋转态 0）的位置偏移 */
-Rule::RotatePosDelta Logic::GetDefaultRotatePosDelta(Rule::TetrominoType tetrominoType) const {
+Rule::RotatePosDelta Logic::GetDefaultRotatePosDelta(Rule::TetrominoType tetrominoType) const noexcept {
     auto it = m_tetrominoData.find(tetrominoType);
     return it != m_tetrominoData.end() ? it->second.rotateData[0] : Rule::RotatePosDelta{};
 }
@@ -282,7 +282,7 @@ bool Logic::Rotate(int delta) {
 /**
  * @brief 获取当前方块最底小格的行，用于计算生成延迟
  */
-int Logic::GetLockRow() const {
+int Logic::GetLockRow() const noexcept {
     int lockRow = Config::Game::FIELD_VISIBLE_HEIGHT + Config::Game::FIELD_HIDDEN_HEIGHT;
     for (auto& pos: m_curBlockPos) {
         if (pos.first < lockRow) {

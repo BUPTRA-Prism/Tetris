@@ -13,6 +13,8 @@
  */
 class ResourceManager {
 private:
+    // 键为 std::string_view，仅指向 config/resource.h 中具有静态存储期的 constexpr 字面量，
+    // 其生命周期长于本对象，不会悬垂；严禁以临时 std::string 或局部缓冲区作为键。
     std::unordered_map<std::string_view, MySDL::UniqueTexture> m_imageMap; ///< 图片缓存
     std::unordered_map<std::string_view, MySDL::UniqueFont> m_fontMap;     ///< 字体缓存
     std::unordered_map<std::string_view, MySDL::UniqueMusic> m_musicMap;   ///< 音乐缓存
@@ -39,25 +41,25 @@ public:
      * @param path 图片资源路径
      * @return 对应纹理，不存在时返回空指针
      */
-    SDL_Texture* GetImage(std::string_view path) const;
+    SDL_Texture* GetImage(std::string_view path) const noexcept;
     /**
      * @brief 获取字体
      * @param path 字体资源路径
      * @return 对应字体，不存在时返回空指针
      */
-    TTF_Font* GetFont(std::string_view path) const;
+    TTF_Font* GetFont(std::string_view path) const noexcept;
     /**
      * @brief 获取音乐
      * @param path 音乐资源路径
      * @return 对应音乐，不存在时返回空指针
      */
-    Mix_Music* GetMusic(std::string_view path) const;
+    Mix_Music* GetMusic(std::string_view path) const noexcept;
     /**
      * @brief 获取音效
      * @param path 音效资源路径
      * @return 对应音效，不存在时返回空指针
      */
-    Mix_Chunk* GetChunk(std::string_view path) const;
+    Mix_Chunk* GetChunk(std::string_view path) const noexcept;
 
 private:
     /**

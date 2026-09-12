@@ -23,7 +23,7 @@ MenuScene::MenuScene(Context& ctx, std::function<void(std::string_view)> loadSce
     : Scene(ctx, loadSceneCallback) {
     m_menuImg = std::make_unique<Image>(ctx.manager.resourceMgr, ctx.renderer, Resource::Image::MENU_IMG);
 
-    const auto& gameTypeOptionStr = ctx.game.setting.GetGameTypeOptionStr();
+    const auto gameTypeOptionStr = ctx.game.setting.GetGameTypeOptionStr();
     std::vector<OptionGroup::TextSpec> gameTypeOptionSpec(gameTypeOptionStr.size());
     for (size_t i = 0; i < gameTypeOptionStr.size(); ++i) {
         gameTypeOptionSpec[i] = OptionGroup::TextSpec{
@@ -47,7 +47,7 @@ MenuScene::MenuScene(Context& ctx, std::function<void(std::string_view)> loadSce
         }
     );
 
-    const auto& musicOptionStr = ctx.game.setting.GetMusicOptionStr();
+    const auto musicOptionStr = ctx.game.setting.GetMusicOptionStr();
     std::vector<OptionGroup::TextSpec> musicOptions(musicOptionStr.size());
     for (size_t i = 0; i < musicOptionStr.size(); ++i) {
         musicOptions[i] = OptionGroup::TextSpec{ 

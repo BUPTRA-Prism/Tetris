@@ -8,7 +8,7 @@
 /**
  * @brief 构造选项图标，创建图片与闪烁动画
  */
-OptionIcon::OptionIcon(ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view path)
+OptionIcon::OptionIcon(const ResourceManager& resourceMgr, SDL_Renderer* renderer, std::string_view path)
     : m_img(std::make_unique<Image>(resourceMgr, renderer, path))
     , m_anim(std::make_unique<BlinkAnimation>(Config::UICommon::OPTION_ICON_HIDE_TOTAL_FRAME, Config::UICommon::OPTION_ICON_SHOW_TOTAL_FRAME)) {}
 

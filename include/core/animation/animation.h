@@ -47,14 +47,14 @@ public:
      * @brief 判断是否已停止
      * @return 停止返回 true
      */
-    bool IsStopped() const;
+    bool IsStopped() const noexcept;
 
 protected:
     /**
-     * @brief 判断当前循环是否完成
-     * @return 完成返回 true
+     * @brief 推进一帧，返回一轮循环是否完成
+     * @return 一轮完成返回 true
      */
-    virtual bool IsCycleComplete() = 0;
-    /** @brief 重置当前循环到初始状态 */
-    virtual void ResetCycle() = 0;
+    virtual bool AdvanceFrame() = 0;
+    /** @brief 重置动画 */
+    virtual void Reset() = 0;
 };
