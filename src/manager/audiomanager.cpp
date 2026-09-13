@@ -54,7 +54,20 @@ void AudioManager::PlayChunk(const ResourceManager& resourceMgr, std::string_vie
         std::cerr << "Failed to load chunk \"" << path << "\"" << std::endl;
         return;
     }
-    Mix_PlayChannel(-1, chunk, static_cast<int>(loop) - 1);
+
+    // 遍历当前播放指定音效的频道
+    int channel = -1;
+    for (int ch = 0; ch < Mix_AllocateChannels(-1); ++ch) {
+        if (Mix_Playing(ch) && Mix_GetChunk(ch) == chunk) {
+            channel = ch;
+            break;
+        }
+    }
+    // 频道复用，尽可能避免创建新频道
+    // 如果返回-1，说明没有空闲频道，打印报错信息
+    if (Mix_PlayChannel(channel, chunk, static_cast<int>(loop) - 1) == -1) {
+        std::cerr << "Failed to play chunk \"" << path << "\": no free channel" << std::endl;
+    }
 }
 
 /** @brief 暂停全部音效 */
