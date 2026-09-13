@@ -3,7 +3,6 @@
  * @brief 程序入口，初始化 SDL 与各子系统并启动主循环
  */
 #include "config/basic.h"
-#include "config/resource.h"
 #include "mysdl/wrapper.h"
 #include "game/setting.h"
 #include "game/leaderboard.h"
