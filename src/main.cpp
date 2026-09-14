@@ -64,6 +64,11 @@ int main(int, char*[]) {
     if (!resourceMgr.LoadResource(renderer.get())) {
         return 1;
     }
+    // 设置窗口图标
+    auto icon = resourceMgr.GetIcon();
+    if (icon) {
+        SDL_SetWindowIcon(window.get(), icon);
+    }
 
     // 组装依赖注入的全局上下文
     AudioManager audioMgr;

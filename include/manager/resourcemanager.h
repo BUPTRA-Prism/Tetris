@@ -13,6 +13,8 @@
  */
 class ResourceManager {
 private:
+    MySDL::UniqueSurface m_iconSurface;                                    ///< 图标缓存
+
     // 键为 std::string_view，仅指向 config/resource.h 中具有静态存储期的 constexpr 字面量，
     // 其生命周期长于本对象，不会悬垂；严禁以临时 std::string 或局部缓冲区作为键。
     std::unordered_map<std::string_view, MySDL::UniqueTexture> m_imageMap; ///< 图片缓存
@@ -36,6 +38,11 @@ public:
      */
     bool LoadResource(SDL_Renderer* renderer);
 
+    /**
+     * @brief 获取图标 Surface
+     * @return 图标 Surface，不存在时返回空指针
+     */
+    SDL_Surface* GetIcon() const noexcept;
     /**
      * @brief 获取图片纹理
      * @param path 图片资源路径
@@ -62,6 +69,11 @@ public:
     Mix_Chunk* GetChunk(std::string_view path) const noexcept;
 
 private:
+    /**
+     * @brief 加载图标
+     * @return 加载成功返回 true
+     */
+    bool LoadIcon();
     /**
      * @brief 加载单张图片
      * @param renderer 渲染器

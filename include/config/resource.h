@@ -66,12 +66,24 @@ namespace Resource {
     }
 
     /**
+     * @brief 图标资源路径常量
+     */
+    namespace Icon {
+        /** @brief 图标资源目录 */
+        constexpr std::string_view ICON_FOLDER = "resource/icon";
+
+        
+    }
+
+    /**
      * @brief 图片资源路径常量
      */
     namespace Image {
         /** @brief 图片资源目录 */
         constexpr std::string_view FOLDER = "resource/image/";
 
+        /** @brief 图标文件名 */
+        constexpr std::string_view ICON_IMG = "icon.ico";
         /** @brief 标题页图片文件名 */
         constexpr std::string_view TITLE_IMG = "title.png";
         /** @brief 版权信息图片文件名 */

@@ -72,6 +72,10 @@ bool ResourceManager::LoadResource(SDL_Renderer* renderer) {
         std::cerr << "Renderer is null!" << std::endl;
         return false;
     }
+    if (!LoadIcon()) {
+        std::cerr << "Failed to load icon: " << IMG_GetError() << std::endl;
+        return false;
+    }
     for (const auto& path: imagePaths) {
         if (!LoadImage(renderer, path)) {
             std::cerr << "Failed to load image \"" << path << "\": " << IMG_GetError() << std::endl;
@@ -101,6 +105,14 @@ bool ResourceManager::LoadResource(SDL_Renderer* renderer) {
     }
 
     return true;
+}
+
+/**
+ * @brief 获取图标Surface
+ * @return 对应Surface
+ */
+SDL_Surface* ResourceManager::GetIcon() const noexcept {
+    return m_iconSurface.get();
 }
 
 /**
@@ -137,6 +149,22 @@ Mix_Music* ResourceManager::GetMusic(std::string_view path) const noexcept {
 Mix_Chunk* ResourceManager::GetChunk(std::string_view path) const noexcept {
     auto it = m_chunkMap.find(path);
     return it != m_chunkMap.end() ? it->second.get() : nullptr;
+}
+
+/**
+ * @brief 加载图标
+ * @return 加载成功返回 true，失败返回 false
+ */
+bool ResourceManager::LoadIcon() {
+    std::string fullPath(Resource::Image::FOLDER);
+    fullPath.append(Resource::Image::ICON_IMG);
+    m_iconSurface.reset(IMG_Load(fullPath.c_str()));
+    if (!m_iconSurface) {
+        std::cerr << "Failed to load icon: " << IMG_GetError() << std::endl;
+        return false;
+    }
+
+    return true;
 }
 
 /**
