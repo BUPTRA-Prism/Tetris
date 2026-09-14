@@ -66,16 +66,6 @@ namespace Resource {
     }
 
     /**
-     * @brief 图标资源路径常量
-     */
-    namespace Icon {
-        /** @brief 图标资源目录 */
-        constexpr std::string_view ICON_FOLDER = "resource/icon";
-
-        
-    }
-
-    /**
      * @brief 图片资源路径常量
      */
     namespace Image {
